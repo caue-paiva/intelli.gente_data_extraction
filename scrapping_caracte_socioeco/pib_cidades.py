@@ -15,36 +15,46 @@ class IbgeBasesScrapper():
    OFFSET_STRING_BASES: int = 10 #quando achamos a string que representa a tag html com o link das bases, precisamos voltar 10 chars para pegar a tag que tem essa string
    EXTRACTED_FILES_DIR:str = "tempfiles"
 
+   def extract_database(self, url: str, html_tag_identifier:str ,data_type: BaseDataType)->pd.DataFrame:
+      """
+      Extrai um arquivo da base de dados do IBGE dado um URL para uma página do IBGE, um identificador da tag HTML que o link do arquivo está e o tipo de dado do arquivo
 
-   def extract_database(self, url: str, html_tag_bases:str ,data_type: BaseDataType)->pd.DataFrame:
+      Args:
+         url (str) : URL da página do IBGE com os dados das bases
+         html_tag_identifier (str): uma tag HTML onde o link para o arquivo da base está, usada no web-scrapping
+         data_type (Enum BaseDataType): Um elemento do Enum que dita qual o tipo de arquivo será baixado
+
+      Return:
+         (pd.Dataframe) : Dataframe do Pandas com os dados baixados   
+      """
+      
       driver = selenium.webdriver.Chrome()
       driver.get(url)
-      page_source:str = driver.page_source
+      page_source:str = driver.page_source #pega o HTML da página
+      driver.quit() #fecha o webdriver 
 
       databases_match = re.finditer(self.REGEX_BASES_DADOS_IBGE, page_source) #matchs no HTML com a string que identifica as bases de dados do ibge
    
       most_recent_data = max(databases_match,key= lambda x : x.group()) #acha a data mais recente entre as matches de banco de dados, isso por que 2010 > 2000 na comparação
 
-      html_parser = MyHTMLParser(html_tag_bases) #instancia um objeto de parser de html
+      html_parser = MyHTMLParser(html_tag_identifier) #instancia um objeto de parser de html
       substr:str = page_source[ (most_recent_data.start()- self.OFFSET_STRING_BASES) : ]  #substr do html que começa um pouco antes (offset negativo) do match com a str que identifica
-      #o banco de dados do ibge
+      #o banco de dados do ibge, isso é feito para pegar a tag HTML que o link dessa base está
       
-      lista_links:list[str] = html_parser.get_all_links( html_parser.get_limited_html_block(substr) )  
+      lista_links:list[str] = html_parser.get_all_links( html_parser.get_limited_html_block(substr) ) #pega todos os links do html extraido
       final_link:str = ""
 
-      for link in lista_links:
+      for link in lista_links: #acha o link certo para o tipo de dado passado como argumento
          if data_type.value in link:
                final_link = link
          
       if not final_link:
          raise RuntimeError(f"não foi possível achar o link da base de dados com o tipo {data_type.value}")
          
-      driver.quit() #fecha o webdriver 
-      
-      return self.__dataframe_from_link(final_link,data_type)
+      return self.__dataframe_from_link(final_link,data_type) #retorna o dataframe do link extraido
    
    def __download_extract_zipfile(self,url:str)->str:
-      """Retorna o caminho para o arquivo que foi baixado e extraido"""
+      """Retorna o caminho para o arquivo de dados que foi baixado e extraido"""
 
       #caso o diretório para guardar os arquivos extraidos não exista, vamos criar ele
       if not os.path.exists(self.EXTRACTED_FILES_DIR):
@@ -86,9 +96,11 @@ class IbgeBasesScrapper():
          raise RuntimeError("não foi possível criar um dataframe a partir do link")
       
       return df
-   
-scrapper = IbgeBasesScrapper()
-url = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?t=downloads&c=1100023"
-df:pd.DataFrame = scrapper.extract_database(url=url, html_tag_bases="li" , data_type=BaseDataType.EXCEL)
 
-print(df.head())
+
+if __name__ == "__main__":
+   scrapper = IbgeBasesScrapper()
+   url = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?t=downloads&c=1100023"
+   df:pd.DataFrame = scrapper.extract_database(url=url, html_tag_identifier="li" , data_type=BaseDataType.EXCEL)
+
+   print(df.head())
