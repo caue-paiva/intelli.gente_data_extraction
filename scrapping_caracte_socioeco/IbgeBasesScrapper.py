@@ -48,7 +48,7 @@ class IbgeBasesScrapper(AbstractScrapper):
       """
       
       file_link:str = self.__get_file_link(website_url=website_url,file_type=file_type,html_tag_identifier=html_tag_identifier)
-      return self._download_and_extract_zipfile(file_link,self.__class__.__name__)
+      return super()._download_and_extract_zipfile(file_link,self.__class__.__name__)
 
    def __get_file_link(self, website_url: str, file_type: BaseFileType,html_tag_identifier:str)->str:
       """
