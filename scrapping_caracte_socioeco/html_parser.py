@@ -45,12 +45,12 @@ class MyHTMLParser():
 
 if __name__ == "__main__":
    html = """
-Base 2010-2021 - <strong>(<a href="https://ftp.ibge.gov.br/Pib_Municipios/2021/base/base_de_dados_2010_2021_xlsx.zip">xlsx </a>| <a href="https://ftp.ibge.gov.br/Pib_Municipios/2021/base/base_de_dados_2010_2021_ods.zip">ods </a>| <a href="https://ftp.ibge.gov.br/Pib_Municipios/2021/base/base_de_dados_2010_2021_txt.zip">txt</a>)</strong></li>
-</ul>
-<p></p>
-<h4>Mapa interativo</h4>
-<p><a href="https://www.ibge.gov.br/apps/pibmunic" target="_blank" rel="noopener noreferrer">PIB dos Municípios</a></p><hr>
-<p style="font-size: 12px; line-height: 16px; margin-top: -15px;">O IBGE adota uma política d
+   Base 2010-2021 - <strong>(<a href="https://ftp.ibge.gov.br/Pib_Municipios/2021/base/base_de_dados_2010_2021_xlsx.zip">xlsx </a>| <a href="https://ftp.ibge.gov.br/Pib_Municipios/2021/base/base_de_dados_2010_2021_ods.zip">ods </a>| <a href="https://ftp.ibge.gov.br/Pib_Municipios/2021/base/base_de_dados_2010_2021_txt.zip">txt</a>)</strong></li>
+   </ul>
+   <p></p>
+   <h4>Mapa interativo</h4>
+   <p><a href="https://www.ibge.gov.br/apps/pibmunic" target="_blank" rel="noopener noreferrer">PIB dos Municípios</a></p><hr>
+   <p style="font-size: 12px; line-height: 16px; margin-top: -15px;">O IBGE adota uma política d
 
    """
    parser = MyHTMLParser("li")
