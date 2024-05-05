@@ -18,7 +18,7 @@ class IbgeBasesScrapper(AbstractScrapper):
 
    DATA_BASE_IDENTIFIER_PATTERN: str = r"Base \d{4}-\d{4}" #regex para achar a string que identifica onde está os arquivos da base de dados
 
-   def extract_database(self, website_url: str, file_type: BaseFileType,html_tag_identifier:str)->pd.DataFrame:
+   def extract_database(self, website_url: str, file_type: BaseFileType, html_tag_identifier:str)->pd.DataFrame:
       """
       Extrai um arquivo e retorna ele como um Dataframe da base de dados do IBGE dado um URL para uma página do IBGE, um identificador da tag HTML que o link do arquivo está e o tipo de dado do arquivo
 
