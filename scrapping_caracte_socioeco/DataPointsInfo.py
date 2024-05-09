@@ -1,17 +1,18 @@
 from enum import Enum
 from typing import Any
 
-class DataPointTypes(Enum):
+class DataPointTypes(Enum): #Enum para os tipos de dados encontrados nas bases 
    INT = int
    FLOAT = float
    STRING = str
    BOOL = bool
 
-class DataPoint():
+class DataPoint(): #clase para um ponto de dado específico encontrado na tabela de dados brutos
    data_name: str
    column_name:str
    data_type: DataPointTypes
-   multiply_amount: int 
+   multiply_amount: int  #algumas vezes os dados vão vir em escala de 1 equivale a 1000, então é necessário
+   #guardar por quanto esse valor deve ser multiplicado
 
    def __init__(
       self,
