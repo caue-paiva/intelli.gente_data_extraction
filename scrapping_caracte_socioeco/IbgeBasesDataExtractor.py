@@ -55,7 +55,7 @@ class CategoryDataExtractor():
       return initial_df
 
 
-df:pd.DataFrame = pd.read_excel(os.path.join("tempfiles","PIB dos Municípios - base de dados 2010-2021.xlsx"))
+df:pd.DataFrame = pd.read_excel(os.path.join("webscrapping","tempfiles","PIB dos Municípios - base de dados 2010-2021.xlsx"))
 
 pib_percapita = {
    "data_name": "PIB per capita",
