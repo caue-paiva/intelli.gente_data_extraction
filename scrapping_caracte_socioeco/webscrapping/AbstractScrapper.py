@@ -7,6 +7,7 @@ class BaseFileType(Enum): #enum para os tipos de arquivos que são comumente enc
    EXCEL = "xlsx"
    ODS = "ods"
    TXT = "txt"
+   CSV = "csv"
 
 
 class AbstractScrapper(ABC):
@@ -14,17 +15,20 @@ class AbstractScrapper(ABC):
    EXTRACTED_FILES_DIR:str = "tempfiles" #diretório temporário para guardar os arquivos .zip e de dados extraidos
 
    @abstractmethod
-   def extract_database(self, website_url:str, file_type:BaseFileType, *args)->pd.DataFrame:
+   def __init__(self,website_url:str,file_type:str,*kwargs)-> None:
+      pass
+
+   @abstractmethod
+   def extract_database(self, website_url:str, file_type:BaseFileType)->pd.DataFrame:
       """Extrai um arquivo e retorna ele como um Dataframe da base de dados oficial dado um URL para uma página e o tipo de dado do arquivo"""
       pass
    
    @abstractmethod
-   def download_database_locally(self, website_url:str, file_type:BaseFileType, object_identifier:str ,*args)->str:
+   def download_database_locally(self, website_url:str, file_type:BaseFileType)->str:
       """baixa um arquivo da base de dados oficial e retorna o caminho para ele dado um URL para uma página e o tipo de dado do arquivo"""
       pass
    
-   
-   def _download_and_extract_zipfile(self,file_url:str, object_identifier:str)->str:
+   def _download_and_extract_zipfile(self, file_url:str)->str:
       """
       Dado um URL para baixar um arquivo zip das bases oficiais, baixa esse arquivo zip e extrai seu conteúdo,
       retornando o caminho para o arquivo de dados que extraido. Esse método é implementado na classe mãe abstrata, pois ele é genérico para a maioria
@@ -32,11 +36,8 @@ class AbstractScrapper(ABC):
 
       Args:
          file_url (str) : url para baixar o arquivo .zip das bases do IBGE
-         object_identifier (str): para que o arquivo zip seja identificado com a subclasse que criou esse arquivo, já que não é possível pegar o 
-         nome do mesmo pelo link de download
       """
      
-      zip_file_name:str = object_identifier + "_zipfile.zip"
       #caso o diretório para guardar os arquivos extraidos não exista, vamos criar ele
       if not os.path.exists(self.EXTRACTED_FILES_DIR):
          os.makedirs(self.EXTRACTED_FILES_DIR)
@@ -44,8 +45,11 @@ class AbstractScrapper(ABC):
       #baixando o arquivo zip
       response = requests.get(file_url) #request get para o link do arquivo zip 
       if response.status_code == 200: #request com sucesso
-   
-         with open(os.path.join(self.EXTRACTED_FILES_DIR, zip_file_name), "wb") as f:
+         zip_file_name =  "zipfile.zip"
+         zip_file_path = os.path.join(self.EXTRACTED_FILES_DIR, zip_file_name)
+         print(zip_file_name)
+    
+         with open(zip_file_path, "wb") as f:
             f.write(response.content) #escreve o arquivo zip no diretório de dados temporários
       else:
          raise RuntimeError("Falhou em baixar o arquivo .zip, status code da resposta:", response.status_code)
@@ -67,5 +71,28 @@ class AbstractScrapper(ABC):
          raise RuntimeError("Extração do arquivo zip num diretório temporário falhou")
       
       return os.path.join(self.EXTRACTED_FILES_DIR, data_file_name) #retorna o caminho para o arquivo extraido
-     
+   
+   def _dataframe_from_link(self, file_url:str, file_type: BaseFileType, zipfile: bool = True)->pd.DataFrame:
+      if zipfile: #link  é pra um arquivo zip, vamos extrair ele primeiro
+         file_path:str = self._download_and_extract_zipfile(file_url) #chama o método da mesma classe de extrair o zipfile
+      else:
+         file_path:str = file_url  #link n é pra um arquivo zip, o argumento pode ser passado para o pandas direto
 
+      df:pd.DataFrame
+      match (file_type):
+         case BaseFileType.EXCEL:
+            df = pd.read_excel(file_path)
+         case BaseFileType.ODS:
+            pass
+         case BaseFileType.CSV:
+            pass
+      """
+      TODO
+      Colocar os casos para os outros tipos de arquivos, caso seja possível extrair dataframes deles
+      """
+
+      if df is None:
+         raise RuntimeError("não foi possível criar um dataframe a partir do link")
+      
+      return df
+     
