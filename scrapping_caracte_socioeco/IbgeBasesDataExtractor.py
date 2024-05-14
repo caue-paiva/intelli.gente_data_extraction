@@ -14,7 +14,7 @@ um código quase identico porém com 6 dígitos e não 7, isso deve ser levado e
 
 class CategoryDataExtractor():
 
-   CITY_COLUMN = "codigo_municipio"
+   CITY_COLUMN = "codigo_municipio" #constantes para o nome das colunas no dataframe final 
    YEAR_COLUMN = "ano"
    DATA_IDENTIFIER_COLUMN = "dado_identificador"
    DATA_VALUE_COLUMN = "valor"
@@ -26,11 +26,22 @@ class CategoryDataExtractor():
       self.category = category
 
    def extract_data_points(self, df:pd.DataFrame, data_info: TableDataPoints)->pd.DataFrame:
-      """extrai o dataframe bruto da base em um df menor apenas com os pontos de dados buscados"""
+      """ 
+      extrai o dataframe bruto da base em um df menor apenas com as colunas de ano, código de cidade e os pontos de dados buscados
+      
+      Args:
+         df (dataframe) : dataframe bruto da base de dados
+         data_info (TableDataPoints) : Classe para especificar onde e como os dados buscados estão no df bruto
+      
+      Return:
+         (dataframe): dataframe com as colunas: ano, código_muni, dado_identificador, valor e tipo_dado. Esse formato será similar aos 
+         dados em cada tabela de categoria
+      """
+
       if len(data_info.data_point_list) < 1:
          raise IOError("Lista de ponto de dados deve conter pelo menos 1 ponto de dado")
       
-      df = self.__check_city_code(df,data_info.city_code_column)
+      df = self.__check_city_code(df,data_info.city_code_column) #checa se o código dos municípios está correto
 
       final_df:pd.DataFrame = pd.DataFrame() #df final a ser retornado
       

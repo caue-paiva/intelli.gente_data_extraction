@@ -36,7 +36,7 @@ class IbgeBasesScrapper(AbstractScrapper):
       file_link: str = self.__get_file_link()
       return super()._dataframe_from_link(file_link,self.file_type,zipfile=True) #retorna o dataframe do link extraido
    
-   def download_database_locally(self) -> str:
+   def download_database_locally(self)-> str:
       """
       Extrai um arquivo e baixa ele localmente apenas da base de dados do IBGE dado um URL para uma página do IBGE, um identificador da tag HTML que o link do arquivo está e o tipo de dado do arquivo
 

@@ -35,7 +35,7 @@ class AbstractScrapper(ABC):
       dos scrappers de diferentes bases
 
       Args:
-         file_url (str) : url para baixar o arquivo .zip das bases do IBGE
+         file_url (str): url para baixar o arquivo .zip das bases do IBGE
       """
      
       #caso o diretório para guardar os arquivos extraidos não exista, vamos criar ele
@@ -73,13 +73,26 @@ class AbstractScrapper(ABC):
       return os.path.join(self.EXTRACTED_FILES_DIR, data_file_name) #retorna o caminho para o arquivo extraido
    
    def _dataframe_from_link(self, file_url:str, file_type: BaseFileType, zipfile: bool = True)->pd.DataFrame:
+      """
+      Dado um link para um arquivo , se ele for zip primeiro extrai e dps carrega o arquivo tabular extraido, caso não seja apenas usas as 
+      funções do pandas para carregar essa arquivo em um Dataframe
+
+      Args:
+         file_url (str): url para baixa o arquivo
+         file_type (BaseFileType): tipo de arquivo a ser baixado
+         zipfile (bool): diz se o link é pra um arquivo zip ou não
+
+      Return:
+         (Dataframe): um df da base extraida
+      """
+      
       if zipfile: #link  é pra um arquivo zip, vamos extrair ele primeiro
          file_path:str = self._download_and_extract_zipfile(file_url) #chama o método da mesma classe de extrair o zipfile
       else:
          file_path:str = file_url  #link n é pra um arquivo zip, o argumento pode ser passado para o pandas direto
 
-      df:pd.DataFrame
-      match (file_type):
+      df:pd.DataFrame = None
+      match (file_type): #match case no tipo de dado
          case BaseFileType.EXCEL:
             df = pd.read_excel(file_path)
          case BaseFileType.ODS:
@@ -91,7 +104,7 @@ class AbstractScrapper(ABC):
       Colocar os casos para os outros tipos de arquivos, caso seja possível extrair dataframes deles
       """
 
-      if df is None:
+      if df is None: #não foi possível extrair o DF
          raise RuntimeError("não foi possível criar um dataframe a partir do link")
       
       return df
