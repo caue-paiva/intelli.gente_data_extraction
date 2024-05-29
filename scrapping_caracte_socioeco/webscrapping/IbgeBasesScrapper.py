@@ -9,6 +9,9 @@ TODO
 1) Atualmente esse código foi testado apenas na página de PIB de cidades do IBGE, testar em páginas similares
 url da página: https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?t=downloads&c=1100023
 
+
+2) Ver se dá pra implementar esse código com o beatifulSoup4
+
 """
 
 class IbgeBasesScrapper(AbstractScrapper):
