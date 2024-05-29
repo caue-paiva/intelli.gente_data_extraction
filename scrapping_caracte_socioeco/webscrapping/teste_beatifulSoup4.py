@@ -47,6 +47,53 @@ def file_types_to_regex(file_types_list:list[str])->str:
    base_str +=  ")"
    return r'base.{0,30}\.' + base_str
 
+def extract_best_dataset(file_name_list:list[str], priority_to_series_len:bool)->dict:
+   """
+
+   Return:
+      {
+      "file_name": "base/base_de_dados_2002_2009_xls.zip"
+      "time_series_len" : 3
+      "series_range" : (2002,2009)\n
+      }
+   """
+   
+   year_patern:str =  r'\b\d{4}\b'
+   most_recent_year:int = 0
+   max_years_in_series:int = 0
+   series_range:tuple[int] = ()
+   return_file:str
+
+   for file in file_name_list:
+      print(file)
+      years_str: list[str] = list(re.findall(file,year_patern))
+      print(years_str)
+      years_int: list[int] = list(map(int,years_str))
+      cur_years_in_series: int =  1 if len(years_int) == 1 else years_int[-1] - years_int[0] #numero de anos na série histórica
+      cur_series_range: tuple[int] = (years_int[0],years_int[-1]) if len(years_int) != 1 else (years_int[0])
+      #1 se a lista tiver so um ano ou o ano final - o inicial se tiver mais que 1 
+      
+      if priority_to_series_len: #prioridade para coletar com a maior série histórica
+         if cur_years_in_series >= max_years_in_series and max(years_int) > most_recent_year: #só um ano no dataset
+            return_file = file
+            max_years_in_series = cur_years_in_series
+            most_recent_year = max(years_int)
+            series_range = cur_series_range
+      else:
+         if max(years_int) > most_recent_year:
+            return_file = file
+            max_years_in_series = cur_years_in_series
+            most_recent_year = max(years_int)
+            series_range = cur_series_range
+
+
+   return {
+         "file_name": return_file,
+         "time_series_len" : max_years_in_series,
+         "series_range" : series_range
+   }
+
+
 
 def extract2(website_url:str)->str:
    response = requests.get(website_url)
@@ -55,27 +102,21 @@ def extract2(website_url:str)->str:
    soup = BeautifulSoup(html_content, 'html.parser')
    page_html = soup.prettify().lower()  #
    pattern = file_types_to_regex(["zip","xlsx","ods"])
-   print(pattern)
 
-   with open("teste.html", "w") as f:
-      f.write(page_html)
-
-
-
-   databases_match = re.finditer(pattern, page_html) #match no HTML com a string que identifica as bases de dados do ibge
+   databases_match:list[Match] = list(re.finditer(pattern, page_html)) #match no HTML com a string que identifica as bases de dados do ibge
+   str_list:list[str] = list(map(lambda x : page_html[x.start():x.end()],  databases_match))
+   print(str_list)
+   dict_ = extract_best_dataset(str_list,False)
    
-   for match_ in databases_match:
-      print(page_html[match_.start(): match_.end()])
    
-   most_recent_data: Match = max(databases_match,key= lambda x : x.group()) #acha a data mais recente entre as matches de banco de dados, isso por que 2010 > 2000 na comparação
+   #most_recent_data: Match = max(databases_match,key= lambda x : x.group()) #acha a data mais recente entre as matches de banco de dados, isso por que 2010 > 2000 na comparação
+   #substr:str = page_html[most_recent_data.start():most_recent_data.start() + 500]
 
-   substr:str = page_html[most_recent_data.start():most_recent_data.start() + 500]
-
-   return substr
+   return "dict_"
 
 
 if __name__ == "__main__":
 
    url:str = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
-   extract2(url)
+   print(extract2(url))
 
