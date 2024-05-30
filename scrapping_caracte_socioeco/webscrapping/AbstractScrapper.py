@@ -8,6 +8,7 @@ class BaseFileType(Enum): #enum para os tipos de arquivos que são comumente enc
    ODS = "ods"
    TXT = "txt"
    CSV = "csv"
+   
 
 
 class AbstractScrapper(ABC):

@@ -4,13 +4,7 @@ from re import Match
 import re , os
 
 
-def get_whole_link(html:str, substr_index:int)->str:
-   
-   link_end:int = html.find('"',substr_index)
-   link_start:int = html.rfind('"',0,substr_index)
 
-   return html[link_start+1:link_end]
- 
 def file_types_to_regex(file_types_list:list[str])->str:
    list_size:int = len(file_types_list)
    
@@ -75,10 +69,7 @@ def extract2(website_url:str)->str:
 
    response = requests.get(website_url) #request get pro site
    page_html: str = response.content.decode()  #pega conteudo html
-   
-   with open("teste2.html","w") as f:
-      f.write(page_html)
-   
+    
    pattern:str = file_types_to_regex(["zip","xlsx","ods"]) #cria padrão regex para achar certo tipo de arquivo
 
    databases_match:list[Match] = list(re.finditer(pattern, page_html,re.IGNORECASE)) #match no HTML com a string que identifica as bases de dados do ibge
@@ -94,7 +85,6 @@ def extract2(website_url:str)->str:
    entire_link:str = get_whole_link(page_html,file_index)
    print(entire_link)
    
-
    return  entire_link
 
 if __name__ == "__main__":
