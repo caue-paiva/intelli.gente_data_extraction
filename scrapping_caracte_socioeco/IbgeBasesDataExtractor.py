@@ -110,6 +110,7 @@ class CategoryDataExtractor():
 df:pd.DataFrame = pd.read_excel(os.path.join("webscrapping","tempfiles","PIB dos Municípios - base de dados 2010-2021.xlsx"))
 
 pib_percapita = {
+   "data_category": "caracterizacao_socio_economica",
    "data_name": "PIB per capita",
    "column_name": """Produto Interno Bruto per capita, 
 a preços correntes
@@ -119,6 +120,7 @@ a preços correntes
 }
 
 pib_agro = {
+   "data_category": "caracterizacao_socio_economica",
    "data_name": "PIB Agropecuária",
    "column_name": """Valor adicionado bruto da Agropecuária, 
 a preços correntes
@@ -139,15 +141,16 @@ if __name__ == "__main__":
    extractor = CategoryDataExtractor("teste")
 
    df1 = extractor.extract_data_points(df,df_info1)
+   print(df1.head(5))
    
    df2 = extractor.extract_data_points(df,df_info2)
-   print(df2.info())
+   print(df2.head(5))
 
    df3 = extractor.join_category_dfs([df1,df2])
 
-   print(df3.head(5))
-   print(df3.shape)
-   print(df3.info())
+   # print(df3.head(5))
+   # print(df3.shape)
+   # print(df3.info())
 
 
 

@@ -38,12 +38,12 @@ class DatasusLinkScrapper(AbstractScrapper):
          final_df = pd.concat(objs=[final_df,new_df],axis="index",ignore_index=True)
       
       return final_df
-   
+   """
    @classmethod   
    def download_database_locally(cls,website_url: str,data_abreviation:DatasusAbreviations)-> str:
       df:pd.DataFrame =  cls.extract_database(website_url,data_abreviation)
       df.to_csv(os.path.join(cls.EXTRACTED_FILES_DIR, "datasus_" + data_abreviation.value + ".csv"))
-   
+   """
    #overwride no método de achar o df pelo link, pq o csv do datasus é bem quebrado
    @classmethod
    def _dataframe_from_link(cls, file_url: str) -> pd.DataFrame:
@@ -95,6 +95,6 @@ class DatasusLinkScrapper(AbstractScrapper):
 
 url = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr"
 abreviation = DatasusAbreviations.ILLITERACY_RATE
-DatasusLinkScrapper.download_database_locally(url,abreviation)
+DatasusLinkScrapper.extract_database(url,abreviation)
 
 #df.to_csv(os.path.join("tempfiles","datasus_analfabetismo.csv"))

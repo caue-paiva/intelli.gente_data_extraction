@@ -8,6 +8,7 @@ class DataPointTypes(Enum): #Enum para os tipos de dados encontrados nas bases
    BOOL = "bool"
 
 class DataPoint(): #clase para um ponto de dado específico encontrado na tabela de dados brutos
+   data_category:str
    data_name: str
    column_name:str
    data_type: DataPointTypes
@@ -16,12 +17,14 @@ class DataPoint(): #clase para um ponto de dado específico encontrado na tabela
 
    def __init__(
       self,
+      data_category:str,
       data_name:str,
       column_name:str,
       data_type:DataPointTypes, 
       multiply_amount: int | None = None
    )-> None:
       
+      self.data_category = data_category
       self.data_name:str =  data_name
       self.column_name:str = column_name
       self.data_type: DataPointTypes = data_type
@@ -53,20 +56,22 @@ class TableDataPoints(): #classe para agregar todos os pontos de dados extraido 
 
    def add_data_point(
       self,
+      data_category:str,
       data_name:str,
       column_name:str,
       data_type:DataPointTypes,
       multiply_amount: int | None = None
    )->None:
-      self.data_point_list.append(DataPoint(data_name,column_name,data_type,multiply_amount))
+      self.data_point_list.append(DataPoint(data_category,data_name,column_name,data_type,multiply_amount))
 
    def add_data_point_dict(self,data_dict:dict[str, str|int])->None:
+      data_category:str = data_dict["data_category"]
       data_name:str = data_dict["data_name"]
       column_name:str = data_dict["column_name"]
       data_type:DataPointTypes = data_dict["data_type"]
       multiply_amount: int | None = data_dict.get("multiply_amount")
 
-      self.data_point_list.append(DataPoint(data_name,column_name,data_type,multiply_amount))
+      self.data_point_list.append(DataPoint(data_category,data_name,column_name,data_type,multiply_amount))
 
    def add_data_points_dicts(self, dict_list: list[dict[str, str|int]])->None:
       for data_point in dict_list:
