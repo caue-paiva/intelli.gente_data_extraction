@@ -1,5 +1,5 @@
-import selenium.webdriver
-import re , os
+import requests
+import re 
 import pandas as pd
 from html_parser import MyHTMLParser
 from AbstractScrapper import AbstractScrapper, BaseFileType
@@ -63,10 +63,9 @@ class IbgeBasesScrapper(AbstractScrapper):
       DATA_BASE_IDENTIFIER_PATTERN: str = r"Base \d{4}-\d{4}" #regex para achar a string que identifica onde está os arquivos da base de dados
       HTML_TAG_IDENTIFIER:str = "li" #essas são constantes internas da lógica de webscrapping de página desse tipo 
 
-      driver = selenium.webdriver.Chrome()
-      driver.get(self.website_url) #acessa a página do url
-      page_source:str = driver.page_source #pega o HTML da página
-      driver.quit() #fecha o webdriver 
+      response = requests.get(self.website_url) #request get pro site
+      page_source:str = response.content.decode()  #pega conteudo html
+     
 
       databases_match = re.finditer(DATA_BASE_IDENTIFIER_PATTERN, page_source) #match no HTML com a string que identifica as bases de dados do ibge
    
@@ -95,7 +94,4 @@ if __name__ == "__main__":
    scrapper = IbgeBasesScrapper(website_url=url,file_type=BaseFileType.EXCEL)
    
    df:pd.DataFrame = scrapper.extract_database()
-
    print(df.head())
-
-   df.to_csv(os.path.join("tempfiles","pib2.csv"))
