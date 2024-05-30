@@ -97,7 +97,7 @@ class AbstractScrapper(ABC):
          case BaseFileType.ODS:
             pass
          case BaseFileType.CSV:
-            pass
+            df = pd.read_csv(file_path)
       """
       TODO
       Colocar os casos para os outros tipos de arquivos, caso seja possível extrair dataframes deles
