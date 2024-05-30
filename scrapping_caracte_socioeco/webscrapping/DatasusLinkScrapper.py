@@ -17,8 +17,8 @@ class DatasusAbreviations(Enum):
 
 class DatasusLinkScrapper(AbstractScrapper):
    
-   @classmethod
-   def extract_database(cls,website_url: str, data_abreviation:DatasusAbreviations)-> pd.DataFrame:
+
+   def extract_database(self,website_url: str, data_abreviation:DatasusAbreviations)-> pd.DataFrame:
       driver = webdriver.Chrome()
       driver.get(website_url) 
       select_element = driver.find_element(By.ID, 'A') #acha o botão de selecionar os anos
@@ -27,26 +27,24 @@ class DatasusLinkScrapper(AbstractScrapper):
       select_button = Select(select_element) #elemento de selecionar
       year_options_list: list[str] = list(map(lambda x :x.text, select_button.options))
       for year_option in year_options_list:
-         csv_link_list.append(cls.__get_csv_link_by_year(driver, select_button,data_abreviation,year_option))
+         csv_link_list.append(self.__get_csv_link_by_year(driver, select_button,data_abreviation,year_option))
       driver.close()
 
       final_df: pd.DataFrame = pd.DataFrame()
       for link ,year in zip(csv_link_list,year_options_list):
          print(link)
-         new_df = cls._dataframe_from_link(link)
+         new_df = self._dataframe_from_link(link)
          new_df["ano"] = year
          final_df = pd.concat(objs=[final_df,new_df],axis="index",ignore_index=True)
       
       return final_df
-   """
-   @classmethod   
-   def download_database_locally(cls,website_url: str,data_abreviation:DatasusAbreviations)-> str:
-      df:pd.DataFrame =  cls.extract_database(website_url,data_abreviation)
-      df.to_csv(os.path.join(cls.EXTRACTED_FILES_DIR, "datasus_" + data_abreviation.value + ".csv"))
-   """
+    
+   def download_database_locally(self,website_url: str,data_abreviation:DatasusAbreviations)-> str:
+      df:pd.DataFrame =  self.extract_database(website_url,data_abreviation)
+      df.to_csv(os.path.join(self.EXTRACTED_FILES_DIR, "datasus_" + data_abreviation.value + ".csv"))
+
    #overwride no método de achar o df pelo link, pq o csv do datasus é bem quebrado
-   @classmethod
-   def _dataframe_from_link(cls, file_url: str) -> pd.DataFrame:
+   def _dataframe_from_link(self, file_url: str) -> pd.DataFrame:
       df = pd.read_csv(file_url, encoding="latin-1", sep=";",header=3)
       if df is None:
          raise RuntimeError("falha em gerar o df a partir do link")
@@ -56,8 +54,7 @@ class DatasusLinkScrapper(AbstractScrapper):
 
       return df
       
-   @classmethod
-   def __get_csv_link_by_year(cls, driver:webdriver.Chrome,select_elem:Select ,data_abreviation:DatasusAbreviations, year_str:str)->str:
+   def __get_csv_link_by_year(self, driver:webdriver.Chrome,select_elem:Select ,data_abreviation:DatasusAbreviations, year_str:str)->str:
       last_two_digits:str = year_str[-2:] #ultimos dois dígitos do número em forma de str
       year_button_identifier: str = data_abreviation.value + last_two_digits + ".dbf"
       
@@ -72,7 +69,7 @@ class DatasusLinkScrapper(AbstractScrapper):
       driver.switch_to.window(window_handles[1])
 
       html:str = driver.page_source
-      csv_link:str = cls.__csv_link_from_html(html)
+      csv_link:str = self.__csv_link_from_html(html)
 
       driver.close()
       driver.switch_to.window(window_handles[0])
@@ -95,6 +92,7 @@ class DatasusLinkScrapper(AbstractScrapper):
 
 url = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr"
 abreviation = DatasusAbreviations.ILLITERACY_RATE
-DatasusLinkScrapper.extract_database(url,abreviation)
+scrapper = DatasusLinkScrapper()
+scrapper.extract_database(url,abreviation)
 
 #df.to_csv(os.path.join("tempfiles","datasus_analfabetismo.csv"))

@@ -12,23 +12,22 @@ class IbgeBasesMunicScrapper(IbgeBasesScrapper):
       "2021" : "https://www.ibge.gov.br/estatisticas/sociais/educacao/10586-pesquisa-de-informacoes-basicas-municipais.html?edicao=35765&t=downloads",
    }
 
-   @classmethod
-   def extract_database(cls,file_type: BaseFileType, priority_to_series_len:bool) ->pd.DataFrame:
-      file_links_by_year:dict = cls._get_all_files(file_type,priority_to_series_len)
+   def extract_database(self,file_type: BaseFileType, priority_to_series_len:bool) ->pd.DataFrame:
+      file_links_by_year:dict = self._get_all_files(file_type,priority_to_series_len)
       #fazer auguma lógica para concatenar os dados de todos os anos, mas para isso é preciso saber como manipular esses dados
       print(file_links_by_year)
       return super().extract_database()
    
-   @classmethod
-   def _get_all_files(cls,file_type: BaseFileType, priority_to_series_len:bool)->dict[str,str]:
+   def _get_all_files(self,file_type: BaseFileType, priority_to_series_len:bool)->dict[str,str]:
       file_links_by_year:dict = {}
       
-      for year,page_url in cls.URL_FOR_EACH_YEAR.items():
+      for year,page_url in self.URL_FOR_EACH_YEAR.items():
           file_link:str = super()._get_file_link(page_url,file_type,priority_to_series_len)
           file_links_by_year[year] = file_link
       
       return file_links_by_year
-  
+
+scrapper: IbgeBasesMunicScrapper = IbgeBasesMunicScrapper()
 
 # links:str = IbgeBasesMunicScrapper.extract_database(BaseFileType.EXCEL,True)
 # print(links)

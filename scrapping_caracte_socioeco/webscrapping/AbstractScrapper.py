@@ -15,18 +15,24 @@ class AbstractScrapper(ABC):
 
    EXTRACTED_FILES_DIR:str = "tempfiles" #diretório temporário para guardar os arquivos .zip e de dados extraidos
 
+   """
+   todas as classes que herdam dessa principal não devem ter construtores com campos para guardar o estado, visto que a extração de
+   dados é stateless, com as classes apenas organizando métodos para realizar essa tarefa
+   """
+   def __init__(self)->None: 
+      pass
+
    @abstractmethod
-   def extract_database(cls,website_url:str, file_type:BaseFileType)->pd.DataFrame:
+   def extract_database(website_url:str, file_type:BaseFileType)->pd.DataFrame:
       """Extrai um arquivo e retorna ele como um Dataframe da base de dados oficial dado um URL para uma página e o tipo de dado do arquivo"""
       pass
    
    @abstractmethod
-   def download_database_locally(cls,website_url:str, file_type:BaseFileType)->str:
+   def download_database_locally(website_url:str, file_type:BaseFileType)->str:
       """baixa um arquivo da base de dados oficial e retorna o caminho para ele dado um URL para uma página e o tipo de dado do arquivo"""
       pass
    
-   @classmethod
-   def _download_and_extract_zipfile(cls, file_url:str)->str:
+   def _download_and_extract_zipfile(self, file_url:str)->str:
       """
       Dado um URL para baixar um arquivo zip das bases oficiais, baixa esse arquivo zip e extrai seu conteúdo,
       retornando o caminho para o arquivo de dados que extraido. Esse método é implementado na classe mãe abstrata, pois ele é genérico para a maioria
@@ -37,14 +43,14 @@ class AbstractScrapper(ABC):
       """
      
       #caso o diretório para guardar os arquivos extraidos não exista, vamos criar ele
-      if not os.path.exists(cls.EXTRACTED_FILES_DIR):
-         os.makedirs(cls.EXTRACTED_FILES_DIR)
+      if not os.path.exists(self.EXTRACTED_FILES_DIR):
+         os.makedirs(self.EXTRACTED_FILES_DIR)
 
       #baixando o arquivo zip
       response = requests.get(file_url) #request get para o link do arquivo zip 
       if response.status_code == 200: #request com sucesso
          zip_file_name =  "zipfile.zip"
-         zip_file_path = os.path.join(cls.EXTRACTED_FILES_DIR, zip_file_name)
+         zip_file_path = os.path.join(self.EXTRACTED_FILES_DIR, zip_file_name)
          print(zip_file_name)
     
          with open(zip_file_path, "wb") as f:
@@ -53,11 +59,11 @@ class AbstractScrapper(ABC):
          raise RuntimeError("Falhou em baixar o arquivo .zip, status code da resposta:", response.status_code)
 
       #extraindo o arquivo zip
-      with zipfile.ZipFile(os.path.join(cls.EXTRACTED_FILES_DIR, zip_file_name), "r") as zip_ref:
-            zip_ref.extractall(cls.EXTRACTED_FILES_DIR)
+      with zipfile.ZipFile(os.path.join(self.EXTRACTED_FILES_DIR, zip_file_name), "r") as zip_ref:
+            zip_ref.extractall(self.EXTRACTED_FILES_DIR)
 
       #no diretório de arquivos baixados e extraidos, vamos ter o .zip e o arquivo de dados extraido
-      extracted_files:list[str] = os.listdir(cls.EXTRACTED_FILES_DIR)
+      extracted_files:list[str] = os.listdir(self.EXTRACTED_FILES_DIR)
       
       data_file_name:str = ""
       for file in extracted_files:
@@ -68,10 +74,9 @@ class AbstractScrapper(ABC):
       if not extracted_files or not data_file_name: #nenhum arquivo foi extraido ou nenhum arquivo de dados foi encontrado
          raise RuntimeError("Extração do arquivo zip num diretório temporário falhou")
       
-      return os.path.join(cls.EXTRACTED_FILES_DIR, data_file_name) #retorna o caminho para o arquivo extraido
+      return os.path.join(self.EXTRACTED_FILES_DIR, data_file_name) #retorna o caminho para o arquivo extraido
    
-   @classmethod
-   def _dataframe_from_link(cls, file_url:str, file_type: BaseFileType, zipfile: bool = True)->pd.DataFrame:
+   def _dataframe_from_link(self, file_url:str, file_type: BaseFileType, zipfile: bool = True)->pd.DataFrame:
       """
       Dado um link para um arquivo , se ele for zip primeiro extrai e dps carrega o arquivo tabular extraido, caso não seja apenas usas as 
       funções do pandas para carregar essa arquivo em um Dataframe
@@ -86,7 +91,7 @@ class AbstractScrapper(ABC):
       """
       
       if zipfile: #link  é pra um arquivo zip, vamos extrair ele primeiro
-         file_path:str = cls._download_and_extract_zipfile(file_url) #chama o método da mesma classe de extrair o zipfile
+         file_path:str = self._download_and_extract_zipfile(file_url) #chama o método da mesma classe de extrair o zipfile
       else:
          file_path:str = file_url  #link n é pra um arquivo zip, o argumento pode ser passado para o pandas direto
 
