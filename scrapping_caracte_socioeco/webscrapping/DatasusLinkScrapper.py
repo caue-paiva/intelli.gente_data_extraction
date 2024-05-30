@@ -17,7 +17,6 @@ class DatasusAbreviations(Enum):
 
 class DatasusLinkScrapper(AbstractScrapper):
    
-
    def extract_database(self,website_url: str, data_abreviation:DatasusAbreviations)-> pd.DataFrame:
       driver = webdriver.Chrome()
       driver.get(website_url) 
