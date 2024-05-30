@@ -1,5 +1,5 @@
 import selenium.webdriver
-import re
+import re , os
 import pandas as pd
 from html_parser import MyHTMLParser
 from AbstractScrapper import AbstractScrapper, BaseFileType
@@ -86,6 +86,7 @@ class IbgeBasesScrapper(AbstractScrapper):
          
       if not final_link:
          raise RuntimeError("não foi possível extrai o link para o arquivo de dados")
+      print(final_link)
       return final_link
 
 
@@ -96,3 +97,5 @@ if __name__ == "__main__":
    df:pd.DataFrame = scrapper.extract_database()
 
    print(df.head())
+
+   df.to_csv(os.path.join("tempfiles","pib2.csv"))
