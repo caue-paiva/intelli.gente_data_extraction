@@ -13,7 +13,7 @@ class IbgeBasesMunicScrapper(IbgeBasesScrapper):
    }
 
    @classmethod
-   def extract_database(cls,file_type: BaseFileType, priority_to_series_len:bool) -> pd.DataFrame:
+   def extract_database(cls,file_type: BaseFileType, priority_to_series_len:bool) ->pd.DataFrame:
       file_links_by_year:dict = cls._get_all_files(file_type,priority_to_series_len)
       #fazer auguma lógica para concatenar os dados de todos os anos, mas para isso é preciso saber como manipular esses dados
       print(file_links_by_year)
