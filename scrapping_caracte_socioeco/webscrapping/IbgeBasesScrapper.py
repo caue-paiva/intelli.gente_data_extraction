@@ -19,12 +19,14 @@ class IbgeBasesScrapper(AbstractScrapper):
    BASE_REGEX_PATTERN:str = r'base.{0,70}\.' #regex padrão pra qualquer substr com a palavra base
    website_url:str
    file_type: BaseFileType
+   priority_to_series_len:bool
    __data_file_regex_pattern: str #regex que pega o padrão e adiciona um .tipo de arquivo no final, para identificar links para esses arquivos
 
 
-   def __init__(self, website_url: str, file_type: BaseFileType) -> None:
+   def __init__(self, website_url: str, file_type: BaseFileType, priority_to_series_len:bool) -> None:
       self.website_url = website_url
       self.file_type = file_type
+      self.priority_to_series_len = priority_to_series_len
       self.__file_type_to_regex()
 
    def extract_database(self)->pd.DataFrame:
@@ -143,12 +145,10 @@ class IbgeBasesScrapper(AbstractScrapper):
       file_str_and_index: dict = {page_html[x.start():x.end()]:x.start() for x in databases_match} #cria um dict da string do link de bases e seu index na str do HTML
       
       str_list:list[str] = list(file_str_and_index.keys()) #lista das strings dos links
-      data_info:dict = self.__extract_best_dataset(str_list,True) #extrai o melhor dataset baseado na qntd de dados e/ou dados mais recentes
+      data_info:dict = self.__extract_best_dataset(str_list,self.priority_to_series_len) #extrai o melhor dataset baseado na qntd de dados e/ou dados mais recentes
       file_name:str = data_info["file_name"] #nome do arquivo escolhido
       file_index: int = file_str_and_index[file_name] #index desse arquivo
       final_link:str = self.__get_whole_link(page_html,file_index)
-
-      print(final_link)
 
       return final_link
 
