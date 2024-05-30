@@ -1,0 +1,16 @@
+{
+
+   "economia":{
+      "Índice de Gini da renda domiciliar per capita segundo Município" : {
+         "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def" : [1991,2000,2010]
+      }
+   },
+   "educação":{
+      "Taxa de analfabetismo segundo Município" : {
+         "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?ibge/censo/cnv/alfbr" : [2010],
+         "" : []
+      }
+   }
+
+
+}
