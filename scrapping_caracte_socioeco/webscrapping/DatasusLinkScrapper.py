@@ -1,5 +1,5 @@
 import pandas as pd
-from AbstractScrapper import AbstractScrapper
+from .AbstractScrapper import AbstractScrapper
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
@@ -24,8 +24,7 @@ class DatasusLinkScrapper(AbstractScrapper):
       self.website_url = website_url
       self.data_abrevia = data_abrevia
    
-   def extract_database(self)->tuple[list[pd.DataFrame] , list[int]]:
-      data_values_col:str = self.data_abrevia.value #o nome da coluna com os dados no DF será a abreviação de cada dado, vindo do enum
+   def extract_database(self)->tuple[list[pd.DataFrame], list[int]]:
 
       if self.data_abrevia == DatasusAbreviations.GINI_COEF:
          driver = webdriver.Chrome()
@@ -34,17 +33,16 @@ class DatasusLinkScrapper(AbstractScrapper):
          html:str = driver.page_source
          link:str = self.__get_link_from_html(html,self.data_abrevia)
          list_of_years:list[int] = self.__get_years_from_html(driver)
-         df =  self.__process_and_clean_df(self._dataframe_from_link(),list_of_years,data_values_col)
-         return [df] , list_of_years
+         df =  self._dataframe_from_link()
+         return [df], list_of_years
 
       else:
-         csv_link_list,year_options_list = self.__selenium_page_interaction()
-         final_df: pd.DataFrame = pd.DataFrame()
-         for link ,year in zip(csv_link_list,year_options_list):
-            new_df =  self.__process_and_clean_df(self._dataframe_from_link(link),[year],data_values_col )
-            final_df = pd.concat(objs=[final_df,new_df],axis="index",ignore_index=True)
-         
-         return [final_df], list_of_years
+         csv_link_list, year_options_list = self.__selenium_page_interaction()
+         list_of_dfs:list[pd.DataFrame] = []
+         for link  in csv_link_list:
+            list_of_dfs.append(self._dataframe_from_link(link))
+
+         return list_of_dfs, year_options_list
     
    def download_database_locally(self)-> str:
       df:pd.DataFrame =  self.extract_database(self.website_url,self.data_abrevia)
@@ -78,6 +76,7 @@ class DatasusLinkScrapper(AbstractScrapper):
       
       return df
 
+   """
    def __process_and_clean_df(self,df:pd.DataFrame,list_of_years:list[int],data_value_col:str)->pd.DataFrame:
       df = df.dropna(how = "any", axis= "index") #da drop nos NaN que vem de linhas do CSV com informações sobre os estudos 
       df = df[df["Município"] != "Total"]
@@ -90,6 +89,7 @@ class DatasusLinkScrapper(AbstractScrapper):
          df = pd.melt(df, id_vars=['Município'], var_name='ano', value_name=data_value_col)
 
       return df
+   """
 
    def __get_csv_link_by_year(self, driver:webdriver.Chrome,select_elem:Select, year_str:str)->str:
       last_two_digits:str = year_str[-2:] #ultimos dois dígitos do número em forma de str
