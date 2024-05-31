@@ -28,14 +28,11 @@ class AbstractScrapper(ABC):
       pass
 
    @abstractmethod
-   def extract_processed_collection():
-      pass
-   
-   @abstractmethod
    def download_database_locally(website_url:str, file_type:BaseFileType)->str:
       """baixa um arquivo da base de dados oficial e retorna o caminho para ele dado um URL para uma página e o tipo de dado do arquivo"""
       pass
    
+
    def _download_and_extract_zipfile(self, file_url:str)->str:
       """
       Dado um URL para baixar um arquivo zip das bases oficiais, baixa esse arquivo zip e extrai seu conteúdo,
@@ -96,6 +93,7 @@ class AbstractScrapper(ABC):
       
       if zipfile: #link  é pra um arquivo zip, vamos extrair ele primeiro
          file_path:str = self._download_and_extract_zipfile(file_url) #chama o método da mesma classe de extrair o zipfile
+         print("zipfile path" + file_path)
       else:
          file_path:str = file_url  #link n é pra um arquivo zip, o argumento pode ser passado para o pandas direto
 

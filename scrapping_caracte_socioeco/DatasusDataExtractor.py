@@ -7,7 +7,7 @@ from AbstractDataExtractor import AbstractDataExtractor
 class DatasusDataExtractor(AbstractDataExtractor):
 
    CITY_IDENTIFIER_COLUMN: str = "Município"
-   
+
    def __init__(self) -> None:
       pass
 
@@ -65,16 +65,17 @@ class DatasusDataExtractor(AbstractDataExtractor):
 
    def extract_processed_collection(
       self,
-      dfs: list[pd.DataFrame],
+      data_scrapper: DatasusLinkScrapper,
       data_category:str,
-      time_series_years:list[int], #talvez esse argumento possa ser inferido com o .value_counts do pandas
       data_identifier:str,
-      data_abrevia: DatasusAbreviations
    )->ProcessedDataCollection:
+      
+      dfs = data_scrapper.extract_database()
+
       if len(dfs) < 1:
          raise IOError("Lista de dataframes deve ter tamanho de pelo menos 1")
 
-      if data_abrevia == DatasusAbreviations.GINI_COEF: #df único, caso separado
+      if data_scrapper.data_abrevia == DatasusAbreviations.GINI_COEF: #df único, caso separado
          processed_df:pd.DataFrame = self.__process_and_clean_df(dfs[0],time_series_years)
       else: #lista de dataframes, um para cada ano, caso padrão
          processed_df:pd.DataFrame = self.__join_df_parts(dfs,time_series_years)
@@ -82,26 +83,28 @@ class DatasusDataExtractor(AbstractDataExtractor):
       processed_df = self.__transform_df(processed_df,data_identifier,data_abrevia.value)
       return ProcessedDataCollection(data_category,data_identifier,time_series_years,processed_df)
 
-
-url1 = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr"
-url2 = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
-abreviation1 = DatasusAbreviations.ILLITERACY_RATE
-abreviation2 = DatasusAbreviations.GINI_COEF
-
-extractor = DatasusDataExtractor()
-scrapper = DatasusLinkScrapper()
-
-df = scrapper.extract_database(url1,abreviation1)
-
-collection = extractor.extract_processed_collection()
+if __name__ == "__main__":
 
 
-"""
-df = pd.read_csv(os.path.join("webscrapping","tempfiles","datasus_alfbr.csv"))
-collection:ProcessedDataCollection = extractor.get_data_collection(df,"educa",[1991,2000,2010],"TAXA ANALFABETISMO","Município","Taxa_de_analfabetismo")
+   url1 = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr"
+   url2 = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
+   abreviation1 = DatasusAbreviations.ILLITERACY_RATE
+   abreviation2 = DatasusAbreviations.GINI_COEF
 
-#df = __transform_df(df,"TAXA ANALFABETISMO","Município","Taxa_de_analfabetismo")
+   extractor = DatasusDataExtractor()
+   scrapper = DatasusLinkScrapper()
 
-print(collection.df.head(5))
-print(collection.df.info())
-"""
+   df = scrapper.extract_database(url1,abreviation1)
+
+   collection = extractor.extract_processed_collection()
+
+
+   """
+   df = pd.read_csv(os.path.join("webscrapping","tempfiles","datasus_alfbr.csv"))
+   collection:ProcessedDataCollection = extractor.get_data_collection(df,"educa",[1991,2000,2010],"TAXA ANALFABETISMO","Município","Taxa_de_analfabetismo")
+
+   #df = __transform_df(df,"TAXA ANALFABETISMO","Município","Taxa_de_analfabetismo")
+
+   print(collection.df.head(5))
+   print(collection.df.info())
+   """

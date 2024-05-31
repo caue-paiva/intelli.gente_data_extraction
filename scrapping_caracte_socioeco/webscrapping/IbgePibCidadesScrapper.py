@@ -16,8 +16,19 @@ url da página: https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais
 class IbgeBasesScrapper(AbstractScrapper):
 
    BASE_REGEX_PATTERN:str = r'base.{0,70}\.' #regex padrão pra qualquer substr com a palavra base
+   
+   url:str
+   file_type:BaseFileType
+   file_is_zip:bool
+   priority_to_series_len:bool
 
-   def extract_database(self, url: str, file_type: BaseFileType, priority_to_series_len:bool, zipfile:bool)->pd.DataFrame:
+   def __init__(self, url:str, file_type:BaseFileType, file_is_zip:bool, priority_to_series_len:bool = False) -> None:
+      self.url = url
+      self.file_type = file_type
+      self.file_is_zip = file_is_zip
+      self.priority_to_series_len = priority_to_series_len
+
+   def extract_database(self)->pd.DataFrame:
       """
       Extrai um arquivo e retorna ele como um Dataframe da base de dados do IBGE dado um URL para uma página do IBGE, um identificador da tag HTML que o link do arquivo está e o tipo de dado do arquivo
 
@@ -30,10 +41,11 @@ class IbgeBasesScrapper(AbstractScrapper):
          (pd.Dataframe) : Dataframe do Pandas com os dados baixados   
       """
       
-      file_link: str = self._get_file_link(url, file_type, priority_to_series_len)
-      return super()._dataframe_from_link(file_link,file_type,zipfile) #retorna o dataframe do link extraido
+      file_link: str = self._get_file_link()
+      print(self.file_is_zip)
+      return super()._dataframe_from_link(file_link,self.file_type, self.file_is_zip) #retorna o dataframe do link extraido
    
-   def download_database_locally(self, url: str, file_type: BaseFileType, priority_to_series_len:bool)-> str:
+   def download_database_locally(self)-> str:
       """
       Extrai um arquivo e baixa ele localmente apenas da base de dados do IBGE dado um URL para uma página do IBGE, um identificador da tag HTML que o link do arquivo está e o tipo de dado do arquivo
 
@@ -46,14 +58,14 @@ class IbgeBasesScrapper(AbstractScrapper):
          (str) : caminho para o arquivo baixado
       """
       
-      file_link:str = self._get_file_link(url, file_type, priority_to_series_len)
+      file_link:str = self._get_file_link()
       return super()._download_and_extract_zipfile(file_link)
 
-   def _file_type_to_regex(self,file_type:BaseFileType)->str:
+   def _file_type_to_regex(self)->str:
       """
       cria um padrão de regex para pegar links para arquivos de dados com o nome base e de um tipo específico (.zip,.xlsx...)
       """
-      file_types_list:list[str] = ["zip", file_type.value]
+      file_types_list:list[str] = ["zip", self.file_type.value]
       list_size:int = len(file_types_list)
       
       base_str = "("
@@ -65,19 +77,19 @@ class IbgeBasesScrapper(AbstractScrapper):
       base_str +=  ")"
       return self.BASE_REGEX_PATTERN + base_str
 
-   def _get_file_link(self,url: str, file_type: BaseFileType, priority_to_series_len:bool)->str:
+   def _get_file_link(self)->str:
       """
       realiza o web-scrapping e retorna o link para o arquivo da base mais atual e com o tipo de arquivo passado como argumento
       """
-      response = requests.get(url) #request get pro site
+      response = requests.get(self.url) #request get pro site
       page_html: str = response.content.decode()  #pega conteudo html
-      regex_pattern:str = self._file_type_to_regex(file_type)
+      regex_pattern:str = self._file_type_to_regex()
       
       databases_match:list[Match] = list(re.finditer(regex_pattern, page_html,re.IGNORECASE)) #match no HTML com a string que identifica as bases de dados do ibge
       file_str_and_index: dict = {page_html[x.start():x.end()]:x.start() for x in databases_match} #cria um dict da string do link de bases e seu index na str do HTML
       
       str_list:list[str] = list(file_str_and_index.keys()) #lista das strings dos links
-      data_info:dict = self._extract_best_dataset(str_list,priority_to_series_len) #extrai o melhor dataset baseado na qntd de dados e/ou dados mais recentes
+      data_info:dict = self._extract_best_dataset(str_list) #extrai o melhor dataset baseado na qntd de dados e/ou dados mais recentes
       file_name:str = data_info["file_name"] #nome do arquivo escolhido
       file_index: int = file_str_and_index[file_name] #index desse arquivo
       final_link:str = self._get_whole_link(page_html,file_index)
@@ -96,7 +108,7 @@ class IbgeBasesScrapper(AbstractScrapper):
 
       return html[link_start+1:link_end]
  
-   def _extract_best_dataset(self,file_name_list:list[str], priority_to_series_len:bool)->dict:
+   def _extract_best_dataset(self,file_name_list:list[str])->dict:
       """
 
       Return:
@@ -124,7 +136,7 @@ class IbgeBasesScrapper(AbstractScrapper):
          cur_series_range: tuple[int] = (years_int[0],years_int[-1]) if len(years_int) != 1 else (years_int[0])
          #1 se a lista tiver so um ano ou o ano final - o inicial se tiver mais que 1 
          
-         if priority_to_series_len: #prioridade para coletar com a maior série histórica
+         if self.priority_to_series_len: #prioridade para coletar com a maior série histórica
             if cur_years_in_series >= max_years_in_series and max(years_int) > most_recent_year: #só um ano no dataset
                return_file = file
                max_years_in_series = cur_years_in_series
@@ -149,7 +161,6 @@ if __name__ == "__main__":
    url = "https://www.ibge.gov.br/estatisticas/sociais/educacao/10586-pesquisa-de-informacoes-basicas-municipais.html?edicao=29466&t=downloads"
    url2 =  "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
    url2020 = "https://www.ibge.gov.br/estatisticas/sociais/educacao/10586-pesquisa-de-informacoes-basicas-municipais.html?edicao=32141&t=downloads"
-   scrapper = IbgeBasesScrapper()
-   
-   df:pd.DataFrame = scrapper.extract_database(url2020,BaseFileType.EXCEL,True,False)
+   scrapper = IbgeBasesScrapper(url2,BaseFileType.EXCEL,True)
+   df:pd.DataFrame = scrapper.extract_database()
    print(df.head())
