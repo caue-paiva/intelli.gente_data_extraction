@@ -5,6 +5,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 import time , os , re 
 from enum import Enum
+from ..DatasusDataExtractor import DatasusDataExtractor
+from ..DataCollection import ProcessedDataCollection
 
 class DatasusAbreviations(Enum):
    """
@@ -17,6 +19,17 @@ class DatasusAbreviations(Enum):
 
 class DatasusLinkScrapper(AbstractScrapper):
    
+   def extract_processed_collection(
+         self,
+         website_url:str,
+         data_abrevia:DatasusAbreviations, 
+         extractor:DatasusDataExtractor,
+         data_category:str,
+         data_identifier:str
+   )->ProcessedDataCollection:
+    pass
+      
+
    def extract_database(self,website_url: str, data_abrevia:DatasusAbreviations)->list[pd.DataFrame]:
       data_values_col:str = data_abrevia.value #o nome da coluna com os dados no DF será a abreviação de cada dado, vindo do enum
 
