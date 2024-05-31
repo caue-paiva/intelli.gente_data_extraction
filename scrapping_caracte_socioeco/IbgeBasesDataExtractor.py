@@ -2,7 +2,8 @@ import pandas as pd
 import os
 from TableDataPoints import TableDataPoints, DataPointTypes
 from AbstractDataExtractor import AbstractDataExtractor
-
+from webscrapping.IbgePibCidadesScrapper import IbgePibCidadesScrapper , BaseFileType
+from typing import Type
 
 """
 Existem cidades com nomes duplicados, vai ser usado o código de município para identificar esses municípios, porém bases antigas como o datasus 2010 usam
@@ -17,12 +18,12 @@ class CategoryDataExtractor(AbstractDataExtractor):
    def extract_processed_collection():
       pass
 
-   def extract_data_points(self, df:pd.DataFrame, data_info: TableDataPoints)->pd.DataFrame:
+   def extract_data_points(self, scrapper: Type[IbgePibCidadesScrapper], data_info: TableDataPoints)->pd.DataFrame:
       """ 
       extrai o dataframe bruto da base em um df menor apenas com as colunas de ano, código de cidade e os pontos de dados buscados
       
       Args:
-         df (dataframe) : dataframe bruto da base de dados
+        scrapper (Type[IbgePibCidadesScrapper]) : um objeto dessa classe ou de uma classe filha que implemente a interface extract_base 
          data_info (TableDataPoints) : Classe para especificar onde e como os dados buscados estão no df bruto
       
       Return:
@@ -30,6 +31,7 @@ class CategoryDataExtractor(AbstractDataExtractor):
          dados em cada tabela de categoria
       """
 
+      df = scrapper.extract_database()
       if len(data_info.data_point_list) < 1:
          raise IOError("Lista de ponto de dados deve conter pelo menos 1 ponto de dado")
       
@@ -126,20 +128,24 @@ if __name__ == "__main__":
    df_info1 = TableDataPoints("Ano","Código do Município")
    df_info1.add_data_points_dicts([pib_agro])
 
-   df_info2 = TableDataPoints("Ano","Código do Município")
-   df_info2.add_data_points_dicts([pib_percapita])
+  # df_info2 = TableDataPoints("Ano","Código do Município")
+   df_info1.add_data_points_dicts([pib_percapita])
 
+   url2 =  "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
+
+   scrapper = IbgePibCidadesScrapper(url2,BaseFileType.EXCEL,True)
    extractor = CategoryDataExtractor()
 
-   df1 = extractor.extract_data_points(df,df_info1)
+   df1 = extractor.extract_data_points(scrapper,df_info1)
    print(df1.head(5))
+   df1.to_csv("teste.csv")
    
-   df2 = extractor.extract_data_points(df,df_info2)
-   print(df2.head(5))
+   #df2 = extractor.extract_data_points(scrapper,df_info2)
+   #print(df2.head(5))
 
-   df3 = extractor.join_category_dfs([df1,df2])
+   #df3 = extractor.join_category_dfs([df1,df2])
 
-   # print(df3.head(5))
+  # print(df3.head(5))
    # print(df3.shape)
    # print(df3.info())
 

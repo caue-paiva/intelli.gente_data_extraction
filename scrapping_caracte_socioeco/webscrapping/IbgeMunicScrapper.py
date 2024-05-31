@@ -1,9 +1,9 @@
 
 import pandas as pd
 from AbstractScrapper import BaseFileType
-from IbgePibCidadesScrapper import IbgeBasesScrapper
+from IbgePibCidadesScrapper import IbgePibCidadesScrapper
 
-class IbgeBasesMunicScrapper(IbgeBasesScrapper):
+class IbgeBasesMunicScrapper(IbgePibCidadesScrapper):
    
    #a base MUNI de municípios do IBGE  tem um link diferente para os dados de cada ano, pelo menos isso é oq da pra ver no HTML da página
    URL_FOR_EACH_YEAR:dict[str,str] = {
@@ -34,7 +34,6 @@ class IbgeBasesMunicScrapper(IbgeBasesScrapper):
       
       return file_links_by_year
 
-scrapper: IbgeBasesMunicScrapper = IbgeBasesMunicScrapper()
 
 # links:str = IbgeBasesMunicScrapper.extract_database(BaseFileType.EXCEL,True)
 # print(links)

@@ -2,7 +2,7 @@ import requests
 import re 
 from re import Match
 import pandas as pd
-from AbstractScrapper import AbstractScrapper, BaseFileType
+from .AbstractScrapper import AbstractScrapper, BaseFileType
 
 
 """
@@ -13,7 +13,7 @@ url da página: https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais
 
 """
 
-class IbgeBasesScrapper(AbstractScrapper):
+class IbgePibCidadesScrapper(AbstractScrapper):
 
    BASE_REGEX_PATTERN:str = r'base.{0,70}\.' #regex padrão pra qualquer substr com a palavra base
    
@@ -161,6 +161,6 @@ if __name__ == "__main__":
    url = "https://www.ibge.gov.br/estatisticas/sociais/educacao/10586-pesquisa-de-informacoes-basicas-municipais.html?edicao=29466&t=downloads"
    url2 =  "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
    url2020 = "https://www.ibge.gov.br/estatisticas/sociais/educacao/10586-pesquisa-de-informacoes-basicas-municipais.html?edicao=32141&t=downloads"
-   scrapper = IbgeBasesScrapper(url2,BaseFileType.EXCEL,True)
+   scrapper = IbgePibCidadesScrapper(url2,BaseFileType.EXCEL,True)
    df:pd.DataFrame = scrapper.extract_database()
    print(df.head())

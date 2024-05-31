@@ -1,8 +1,9 @@
 import pandas as pd
-import re, os
+import re
 from DataCollection import ProcessedDataCollection
 from webscrapping.DatasusLinkScrapper import DatasusAbreviations, DatasusLinkScrapper
 from AbstractDataExtractor import AbstractDataExtractor
+from typing import Type
 
 class DatasusDataExtractor(AbstractDataExtractor):
 
@@ -63,11 +64,10 @@ class DatasusDataExtractor(AbstractDataExtractor):
       df[self.DTYPE_COLUMN] = "float" #coloca coluna do tipo de dado
 
       return df
-
-   def extract_processed_collection(self,data_scrapper:DatasusLinkScrapper,data_category:str,data_identifier:str)->ProcessedDataCollection:
-      scrapper_data_abreviation: DatasusAbreviations = data_scrapper.data_abrevia
-
-      dfs,time_series_years = data_scrapper.extract_database()
+ 
+   def extract_processed_collection(self,scrapper: Type[DatasusLinkScrapper], data_category:str,data_identifier:str)->ProcessedDataCollection:
+      scrapper_data_abreviation: DatasusAbreviations = scrapper.data_abrevia
+      dfs,time_series_years = scrapper.extract_database()
 
       if len(dfs) < 1:
          raise IOError("Lista de dataframes deve ter tamanho de pelo menos 1")
