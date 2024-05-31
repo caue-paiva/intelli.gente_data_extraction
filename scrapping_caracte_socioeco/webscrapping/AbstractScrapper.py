@@ -23,7 +23,7 @@ class AbstractScrapper(ABC):
       pass
 
    @abstractmethod
-   def extract_database(website_url:str, file_type:BaseFileType)->pd.DataFrame:
+   def extract_database(website_url:str, file_type:BaseFileType)->pd.DataFrame | list[pd.DataFrame]:
       """Extrai um arquivo e retorna ele como um Dataframe da base de dados oficial dado um URL para uma página e o tipo de dado do arquivo"""
       pass
    

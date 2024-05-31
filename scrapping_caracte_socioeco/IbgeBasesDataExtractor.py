@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from TableDataPoints import TableDataPoints, DataPointTypes
-
+from AbstractDataExtractor import AbstractDataExtractor
 
 
 """
@@ -12,18 +12,10 @@ um código quase identico porém com 6 dígitos e não 7, isso deve ser levado e
 
 
 
-class CategoryDataExtractor():
+class CategoryDataExtractor(AbstractDataExtractor):
 
-   CITY_COLUMN = "codigo_municipio" #constantes para o nome das colunas no dataframe final 
-   YEAR_COLUMN = "ano"
-   DATA_IDENTIFIER_COLUMN = "dado_identificador"
-   DATA_VALUE_COLUMN = "valor"
-   DTYPE_COLUMN = "tipo_dado"
-
-   category:str
-
-   def __init__(self, category:str) -> None:
-      self.category = category
+   def extract_processed_collection():
+      pass
 
    def extract_data_points(self, df:pd.DataFrame, data_info: TableDataPoints)->pd.DataFrame:
       """ 
@@ -42,7 +34,6 @@ class CategoryDataExtractor():
          raise IOError("Lista de ponto de dados deve conter pelo menos 1 ponto de dado")
       
       df = self.__check_city_code(df,data_info.city_code_column) #checa se o código dos municípios está correto
-
       final_df:pd.DataFrame = pd.DataFrame() #df final a ser retornado
       
       for point in data_info.data_point_list: #loop pela lista de pontos de dados
@@ -138,7 +129,7 @@ if __name__ == "__main__":
    df_info2 = TableDataPoints("Ano","Código do Município")
    df_info2.add_data_points_dicts([pib_percapita])
 
-   extractor = CategoryDataExtractor("teste")
+   extractor = CategoryDataExtractor()
 
    df1 = extractor.extract_data_points(df,df_info1)
    print(df1.head(5))
