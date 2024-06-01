@@ -1,0 +1,8 @@
+[project]
+name = "InteligenteEtl"
+version = "0.0.1"
+description = "Projeto para extração, transformação e carga de dados (ETL) de bases governamentais para o Data Wharehouse do projeto Inteligente"
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
