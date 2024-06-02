@@ -1,6 +1,7 @@
 from WebScrapping.ExtractorClasses import DatasusDataExtractor, CategoryDataExtractor
-from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusAbreviations,IbgePibCidadesScrapper,BaseFileType, IbgeBasesMunicScrapper
-from WebScrapping.ExtractorClasses import TableDataPoints, DataTypes
+from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusAbreviations,IbgePibCidadesScrapper, IbgeBasesMunicScrapper
+from WebScrapping.ExtractorClasses import TableDataPoints
+from DataEnums import DataTypes, BaseFileType
 import pandas as pd
 
 

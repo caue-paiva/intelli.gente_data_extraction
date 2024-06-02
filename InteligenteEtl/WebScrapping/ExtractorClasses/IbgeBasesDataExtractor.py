@@ -1,10 +1,12 @@
 import pandas as pd
 import os
-from WebScrapping.ExtractorClasses import TableDataPoints, DataTypes
+from WebScrapping.ExtractorClasses import TableDataPoints
 from WebScrapping.ExtractorClasses import AbstractDataExtractor
-from WebScrapping.ScrapperClasses import IbgePibCidadesScrapper , BaseFileType
+from WebScrapping.ScrapperClasses import IbgePibCidadesScrapper
 from typing import Type
 from DBInterface import ProcessedDataCollection
+from DataEnums import DataTypes, BaseFileType
+
 
 """
 Existem cidades com nomes duplicados, vai ser usado o código de município para identificar esses municípios, porém bases antigas como o datasus 2010 usam

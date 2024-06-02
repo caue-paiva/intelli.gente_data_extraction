@@ -1,13 +1,9 @@
 from abc import ABC,abstractmethod
-from enum import Enum
 import pandas as pd
 import os , requests , zipfile
+from DataEnums import BaseFileType
 
-class BaseFileType(Enum): #enum para os tipos de arquivos que são comumente encontrados em bases oficiais do governo
-   EXCEL = "xlsx"
-   ODS = "ods"
-   TXT = "txt"
-   CSV = "csv"
+
 
 
 

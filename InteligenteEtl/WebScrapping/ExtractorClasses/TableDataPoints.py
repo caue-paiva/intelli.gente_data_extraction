@@ -1,11 +1,6 @@
-from enum import Enum
 from typing import Any
+from DataEnums import DataTypes
 
-class DataTypes(Enum): #Enum para os tipos de dados encontrados nas bases 
-   INT = "int"
-   FLOAT = "float"
-   STRING = "str"
-   BOOL = "bool"
 
 class DataColumn(): #clase para representar uma coluna de uma tabela que representa um dado específico que queremos extrair
    data_category:str
