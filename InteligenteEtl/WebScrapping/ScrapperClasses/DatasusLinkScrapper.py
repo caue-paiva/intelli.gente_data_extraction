@@ -31,9 +31,9 @@ class DatasusLinkScrapper(AbstractScrapper):
          driver.get(self.website_url) 
          time.sleep(3) #espera a página carrega
          html:str = driver.page_source
-         link:str = self.__get_link_from_html(html,self.data_abrevia)
+         link:str = self.__get_link_from_html(html)
          list_of_years:list[int] = self.__get_years_from_html(driver)
-         df =  self._dataframe_from_link()
+         df =  self._dataframe_from_link(link)
          return [df], list_of_years
 
       else:

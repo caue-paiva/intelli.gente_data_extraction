@@ -52,7 +52,6 @@ class AbstractScrapper(ABC):
       if response.status_code == 200: #request com sucesso
          zip_file_name =  "zipfile.zip"
          zip_file_path = os.path.join(self.EXTRACTED_FILES_DIR, zip_file_name)
-         print(zip_file_name)
     
          with open(zip_file_path, "wb") as f:
             f.write(response.content) #escreve o arquivo zip no diretório de dados temporários
@@ -93,18 +92,22 @@ class AbstractScrapper(ABC):
       
       if zipfile: #link  é pra um arquivo zip, vamos extrair ele primeiro
          file_path:str = self._download_and_extract_zipfile(file_url) #chama o método da mesma classe de extrair o zipfile
-         print("zipfile path" + file_path)
       else:
          file_path:str = file_url  #link n é pra um arquivo zip, o argumento pode ser passado para o pandas direto
 
       df:pd.DataFrame = None
-      match (file_type): #match case no tipo de dado
-         case BaseFileType.EXCEL:
-            df = pd.read_excel(file_path)
-         case BaseFileType.ODS:
-            pass
-         case BaseFileType.CSV:
-            df = pd.read_csv(file_path)
+
+      try:
+         match (file_type): #match case no tipo de dado
+            case BaseFileType.EXCEL:
+               df = pd.read_excel(file_path)
+            case BaseFileType.ODS:
+               pass
+            case BaseFileType.CSV:
+               df = pd.read_csv(file_path)
+      except Exception as e:
+            raise RuntimeError(f"Não foi possível extrair o dataframe, tem certeza que o arquivo extraido do site não  é zip? Msg de erro? {e}")
+      
       """
       TODO
       Colocar os casos para os outros tipos de arquivos, caso seja possível extrair dataframes deles

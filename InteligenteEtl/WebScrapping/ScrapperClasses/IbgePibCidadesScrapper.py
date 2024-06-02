@@ -30,19 +30,13 @@ class IbgePibCidadesScrapper(AbstractScrapper):
 
    def extract_database(self)->pd.DataFrame:
       """
-      Extrai um arquivo e retorna ele como um Dataframe da base de dados do IBGE dado um URL para uma página do IBGE, um identificador da tag HTML que o link do arquivo está e o tipo de dado do arquivo
-
-      Args:
-         url (str) : URL da página do IBGE com os dados das bases
-         html_tag_identifier (str): uma tag HTML onde o link para o arquivo da base está, usada no web-scrapping
-         file_type (Enum BaseFileType): Um elemento do Enum que dita qual o tipo de arquivo será baixado
+      Extrai um arquivo e retorna ele como um Dataframe da base de dados do IBGE 
 
       Return:
          (pd.Dataframe) : Dataframe do Pandas com os dados baixados   
       """
       
       file_link: str = self._get_file_link()
-      print(self.file_is_zip)
       return super()._dataframe_from_link(file_link,self.file_type, self.file_is_zip) #retorna o dataframe do link extraido
    
    def download_database_locally(self)-> str:
@@ -93,7 +87,6 @@ class IbgePibCidadesScrapper(AbstractScrapper):
       file_name:str = data_info["file_name"] #nome do arquivo escolhido
       file_index: int = file_str_and_index[file_name] #index desse arquivo
       final_link:str = self._get_whole_link(page_html,file_index)
-      print(final_link)
 
       return final_link
 
@@ -130,7 +123,6 @@ class IbgePibCidadesScrapper(AbstractScrapper):
          if not years_str:
             raise RuntimeError("Não foi possível extrair o ano do link para o arquivo")
          years_int: list[int] = list(map(int,years_str))
-         print(years_int)
          
          cur_years_in_series: int =  1 if len(years_int) == 1 else years_int[-1] - years_int[0] #numero de anos na série histórica
          cur_series_range: tuple[int] = (years_int[0],years_int[-1]) if len(years_int) != 1 else (years_int[0])
