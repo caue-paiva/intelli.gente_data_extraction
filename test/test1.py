@@ -1,6 +1,6 @@
 from WebScrapping.ExtractorClasses import DatasusDataExtractor, CategoryDataExtractor
-from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusAbreviations,IbgePibCidadesScrapper,BaseFileType
-from WebScrapping.ExtractorClasses import TableDataPoints, DataPointTypes
+from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusAbreviations,IbgePibCidadesScrapper,BaseFileType, IbgeBasesMunicScrapper
+from WebScrapping.ExtractorClasses import TableDataPoints, DataTypes
 import pandas as pd
 
 
@@ -21,7 +21,7 @@ def run_city_gdp(url:str,file_type:BaseFileType,is_zip_file:bool)->pd.DataFrame:
       "data_category": "caracterizacao_socio_economica",
       "data_name": "PIB per capita",
       "column_name": """Produto Interno Bruto per capita,  a preços correntes (R$ 1,00)""",
-      "data_type": DataPointTypes.FLOAT,
+      "data_type": DataTypes.FLOAT,
       "multiply_amount": 1
    }
 
@@ -29,7 +29,7 @@ def run_city_gdp(url:str,file_type:BaseFileType,is_zip_file:bool)->pd.DataFrame:
       "data_category": "caracterizacao_socio_economica",
       "data_name": "PIB Agropecuária",
       "column_name": """Valor adicionado bruto da Agropecuária,  a preços correntes (R$ 1.000)""",
-      "data_type": DataPointTypes.FLOAT,
+      "data_type": DataTypes.FLOAT,
       "multiply_amount": 1000
    }
 
@@ -39,6 +39,11 @@ def run_city_gdp(url:str,file_type:BaseFileType,is_zip_file:bool)->pd.DataFrame:
 
    return processed_df
 
+def run_MUNIC_base(file_type:BaseFileType)->list[pd.DataFrame]:
+   scrapper = IbgeBasesMunicScrapper(file_type,False)
+   return scrapper.extract_database()
+
+
 if __name__ == "__main__":
    url_datasus_literacy_rate = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr.csv"
    url_datasus_gini_coef = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
@@ -46,4 +51,4 @@ if __name__ == "__main__":
 
 
    df = run_city_gdp(url_city_gdp,BaseFileType.EXCEL,True)
-   print(df.head(5))
+   print(df.head())

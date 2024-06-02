@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from WebScrapping.ExtractorClasses import TableDataPoints, DataPointTypes
+from WebScrapping.ExtractorClasses import TableDataPoints, DataTypes
 from WebScrapping.ExtractorClasses import AbstractDataExtractor
 from WebScrapping.ScrapperClasses import IbgePibCidadesScrapper , BaseFileType
 from typing import Type
@@ -34,7 +34,7 @@ class CategoryDataExtractor(AbstractDataExtractor):
 
       data_collection_list: list[ProcessedDataCollection] = []
 
-      for data_point in data_info.data_point_list:
+      for data_point in data_info.data_column_list:
             collection = ProcessedDataCollection(
                data_point.data_category,
                data_point.data_name,
@@ -53,7 +53,7 @@ class CategoryDataExtractor(AbstractDataExtractor):
          dados em cada tabela de categoria
       """
 
-      if len(data_info.data_point_list) < 1:
+      if len(data_info.data_column_list) < 1:
          raise IOError("Lista de ponto de dados deve conter pelo menos 1 ponto de dado")
       
       df = self.check_city_code(df,data_info.city_code_column) #checa se o código dos municípios está correto
@@ -63,7 +63,7 @@ class CategoryDataExtractor(AbstractDataExtractor):
       city_code_col:str = self.parse_strings(data_info.city_code_column) #parsing nos nomes para removes espaços e colocar em lowercase 
       year_col:str =  self.parse_strings(data_info.year_column_name)
       
-      for point in data_info.data_point_list: #loop pela lista de pontos de dados
+      for point in data_info.data_column_list: #loop pela lista de colunas com os dados
          temp_df:pd.DataFrame = pd.DataFrame() #cria df temporário
          data_val_col:str =  self.parse_strings(point.column_name)
 
@@ -105,28 +105,31 @@ class CategoryDataExtractor(AbstractDataExtractor):
    
 
 
-pib_percapita = {
-   "data_category": "caracterizacao_socio_economica",
-   "data_name": "PIB per capita",
-   "column_name": """Produto Interno Bruto per capita, 
-a preços correntes
-(R$ 1,00)""",
-   "data_type": DataPointTypes.FLOAT,
-   "multiply_amount": 1
-}
 
-pib_agro = {
-   "data_category": "caracterizacao_socio_economica",
-   "data_name": "PIB Agropecuária",
-   "column_name": """Valor adicionado bruto da Agropecuária, 
-a preços correntes
-(R$ 1.000)""",
-   "data_type": DataPointTypes.FLOAT,
-   "multiply_amount": 1000
-}
 
 
 if __name__ == "__main__":
+
+
+   pib_percapita = {
+      "data_category": "caracterizacao_socio_economica",
+      "data_name": "PIB per capita",
+      "column_name": """Produto Interno Bruto per capita, 
+   a preços correntes
+   (R$ 1,00)""",
+      "data_type": DataTypes.FLOAT,
+      "multiply_amount": 1
+   }
+
+   pib_agro = {
+      "data_category": "caracterizacao_socio_economica",
+      "data_name": "PIB Agropecuária",
+      "column_name": """Valor adicionado bruto da Agropecuária, 
+   a preços correntes
+   (R$ 1.000)""",
+      "data_type": DataTypes.FLOAT,
+      "multiply_amount": 1000
+   }
    
    df:pd.DataFrame = pd.read_excel(os.path.join("webscrapping","tempfiles","PIB dos Municípios - base de dados 2010-2021.xlsx"))
    df_info1 = TableDataPoints("Ano","Código do Município")
@@ -144,15 +147,6 @@ if __name__ == "__main__":
    print(df1.head(5))
    df1.to_csv("teste.csv")
    
-   #df2 = extractor.extract_data_points(scrapper,df_info2)
-   #print(df2.head(5))
-
-   #df3 = extractor.join_category_dfs([df1,df2])
-
-  # print(df3.head(5))
-   # print(df3.shape)
-   # print(df3.info())
-
 
 
 

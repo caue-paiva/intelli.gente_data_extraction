@@ -1,2 +1,3 @@
 from .DatasusLinkScrapper import DatasusLinkScrapper , DatasusAbreviations
 from .IbgePibCidadesScrapper import IbgePibCidadesScrapper , BaseFileType
+from .IbgeMunicScrapper import IbgeBasesMunicScrapper

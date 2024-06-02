@@ -139,6 +139,7 @@ class DatasusLinkScrapper(AbstractScrapper):
       list_of_years:list[int] = list(map(int,re.findall(re_pattern,inner_text)))
       return list_of_years
 
+
 if __name__ == "__main__":
    url1 = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr"
    url2 = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"

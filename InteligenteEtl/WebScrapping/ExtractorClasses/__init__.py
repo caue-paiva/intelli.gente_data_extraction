@@ -1,4 +1,4 @@
-from .TableDataPoints import TableDataPoints, DataPointTypes
+from .TableDataPoints import TableDataPoints, DataTypes
 from .AbstractDataExtractor import AbstractDataExtractor
 from .DatasusDataExtractor import DatasusDataExtractor
 from .IbgeBasesDataExtractor import CategoryDataExtractor
