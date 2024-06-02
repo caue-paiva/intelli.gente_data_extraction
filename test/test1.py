@@ -3,7 +3,7 @@ from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusAbreviation
 from WebScrapping.ExtractorClasses import TableDataPoints
 from DataEnums import DataTypes, BaseFileType
 import pandas as pd
-
+from config import get_config
 
 def run_datasus(url , abreviation:DatasusAbreviations)->pd.DataFrame:
    scrapper = DatasusLinkScrapper(url ,abreviation)
@@ -50,6 +50,6 @@ if __name__ == "__main__":
    url_datasus_gini_coef = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
    url_city_gdp = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
 
-
-   df = run_city_gdp(url_city_gdp,BaseFileType.EXCEL,True)
+   df = run_MUNIC_base(BaseFileType.EXCEL)[0]
    print(df.head())
+   
