@@ -50,6 +50,7 @@ if __name__ == "__main__":
    url_datasus_gini_coef = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
    url_city_gdp = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
 
-   df = run_MUNIC_base(BaseFileType.EXCEL)[0]
+   df = run_datasus(url_datasus_literacy_rate,DatasusAbreviations.ILLITERACY_RATE)
    print(df.head())
+   df.to_csv("taxa_de_analfabetismo.csv")
    
