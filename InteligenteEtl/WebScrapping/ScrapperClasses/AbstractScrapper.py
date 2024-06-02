@@ -11,13 +11,6 @@ class AbstractScrapper(ABC):
 
    EXTRACTED_FILES_DIR:str = "tempfiles" #diretório temporário para guardar os arquivos .zip e de dados extraidos
 
-   """
-   todas as classes que herdam dessa principal não devem ter construtores com campos para guardar o estado, visto que a extração de
-   dados é stateless, com as classes apenas organizando métodos para realizar essa tarefa
-   """
-   def __init__(self)->None: 
-      pass
-
    @abstractmethod
    def extract_database(website_url:str, file_type:BaseFileType)->pd.DataFrame | list[pd.DataFrame]:
       """Extrai um arquivo e retorna ele como um Dataframe da base de dados oficial dado um URL para uma página e o tipo de dado do arquivo"""

@@ -2,7 +2,7 @@ from typing import Any
 from DataEnums import DataTypes
 
 
-class DataColumn(): #clase para representar uma coluna de uma tabela que representa um dado específico que queremos extrair
+class DataColumn(): #classe para representar uma coluna de uma tabela que representa um dado específico que queremos extrair
    data_category:str
    data_name: str
    column_name:str

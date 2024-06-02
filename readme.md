@@ -1,3 +1,11 @@
+# Sobre o Projeto
+
+
+# Módulos Principais
+
+
+
+
 # problemas conhecidos
 
 1) Auto-complete de imports do VSCODE n funciona com o package local do InteligenteEtl
