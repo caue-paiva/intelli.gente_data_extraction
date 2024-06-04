@@ -144,19 +144,17 @@ class DatasusDataExtractor(AbstractDataExtractor):
          
       """
      
-      scrapper_data_abreviation: DatasusAbreviations = scrapper.data_abrevia
       dfs,time_series_years = scrapper.extract_database()
 
       if len(dfs) < 1:
          raise IOError("Lista de dataframes deve ter tamanho de pelo menos 1")
       
-      if scrapper_data_abreviation == DatasusAbreviations.GINI_COEF: #df único, caso separado
+      if scrapper.data_abrevia == DatasusAbreviations.GINI_COEF: #df único, caso separado
          processed_df:pd.DataFrame = self.__process_df_right_shape(dfs[0],time_series_years,data_identifier)
       else: #lista de dataframes, um para cada ano, caso padrão
          processed_df:pd.DataFrame = self.__join_df_parts(dfs,time_series_years,data_identifier)
 
       processed_df = self.__convert_column_values(processed_df)
-      print(processed_df)
       return ProcessedDataCollection(data_category,data_identifier,time_series_years,processed_df)
 
 if __name__ == "__main__":
