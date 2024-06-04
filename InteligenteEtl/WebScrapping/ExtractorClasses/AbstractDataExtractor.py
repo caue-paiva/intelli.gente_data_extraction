@@ -3,7 +3,15 @@ from DBInterface.DataCollection import ProcessedDataCollection
 import pandas as pd
 
 
+
+
 class AbstractDataExtractor(ABC):
+
+   """
+   Essa classe fornece a interface utilizada pelas classes extratoras de dados, que devem receber um df dos dados brutos
+   extraidos anteriormente e retorna uma classe (ou uma lista delas) de Coleções de dados processadas, que é a classe
+   que vai ser usada para inserir os dados no BD/Data Warehouse 
+   """
    
    CITY_COLUMN = "codigo_municipio" #constantes para o nome das colunas no dataframe final 
    YEAR_COLUMN = "ano"
@@ -18,6 +26,8 @@ class AbstractDataExtractor(ABC):
    def extract_processed_collection(self,df:pd.DataFrame)->ProcessedDataCollection:
       pass
 
+
+   #funções genéricas para ajudar a processar os dados no modelo que o Data Warehouse precisa
    def parse_strings(self,str:str)->str:
       """
       remove whitespace,\ n e  coloca todos os chars em lowercase, feito para facilitar acessar nomes de colunas
@@ -25,7 +35,6 @@ class AbstractDataExtractor(ABC):
       """
       return str.lower().replace(" ","").replace("\n","")
 
-   #funções genéricas para ajudar a processar os dados no modelo que o Data Warehouse precisa
    def check_city_code(self,df:pd.DataFrame, city_code_column:str)->pd.DataFrame:
       """
       checa se um código de cidade do IBGE está dentro do padrão de 7 dígitos, ou se é um código antigo com num diferente

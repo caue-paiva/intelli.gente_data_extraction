@@ -1,6 +1,12 @@
 from pandas import DataFrame
 from dataclasses import dataclass
 
+"""
+Classe que representa o dado que vai ser carregado no BD/Data Warehouse, com o DF sendo os dados em si e com os outros
+campos da classe sendo metadadas como a categoria, nome do dado e os anos da série histórica.
+"""
+
+
 #dataclass cria automaticamente métodos __init__, __eq__ entre outros, além de que mostra que o propósito principal da classe é guardar dados
 @dataclass
 class ProcessedDataCollection:
