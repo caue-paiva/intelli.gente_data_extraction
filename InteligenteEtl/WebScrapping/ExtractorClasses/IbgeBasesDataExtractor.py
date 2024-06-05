@@ -20,6 +20,9 @@ class CategoryDataExtractor(AbstractDataExtractor):
 
    def extract_processed_collection(self,scrapper: Type[IbgePibCidadesScrapper], data_info: TableDataPoints)->list[ProcessedDataCollection]:
       """ 
+      TODO: Completar a função 
+
+
       extrai o dataframe bruto da base em um df menor apenas com as colunas de ano, código de cidade e os pontos de dados buscados
       
       Args:
@@ -44,7 +47,7 @@ class CategoryDataExtractor(AbstractDataExtractor):
 
    def extract_data_points(self, df: pd.DataFrame, data_info: TableDataPoints)->pd.DataFrame:
       """ 
-      extrai o dataframe bruto da base em um df menor apenas com as colunas de ano, código de cidade e os pontos de dados buscados
+      Extrai o dataframe bruto da base em um df menor apenas com as colunas de ano, código de cidade e os pontos de dados buscados
       
       Args:
          df (dataframe) : dataframe bruto da base de dados
@@ -59,7 +62,7 @@ class CategoryDataExtractor(AbstractDataExtractor):
          raise IOError("Lista de ponto de dados deve conter pelo menos 1 ponto de dado")
       
       df = self.check_city_code(df,data_info.city_code_column) #checa se o código dos municípios está correto
-      df.columns = self.parse_df_col_names(df.columns)
+      df.columns = self.__parse_df_col_names(df.columns)
 
       final_df:pd.DataFrame = pd.DataFrame() #df final a ser retornado
       city_code_col:str = self.parse_strings(data_info.city_code_column) #parsing nos nomes para removes espaços e colocar em lowercase 
@@ -83,7 +86,19 @@ class CategoryDataExtractor(AbstractDataExtractor):
       
       return final_df
 
-   def parse_df_col_names(self,columns: list[str])->list[str]:
+   def __parse_df_col_names(self,columns: list[str])->list[str]:
+      """
+      Recebe uma lista com o nome das colunas do df e retorna essa lista com os nomes processados.
+      O processamento se dá por remover os espaços em branco e \ n, já que algumas bases tem nomes de colunas complexos e 
+      longos que os tornam difíceis de acessar.
+
+      Args:
+         columns (list[int]): lista de strings que representam a lista de colunas do dataframe
+
+      Return:
+         (list[int]): lista de strings processadas 
+      
+      """
       new_cols = list(map(self.parse_strings,columns))
       return new_cols
 

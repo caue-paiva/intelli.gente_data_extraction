@@ -32,7 +32,17 @@ class DataColumn(): #classe para representar uma coluna de uma tabela que repres
             raise IOError("Valor de multiplicação não é valido para tipos que não sejam inteiros ou float")
          self.multiply_amount = multiply_amount
 
-   def multiply_value(self, value:Any)-> int | float:
+   def multiply_value(self, value:Any)-> Any:
+      """
+      multiplica um valor dado como parâmetro pelo fator de multiplicadao associado àquele tipo de dado
+      caso o tipo de dado não seja INT ou FLOAT ele é retornado sem multiplicar.
+      Args:
+         value (Any): qualquer valor que pertence ao tipo de dado ditado pelo objeto DataColumn.
+
+      Return:
+         (Any): valor multiplicado
+      
+      """
       if self.data_type not in [DataTypes.INT, DataTypes.FLOAT]:
          return value
       else:

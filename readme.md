@@ -29,10 +29,24 @@ O nome do módulo principal se refere à sigla **ETL** (Extract Transform and Lo
 
 ## Módulos Principais
 
+### Webscrapping: 
+
+Classes que implementam a extração de dados por meio de webscrapping
+
+#### Webscrapping.ScrapperClasses
+Classes que fazem o webscrapping de sites oficiais e retornam um dataframe extraído do site, com nenhum ou muito pouco pre-processamento (apenas se estritamente necessário)
 
 
+#### Webscrapping.ExtractorClasses
+Classes que recebem as classes de Scrapper como parâmetros (Dependecy Injection), chamam a função das classes Scrapper que retornam um DF e processam esse DF para retornar uma estrutura de dados que represeta os dados processados e prontos para serem inseridos no Banco de Dados / Data Warehouse
 
-# problemas conhecidos
+### Api Extractor
+Classes que implementam a extração de dados por meio de APIs do governo
+
+### DB interface
+Lógica de conectar os dados extraídos com o Banco de Dados/Data Warehouse em nuvem para ingestão dos dados, também tem a classe ProcessedDataCollection, que é a estrutura de dados que representa os dados na forma processada e pronta para ser carregada no BD
+
+## problemas conhecidos
 
 1) Auto-complete de imports do VSCODE n funciona com o package local do InteligenteEtl
 
