@@ -9,6 +9,13 @@ from DataEnums import BaseFileType
 
 class AbstractScrapper(ABC):
 
+   """
+   Essa classe fornece a interface utilizada pelas classes de webscrapping,que recebem informações sobre qual dado extrair (os parâmetros de INIT
+   não são fixos e dependem de cada classe) e realizam a extração dos dado desses sites, retornando um df do pandas. Algumas subclasses podem necessitar
+   primeiro baixar os arquivos como zip e depois extrair-los, para isso métodos gerais sobre isso são implementados nessa classe abstrata
+
+   """
+
    EXTRACTED_FILES_DIR:str = "tempfiles" #diretório temporário para guardar os arquivos .zip e de dados extraidos
 
    @abstractmethod

@@ -2,7 +2,15 @@ from typing import Any
 from DataEnums import DataTypes
 
 
-class DataColumn(): #classe para representar uma coluna de uma tabela que representa um dado específico que queremos extrair
+class DataColumn(): 
+   """
+   Essa classe representa uma coluna de dados num df extraido (mas não processado). Essa coluna está atrelada (tem o nome) a um
+   ponto de dados específico que vamos extrair e ela tem informações como a categoria do dado, o nome dele, tipo de dado e se ele 
+   tem um fator de multiplicação (ex valor do PIB em R$1000).
+   
+   """
+   
+   
    data_category:str
    data_name: str
    column_name:str
@@ -49,7 +57,12 @@ class DataColumn(): #classe para representar uma coluna de uma tabela que repres
          return value * self.multiply_amount
       
 class TableDataPoints(): #classe para agregar todos os pontos de dados extraido de uma tabela de dados
-   
+   """
+   Essa classe representa todo o df que foi extraido de uma base do governo, ela tem o nome da coluna de anos e/ou municípios
+   além de conter uma lista de objetos da classe DataColumn, representando as colunas com dados específicos que vamos extrair da tabela/df
+   """
+
+
    year_column_name: str #nome da coluna que tem a info do ano
    city_code_column:str #nome da coluna que tem a info do código do município
    data_column_list: list[DataColumn] #lista de colunas na tabela com cada uma sendo atrelada a um ponto de dado
