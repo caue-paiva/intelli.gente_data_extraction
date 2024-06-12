@@ -1,2 +1,2 @@
-from . DataLine import DataLine , DataLineTypes
+from . DataLine import DataLine
 from . DataCollections import RawDataCollection

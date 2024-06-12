@@ -1,13 +1,7 @@
 from enum import Enum
 from typing import Any
+from DataEnums import DataTypes
 
-class DataLineTypes(Enum):
-   INT = "int"
-   FLOAT = "float"
-   STRING = "str"
-   BOOL = "bool"
-   UNKNOWN = "str"
-   NULL = "NULL"
 
 class DataLine:
    """
@@ -18,7 +12,7 @@ class DataLine:
    city_id: int
    year: int
    data_name: str
-   data_type: DataLineTypes
+   data_type: DataTypes
    value: Any
    multiply_amount:int|float
 
@@ -29,7 +23,7 @@ class DataLine:
       year: int, 
       data_name: str, 
       value: Any,
-      data_type: DataLineTypes = DataLineTypes.STRING, 
+      data_type: DataTypes = DataTypes.STRING, 
       multiply_amount: int|float = 1,
    ) -> None:
       
@@ -40,7 +34,7 @@ class DataLine:
       self.value = value
       self.multiply_amount = multiply_amount
 
-      if self.data_type not in [DataLineTypes.INT, DataLineTypes.FLOAT] and multiply_amount != 1:
+      if self.data_type not in [DataTypes.INT, DataTypes.FLOAT] and multiply_amount != 1:
             raise IOError("Valor de multiplicação além de 1 (default) não é valido para tipos que não sejam inteiros ou float")
      
       self.transform_value()
@@ -69,11 +63,11 @@ class DataLine:
          sucess_flag = False
 
 
-      dtype_map: dict[str,DataLineTypes] = {
-         "reais" : DataLineTypes.FLOAT,
-         "real"  : DataLineTypes.FLOAT,
-         "pessoas": DataLineTypes.INT,
-         "unidades": DataLineTypes.INT
+      dtype_map: dict[str,DataTypes] = {
+         "reais" : DataTypes.FLOAT,
+         "real"  : DataTypes.FLOAT,
+         "pessoas": DataTypes.INT,
+         "unidades": DataTypes.INT
       }
 
       for key in dtype_map:
@@ -83,7 +77,7 @@ class DataLine:
             break
       else:
          sucess_flag = False
-         self.data_type = DataLineTypes.STRING
+         self.data_type = DataTypes.STRING
       
       self.transform_value()
       return sucess_flag
@@ -93,13 +87,13 @@ class DataLine:
       Transforma o campo value de acordo com o tipo de dado e o valor de multiplicar
       """
       match (self.data_type):
-       case DataLineTypes.STRING:
+       case DataTypes.STRING:
             self.value = str(self.value)
-       case DataLineTypes.INT:
+       case DataTypes.INT:
             self.value = int(self.value) * self.multiply_amount
-       case DataLineTypes.FLOAT:
+       case DataTypes.FLOAT:
             self.value = float(self.value) * self.multiply_amount
-       case DataLineTypes.BOOL:
+       case DataTypes.BOOL:
             self.value = bool(self.value) 
        case _:
             self.value = str(self.value) #caso o tipo de dado seja desconhecido, ele será um string

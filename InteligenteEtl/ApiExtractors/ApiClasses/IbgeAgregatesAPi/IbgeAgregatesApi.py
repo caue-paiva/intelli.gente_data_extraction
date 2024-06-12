@@ -1,9 +1,8 @@
 from ApiExtractors.ApiClasses import AbstractApiInterface
-from ApiExtractors.ApiDataClasses import DataLine, DataLineTypes, RawDataCollection
+from ApiExtractors.ApiDataClasses import DataLine, RawDataCollection
 from DBInterface.DataCollection import ProcessedDataCollection
-from CityDataInfo import get_city_codes
-import requests,json , os, urllib3
-from typing import Iterable
+from DataEnums import DataTypes
+import requests,json , os, urllib3, time
 
 #ao chamar a API do IBGE a lib de requests fica reclamando que a conexão é insegura, essa linha desabilita isso
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -21,10 +20,10 @@ TODO
 class IbgeAgregatesApi(AbstractApiInterface):
 
    IBGE_NAN_CODES:dict[str,dict] = { #Códigos que o IBGE adota para valores fora do normal na sua API
-      "-": {"val": 0, "type": DataLineTypes.INT}, #Dado numérico igual a zero não resultante de arredondamento
-      "..": {"val": None,"type":DataLineTypes.NULL}, #Não se aplica dado numérico
-      "...": {"val": None,"type":DataLineTypes.NULL},  #Dado numérico não disponível
-      "X":   {"val": None,"type":DataLineTypes.NULL} #Dado numérico omitido a fim de evitar a individualização da informação
+      "-": {"val": 0, "type": DataTypes.INT}, #Dado numérico igual a zero não resultante de arredondamento
+      "..": {"val": None,"type":DataTypes.NULL}, #Não se aplica dado numérico
+      "...": {"val": None,"type":DataTypes.NULL},  #Dado numérico não disponível
+      "X":   {"val": None,"type":DataTypes.NULL} #Dado numérico omitido a fim de evitar a individualização da informação
    }
 
    MAX_CITY_CODES_PER_CALL = 500 #a api do agregadados aguenta no máximo 500 cidades por chamada
@@ -169,7 +168,6 @@ class IbgeAgregatesApi(AbstractApiInterface):
           RawDataCollection (objeto) com todos os campos
       """
 
-      print(cities)
       cities_call_param: str = ""      
       if cities:
          cities_call_param = f"{cities}"
@@ -223,6 +221,7 @@ class IbgeAgregatesApi(AbstractApiInterface):
             classification: str = api_call_params.get("classificacao","") #classificação da variável, caso exista
             
             call_result:RawDataCollection = self.__make_api_call(time_series_len,aggregate,cities,var,classification)
+            time.sleep(1) #sleep por 1 segundo para não sobrecarregar a api
             api_data_points.append(call_result)
 
       return api_data_points
