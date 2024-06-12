@@ -1,0 +1,31 @@
+[ 
+  {
+     "id": 123,
+     "variavel": "akasa", 
+     "unidade": "Mil reais", 
+     "resultados": [ 
+        { 
+         "classificacoes": [
+            {
+                "id": "12235",
+                "nome": "nome classificação",
+                "categoria": {
+                    "104563": "Calçamento / pavimentação parcial"
+                }
+            }
+         ],
+         "series": [ 
+              {
+                 "localidade" : {
+                     "id": 1827827, 
+                     "nome": "nome cidade"
+                  },
+                  "serie": { 
+                     "ano": "dado em string" 
+                  }
+              } 
+           ]
+        }
+     ]
+   }
+]

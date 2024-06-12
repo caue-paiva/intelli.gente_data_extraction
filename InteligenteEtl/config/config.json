@@ -1,7 +1,9 @@
 {
 
-   "NUMBER_OF_CITIES" : 5571,
-   "NUMBER_OF_DIMENSIONS" : 5
+   "NUMBER_OF_CITIES" : 5570,
+   "NUMBER_OF_DIMENSIONS" : 5,
+   "CITY_NAME_COL": "nome_municipio",
+   "CITY_CODE_COL": "codigo_municipio"
 
 
 }

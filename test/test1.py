@@ -1,9 +1,11 @@
 from WebScrapping.ExtractorClasses import DatasusDataExtractor, CategoryDataExtractor
 from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusAbreviations,IbgePibCidadesScrapper, IbgeBasesMunicScrapper
 from WebScrapping.ExtractorClasses import TableDataPoints
+from ApiExtractors import IbgeAgregatesApi
 from DataEnums import DataTypes, BaseFileType
 import pandas as pd
 from config import get_config
+from CityDataInfo import get_city_codes , get_number_of_cities , get_city_names , get_city_codes_names_map
 
 def run_datasus(url , abreviation:DatasusAbreviations)->pd.DataFrame:
    scrapper = DatasusLinkScrapper(url ,abreviation)
@@ -50,7 +52,12 @@ if __name__ == "__main__":
    url_datasus_gini_coef = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
    url_city_gdp = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
 
-   df = run_datasus(url_datasus_literacy_rate,DatasusAbreviations.ILLITERACY_RATE)
-   print(df.head())
-   df.to_csv("taxa_de_analfabetismo.csv")
+   #df = run_datasus(url_datasus_literacy_rate,DatasusAbreviations.ILLITERACY_RATE)
+   #print(df.head())
+   #df.to_csv("taxa_de_analfabetismo.csv")
+  
+   api = IbgeAgregatesApi("agregados", "ibge")
+   data_points = api.extract_data_points()
+   api.print_processed_data(data_points)
+   api.save_processed_data_in_csv(data_points,1)
    
