@@ -19,6 +19,13 @@ TODO
 
 class IbgeAgregatesApi(AbstractApiInterface):
 
+   """
+   Classe que implementa a extração de dados da API de agregados do IBGE, essa classe requer um arquivo JSON que mapea cada dado (seu nome)
+   com os parâmetros de chamada da API para extrair o dado referido, a partir desse mapeamento ela extrai todos os dados, de todos os municípios 
+   (por padrão) com o máximo de anos da série histórica disponível.
+   """
+
+
    IBGE_NAN_CODES:dict[str,dict] = { #Códigos que o IBGE adota para valores fora do normal na sua API
       "-": {"val": 0, "type": DataTypes.INT}, #Dado numérico igual a zero não resultante de arredondamento
       "..": {"val": None,"type":DataTypes.NULL}, #Não se aplica dado numérico
@@ -26,7 +33,6 @@ class IbgeAgregatesApi(AbstractApiInterface):
       "X":   {"val": None,"type":DataTypes.NULL} #Dado numérico omitido a fim de evitar a individualização da informação
    }
 
-   MAX_CITY_CODES_PER_CALL = 500 #a api do agregadados aguenta no máximo 500 cidades por chamada
 
    api_name:str
    goverment_agency:str
@@ -143,16 +149,19 @@ class IbgeAgregatesApi(AbstractApiInterface):
          result_series_years:list[int] = single_api_result.time_series_years
 
          if not return_data_points:
-               return_data_points = result_data_lines
+                return_data_points = result_data_lines
          else:
-            add_data_point_values = lambda x, y: x.value + y.value
+            add_data_point_values = lambda x, y: x.value + y.value #função para adicionar valores números entre chamadas da API
+           
+            #função que adiciona valores se eles forem válidos, caso eles sejam none (sem dados na API) não faz nada
             adding_function = lambda x,y: add_data_point_values(x,y) if x.value is not None and y.value is not None else None
-            summed_vals = list(map(adding_function, return_data_points, result_data_lines))
+            summed_vals:list = list(map(adding_function, return_data_points, result_data_lines)) #lista com a soma dos valores recebidos entre chamadas de API, caso o valor seja none na lista vai aparecer none
+            #usada quando o mesmo dado tem diferentes categorias que devem ser somadas para atingir o valor final
             
-            for index, val in enumerate(summed_vals):
-                  return_data_points[index].value = val
+            for index, val in enumerate(summed_vals): #atualiza os valores de cada objeto DataLine na lista de retorno com os valores somados
+               return_data_points[index].value = val #novo valor de cada objeto será a soma anterior
 
-         if len(result_series_years) > len(return_series_years): #caso a série histórica seja maior, ela se torna a nova série de retorno
+         if len(result_series_years) > len(return_series_years): #caso a nova série histórica seja maior, ela se torna a nova série de anos extraídos retornadas
             return_series_years = result_series_years 
 
       return RawDataCollection(

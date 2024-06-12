@@ -1,6 +1,10 @@
 import os,json
 from typing import Any
 
+"""
+Módulo para padronizar acesso a configurações globais do projeto, definidas num arquivo JSON
+"""
+
 __SCRIPT_DIR:str = os.path.dirname(os.path.abspath(__file__))
 __CONFIG_PATH: str = os.path.join(__SCRIPT_DIR,"config.json")
 

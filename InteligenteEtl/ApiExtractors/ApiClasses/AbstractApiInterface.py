@@ -3,7 +3,16 @@ from DBInterface.DataCollection import ProcessedDataCollection
 from abc import ABC , abstractmethod
 import pandas as pd
 
+
+
 class AbstractApiInterface(ABC):
+
+   """
+   Classe abstrata e interface para implementar classes que extraem dados por meio de APIs, como a de agregados do IBGE
+   Fornece constantes de classe para o nome das colunas de acordo com o banco de dados e um método concreto para transformar dados
+   não processados em um objeto da classe de dados processados requerido para ingestão no BD.
+   """
+
 
    DB_CITY_ID_COLUMN = "codigo_municipio" #constantes para o nome das colunas no dataframe final e no banco de dados
    DB_YEAR_COLUMN = "ano"
