@@ -4,8 +4,6 @@ from WebScrapping.ExtractorClasses import TableDataPoints
 from ApiExtractors import IbgeAgregatesApi
 from DataEnums import DataTypes, BaseFileType
 import pandas as pd
-from config import get_config
-from CityDataInfo import get_city_codes , get_number_of_cities , get_city_names , get_city_codes_names_map
 
 def run_datasus(url , abreviation:DatasusAbreviations)->pd.DataFrame:
    scrapper = DatasusLinkScrapper(url ,abreviation)
