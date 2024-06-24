@@ -78,7 +78,7 @@ class AbstractApiInterface(ABC):
             dict_index+=1
          columns:list[str] = [self.DB_CITY_ID_COLUMN, self.DB_YEAR_COLUMN, self.DB_DATA_IDENTIFIER_COLUMN, self.DB_DATA_VALUE_COLUMN, self.DB_DTYPE_COLUMN]
          df: pd.DataFrame = pd.DataFrame.from_dict(data_point_dict,orient="index",columns=columns) #cria um dataframe a partir do dicionário criado
-         processed_data_list.append(collection.create_processed_collection(df))
+         processed_data_list.append(collection.create_processed_collection(df).fill_non_existing_cities())
   
       return processed_data_list
    

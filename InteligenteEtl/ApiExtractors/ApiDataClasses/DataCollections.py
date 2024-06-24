@@ -1,4 +1,5 @@
 from .DataLine import DataLine
+from DataEnums import DataTypes
 from pandas import DataFrame
 from dataclasses import dataclass
 from DBInterface import ProcessedDataCollection
@@ -15,11 +16,12 @@ class RawDataCollection:
 
    category:str
    data_name:str
+   data_type: DataTypes
    time_series_years:list[int]
    data_lines: list[DataLine]
 
    def create_processed_collection(self,df:DataFrame)->ProcessedDataCollection:
       return ProcessedDataCollection(
-         self.category, self.data_name, self.time_series_years, df
+         self.category,self.data_type ,self.data_name, self.time_series_years, df
       )
 

@@ -88,6 +88,7 @@ class IbgeAgregatesApi(AbstractApiInterface):
       
       return_data_points:list[DataLine] = []
       series_years:list[int] = []#variavel para guardar os anos da série histórica dos dados
+      data_collection_type = DataTypes.STRING #dado por padrão é string
 
       for city in list_of_cities: #loop pelos municípios
          city_id:int | None = int(city.get("localidade", {}).get("id"))
@@ -110,10 +111,12 @@ class IbgeAgregatesApi(AbstractApiInterface):
                inference_result:bool = new_data_point.infer_dtype_and_multiply_amnt(data_unit) #tentar inferir o numero pra multiplicar o valor da unidade obtida anteriormente
                if not inference_result:
                   print("Não foi possível inferir o tipo de dado e qntd de multiplicar do dado")
+               data_collection_type = new_data_point.data_type
+
 
             return_data_points.append(new_data_point) #adiciona esse data point na lista
 
-      return RawDataCollection("","",series_years, return_data_points)
+      return RawDataCollection("","",data_collection_type,series_years, return_data_points)
 
    def __api_to_data_points(self,api_response:list[dict], classification:str="")->RawDataCollection:
       """
@@ -126,9 +129,9 @@ class IbgeAgregatesApi(AbstractApiInterface):
          raise IOError("Função __api_to_data_points foi feita para processar chamadas de API com apenas uma variável por vez, a lista de resposta da API ultrapassou esse limite")
       
       variable:dict = api_response[0]
-      
       return_data_points:list[DataLine] = []
       return_series_years:list[int] = []
+      data_collection_type:DataTypes = DataTypes.STRING
                
       variable_id: int | None = int(variable.get("id")) #id da variável
       if variable_id is None:
@@ -144,7 +147,7 @@ class IbgeAgregatesApi(AbstractApiInterface):
       for result in results_list: #lista de resultados da variável, usado quando existe uma classificação do dado ex: queremos todas as casas com pavimentação parcial e pavimentação completa
          list_of_cities: list[dict]| None = result["series"] #valores do resultado
          single_api_result: RawDataCollection = self.__process_single_api_result(list_of_cities,data_name,data_unit)
-            
+         data_collection_type = single_api_result.data_type
          result_data_lines:list[DataLine] = single_api_result.data_lines #dados e anos da série histórica para um resultado da API
          result_series_years:list[int] = single_api_result.time_series_years
 
@@ -167,6 +170,7 @@ class IbgeAgregatesApi(AbstractApiInterface):
       return RawDataCollection(
          data_category,
          data_name,
+         data_collection_type,
          result_series_years,
          return_data_points
       )
@@ -230,7 +234,8 @@ class IbgeAgregatesApi(AbstractApiInterface):
             classification: str = api_call_params.get("classificacao","") #classificação da variável, caso exista
             
             call_result:RawDataCollection = self.__make_api_call(time_series_len,aggregate,cities,var,classification)
-            time.sleep(1) #sleep por 1 segundo para não sobrecarregar a api
+            print("chamada da API, extraiu um dado")
+            time.sleep(3) #sleep por 3 segundos para não sobrecarregar a api
             api_data_points.append(call_result)
 
       return api_data_points

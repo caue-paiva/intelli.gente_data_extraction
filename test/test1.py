@@ -4,6 +4,7 @@ from WebScrapping.ExtractorClasses import TableDataPoints
 from ApiExtractors import IbgeAgregatesApi
 from DataEnums import DataTypes, BaseFileType
 import pandas as pd
+from DBInterface import ProcessedDataCollection
 
 def run_datasus(url , abreviation:DatasusAbreviations)->pd.DataFrame:
    scrapper = DatasusLinkScrapper(url ,abreviation)
@@ -50,18 +51,19 @@ def run_api_agregados():
    api.print_processed_data(data_points)
    api.save_processed_data_in_csv(data_points,1)
 
+def test_fill_non_existing_cities(df:pd.DataFrame):
+   data_col1 = ProcessedDataCollection("PIB Agropecuária",DataTypes.FLOAT,"PIB Agropecuária",[1],df)
+   final_df =  data_col1.fill_non_existing_cities()
+   final_df.to_csv("final_agr.csv")
+
+
+
 if __name__ == "__main__":
    url_datasus_literacy_rate = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr.csv"
    url_datasus_gini_coef = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
    url_city_gdp = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
 
-   df = run_datasus(url_datasus_literacy_rate,DatasusAbreviations.ILLITERACY_RATE)
-   print(df.head())
-   df.to_csv("taxa_de_analfabetismo.csv")
-
-   # df2 = run_city_gdp(url_city_gdp,BaseFileType.EXCEL,True)
-   # print(df2.head())
-   # df2.to_csv("pib_cidades.csv")
-  
+   
+   run_api_agregados()
    
    

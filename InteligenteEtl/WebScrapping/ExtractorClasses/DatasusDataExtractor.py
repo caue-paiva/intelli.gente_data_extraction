@@ -155,7 +155,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
          processed_df:pd.DataFrame = self.__join_df_parts(dfs,time_series_years,data_identifier)
 
       processed_df = self.__convert_column_values(processed_df)
-      return ProcessedDataCollection(data_category,data_identifier,time_series_years,processed_df)
+      return ProcessedDataCollection(data_category,data_identifier,time_series_years,processed_df).fill_non_existing_cities()
 
 if __name__ == "__main__":
 
