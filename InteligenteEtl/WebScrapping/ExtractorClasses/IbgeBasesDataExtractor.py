@@ -72,7 +72,7 @@ class CategoryDataExtractor(AbstractDataExtractor):
          temp_df:pd.DataFrame = pd.DataFrame() #cria df temporário
          data_val_col:str =  self.parse_strings(point.column_name)
 
-         temp_df[self.CITY_COLUMN] = df[city_code_col].copy() #copia as colunas de codigo de cidade e ano
+         temp_df[self.CITY_CODE_COL] = df[city_code_col].copy() #copia as colunas de codigo de cidade e ano
          temp_df[self.YEAR_COLUMN] = df[year_col].copy()
          temp_df[self.DATA_IDENTIFIER_COLUMN] = point.data_name #coluna de identificador do dado recebe o nome do dado
          temp_df[self.DATA_VALUE_COLUMN] = df[data_val_col].apply(point.multiply_value) #preenche a coluna de valor de dados

@@ -1,133 +1,14 @@
 from selenium import webdriver
+from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time , requests , os
+import time , os
 import pandas as pd
 #from .AbstractScrapper import AbstractScrapper, BaseFileType
+from .AbstractScrapper import AbstractScrapper ,BaseFileType
 
-# Set up the WebDriver
-
-options = webdriver.ChromeOptions()
-download_dir = os.path.join(os.getcwd(),"teste_dir")  # Change this to your download directory
-
-prefs = {
-    "download.default_directory": download_dir,
-    "download.prompt_for_download": False,
-    "download.directory_upgrade": True,
-    "safebrowsing.enabled": True
-}
-options.add_experimental_option("prefs", prefs)
-driver = webdriver.Chrome(options=options)
-
-def click_voltar_icon(driver):
-    # Function to click the 'voltar icon' button
-    try:
-        voltar_icon = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 'div#lista-base-busca .voltar.icon-left-big'))
-        )
-        voltar_icon.click()
-    except Exception as e:
-        print(f"Error clicking on voltar icon: {e}")
-
-try:
-    # Open the webpage
-    driver.maximize_window()
-    driver.get("https://www.ibge.gov.br/apps/snig/v1/?loc=0&cat=-1,-2,-3,128&ind=4732")
-    time.sleep(10)
-
-    
-    local_selector_div = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.ID, 'local-selector'))
-    )
-    time.sleep(3)
-    step_div = local_selector_div.find_element(By.CLASS_NAME, 'step')
-    step_div.click()
-
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight / 2);")
-    ul_list = WebDriverWait(driver, 20).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, '#local-selector .body-list'))
-    )
-
-    # Debugging: Print if ul_list is found
-    if ul_list:
-        print("UL list found.")
-
-    municipio_li = None
-    li_elements = ul_list.find_elements(By.TAG_NAME, 'li')
-    for li in li_elements:
-        if "Municípios" in li.text:
-            municipio_li = li
-            break
-    print(municipio_li.text)
-    
-    if municipio_li:
-         # Click on the label inside the list item
-         span_inside_li = municipio_li.find_element(By.TAG_NAME, 'span')
-         span_inside_li.click()
-
-         index_li: int = 0
-         while True:
-            # Wait for the UL with class 'list body-list' to appear
-            
-            next_ul = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, 'ul.list.body-list'))
-            )
-
-            list_of_states = next_ul.find_elements(By.CSS_SELECTOR, 'li.option.with-child')
-            state_to_be_clicked = list_of_states[index_li]
-            print(state_to_be_clicked.text)
-            try:
-                    # Click on the 'local' tag inside each 'li'
-                    local_tag = state_to_be_clicked.find_element(By.CLASS_NAME, 'local')
-                    local_tag.click()
-                    time.sleep(0.3)
-
-                    # Re-find the 'ul' element to refresh the context
-                    next_ul = WebDriverWait(driver, 10).until(
-                        EC.presence_of_element_located((By.CSS_SELECTOR, 'ul.list.body-list'))
-                    )
-
-                    first_li = next_ul.find_element(By.CSS_SELECTOR, 'li.option')
-                    input_tag = first_li.find_element(By.CSS_SELECTOR, 'div.input > input')
-                    input_tag.click()
-                    time.sleep(0.3)
-
-                    # Click the 'voltar icon' button to go back to the previous state
-                    click_voltar_icon(driver)
-                    
-                    index_li+=1 #pega prox elemento da lista de estados
-                    if index_li >= len(list_of_states): #chegou no ultimo estado, da break no loop
-                         break
-                      
-            except Exception as e:
-                    print(f"Error clicking on local tag: {e}")
-    
-         time.sleep(2)
-         download_div = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'downloadDiv'))
-         )
-
-         # Find the 'a' tag inside the 'downloadDiv' div
-         download_link = download_div.find_element(By.TAG_NAME, 'a')
-
-         download_link.click()
-
-        # Wait for the download to complete (this may vary depending on the file size and internet speed)
-         time.sleep(10)  # Adjust the sleep time if necessary
-
-        # Verify the download
-         downloaded_files = os.listdir(download_dir)
-         print("Downloaded files:", downloaded_files)
-    else:
-        print("Element with text 'Municípios' not found.")
-
-finally:
-    # Close the browser
-    driver.quit()
-
-
-class FormalJobsScrapper():
+class FormalJobsScrapper(AbstractScrapper):
     
     DOWNLOADED_FILES_DIR = os.path.join(os.getcwd(),"formal_jobs_file_dir")
 
@@ -137,10 +18,10 @@ class FormalJobsScrapper():
         "download.directory_upgrade": True,
         "safebrowsing.enabled": True
     }
-
     BASE_URL: str = "https://www.ibge.gov.br/apps/snig/v1/?loc=0&cat=-1,-2,-3,128&ind=4732"
+    FILE_TYPE: BaseFileType = BaseFileType.CSV
 
-    def __click_return_button(driver):
+    def __click_return_button(self,driver:Chrome):
         
         try:
             voltar_icon = WebDriverWait(driver, 10).until(
@@ -157,7 +38,21 @@ class FormalJobsScrapper():
         
         return dir_path
     
-    def __click_on_all_states(self, driver)->bool:
+    def __delete_download_files_dir(self)->bool:
+        files:list[str] = os.listdir(self.DOWNLOADED_FILES_DIR)
+
+        for file in files:
+            try:
+                os.remove(os.path.join(self.DOWNLOADED_FILES_DIR,file))
+            except Exception as e:
+                print(f"falha ao deletar arquivo CSV extraído. Erro: {e}")
+        
+        try:
+            os.rmdir(self.DOWNLOADED_FILES_DIR)
+        except Exception as e:
+                print(f"falha ao deletar diretório do arquivo extraído. Erro: {e}")
+
+    def __click_on_all_states(self, driver:Chrome)->bool:
         index_of_the_state: int = 0
         while True:
             # Wait for the UL with class 'list body-list' to appear
@@ -197,7 +92,7 @@ class FormalJobsScrapper():
             except Exception as e:
                     print(f"Erro ao clicar no botão de selecionar o estado específico: {e}")
 
-    def __download_files_page(self,url="")->str:
+    def download_database_locally(self, url:str="")->str:
         """
         Método que realiza webscrapping, baixa os dados localmente e retorna o caminho para esse arquivo baixado localmente
         """
@@ -207,7 +102,7 @@ class FormalJobsScrapper():
         self.__create_downloaded_files_dir() #cria diretório para os dados extraidos caso ele não exista
 
         options = webdriver.ChromeOptions()
-        options.add_experimental_option("prefs", prefs)
+        options.add_experimental_option("prefs", self.CHROME_DRIVER_PREFEREN)
         driver = webdriver.Chrome(options=options)
 
         try:
@@ -215,6 +110,25 @@ class FormalJobsScrapper():
             driver.maximize_window()
             driver.get(self.BASE_URL)
             time.sleep(7)
+
+            #div para as filtragens por atributos da tabela
+            dimensoes_div = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.ID, 'dimensoesDiv'))
+            )
+
+            # acha a div que tem os períodos dos dados
+            periodo_div = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, './/div[@id="dimensoesDiv"]//div[contains(text(), "Período")]'))
+            )
+
+            #div com o ano 2000
+            label_2000 = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, './/div[@id="dimensoesDiv"]//label[input[@value="129"] and contains(text(), "2000")]'))
+            )
+
+            #clica no botão para incluir o ano 2000
+            input_2000 = label_2000.find_element(By.XPATH, './input')
+            input_2000.click()
 
             #espera até aparecer o elemento de selecionar o local
             local_selector_div = WebDriverWait(driver, 10).until(
@@ -269,5 +183,20 @@ class FormalJobsScrapper():
             return os.path.join(self.DOWNLOADED_FILES_DIR,downloaded_files[0])
 
         except Exception as e:
-            print(f"falha ao extrai página web, erro {e}")
+            raise Exception(e)
+            print(f"falha ao extrair página web, erro: {e}")
             return ""
+
+    def extract_database(self, website_url: str = "", delete_extracted_files:bool = True) -> pd.DataFrame:
+        path_to_csv:str = self.download_database_locally(website_url)
+        df: pd.DataFrame = pd.read_csv(path_to_csv,sep=";")
+
+        if delete_extracted_files:
+            pass
+            #self.__delete_download_files_dir()
+        return df
+    
+if __name__ == "__main__":
+    obj = FormalJobsScrapper()
+    df = obj.extract_database()
+    print(df.head())

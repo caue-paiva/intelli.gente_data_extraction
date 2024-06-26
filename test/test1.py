@@ -1,6 +1,6 @@
 from WebScrapping.ExtractorClasses import DatasusDataExtractor, CategoryDataExtractor
 from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusAbreviations,IbgePibCidadesScrapper, IbgeBasesMunicScrapper
-from WebScrapping.ExtractorClasses import TableDataPoints
+from WebScrapping.ExtractorClasses import TableDataPoints , FormalJobsExtractor
 from ApiExtractors import IbgeAgregatesApi
 from DataEnums import DataTypes, BaseFileType
 import pandas as pd
@@ -64,6 +64,6 @@ if __name__ == "__main__":
    url_city_gdp = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
 
    
-   run_api_agregados()
+   obj = FormalJobsExtractor()
    
    

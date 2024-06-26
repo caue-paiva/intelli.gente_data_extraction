@@ -34,7 +34,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
           (pd.Dataframe): dataframe com a coluna de municipios apenas com os códigos do IBGE
       """
       remove_non_ints = lambda x : re.sub(r'[^0-9]', '', x)
-      df[self.CITY_COLUMN]= df[self.CITY_COLUMN].apply(remove_non_ints)
+      df[self.CITY_CODE_COL]= df[self.CITY_CODE_COL].apply(remove_non_ints)
 
       return df
 
@@ -120,7 +120,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
       else:
          df = pd.melt(df, id_vars=[self.EXTRACTED_TABLE_CITY_COL], var_name=self.YEAR_COLUMN, value_name=self.DATA_VALUE_COLUMN)
 
-      df = df.rename({self.EXTRACTED_TABLE_CITY_COL: self.CITY_COLUMN},axis="columns") #troca o nome da coluna de municípios
+      df = df.rename({self.EXTRACTED_TABLE_CITY_COL: self.CITY_CODE_COL},axis="columns") #troca o nome da coluna de municípios
       df[self.DATA_IDENTIFIER_COLUMN] = data_identifier #coloca coluna do nome do dado
       df[self.DTYPE_COLUMN] = "float" #coloca coluna do tipo de dado
 
