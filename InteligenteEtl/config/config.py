@@ -16,7 +16,16 @@ except:
    raise RuntimeError("Não foi possível abrir o arquivo de configuração do projeto (config.json)")
 
 #função para deixar o usuário apenas acessar o valor de uma key de configuração
-def get_config(config_name:str)-> Any:
+def get_config(config_name:str)-> str|int:
+    """
+    Função para pegar uma constante do json de configs do projeto, pode retornar uma string ou int
+
+    Args:
+      config_name (str): nome da constante de config
+
+   Return:
+      (str|int): valor da constante de configuração
+    """
     val:Any = __config_dict.get(config_name)
     if val:
        return val
