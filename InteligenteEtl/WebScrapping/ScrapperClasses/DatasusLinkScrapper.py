@@ -18,6 +18,7 @@ class DatasusDataInfo(Enum):
    
    """
    GINI_COEF = {
+      "url":"http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def",
       "data_abrev":"ginibr",
       "data_name":"Índice de GINI da renda domiciliar per capita",
       "data_topic": "saúde",
@@ -28,6 +29,7 @@ class DatasusDataInfo(Enum):
       "dtype":DataTypes.FLOAT
    }
    ILLITERACY_RATE =  {
+      "url":"http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr.csv",
       "data_abrev":"alfbr", 
       "data_name":"Taxa de analfabetismo ",
       "data_topic": "Educação",
@@ -38,6 +40,7 @@ class DatasusDataInfo(Enum):
       "dtype":DataTypes.FLOAT
    }
    MATERNAL_MORTALITY =  {
+      "url":"http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sim/cnv/mat10br.def",
       "data_abrev":"matbr", 
       "data_name":"obitos maternos",
       "data_topic": "saúde",
@@ -48,6 +51,7 @@ class DatasusDataInfo(Enum):
       "dtype":DataTypes.INT
    }
    LIVE_BIRTHS = {
+      "url": "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sinasc/cnv/nvbr.def",
       "data_abrev":"nvbr", 
       "data_name":"nascidos vivos",
       "data_topic": "saúde",
@@ -58,6 +62,7 @@ class DatasusDataInfo(Enum):
       "dtype":DataTypes.INT
    }
    NUMBER_OF_MEDICS = {
+      "url": "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?cnes/cnv/prid02br.def",
       "data_abrev":"pfbr", 
       "data_name":"Médicos disponíveis na rede pública municipal",
       "data_topic": "saúde",
@@ -68,6 +73,7 @@ class DatasusDataInfo(Enum):
       "dtype":DataTypes.INT
    }
    NUMBER_HOSPITAL_BEDS = {
+      "url":"http://tabnet.datasus.gov.br/cgi/tabcgi.exe?cnes/cnv/leiintbr.def",
       "data_abrev":"ltbr", 
       "data_name":"Leitos hospitalares na rede pública municipal",
       "data_topic": "saúde",
@@ -105,8 +111,8 @@ class DatasusLinkScrapper(AbstractScrapper):
    website_url: str
    data_info:DatasusDataInfo
 
-   def __init__(self,website_url:str, data_info:DatasusDataInfo):
-      self.website_url = website_url
+   def __init__(self,data_info:DatasusDataInfo):
+      self.website_url = data_info.value["url"] #pega o url associada ao dado que vai ser extraido
       self.data_info = data_info
    
    def extract_database(self)->tuple[list[pd.DataFrame], list[int]]:
@@ -167,17 +173,19 @@ class DatasusLinkScrapper(AbstractScrapper):
       else:
          year_options_list: list[str] = list(map(lambda x :x.text, select_button.options)) #pega a lista de anos 
       
-      print(year_options_list)
+      extracted_years:list[int] = []
       for year_option in year_options_list: #loop por todos os anos de dados disponíveis
          link  = self.__get_csv_link_by_year(driver, select_button,year_option)
+         
          if not link: #não foi possívei extrair o link
-            year_options_list.remove(year_option)
             continue
+
+         extracted_years.append(year_option) #extraiu o ano com sucesso
          csv_link_list.append(link) #adiciona o link na lista de CSV
       
       driver.close() #fecha o driver do selenium
 
-      return csv_link_list, year_options_list
+      return csv_link_list, extracted_years
 
    #overwride no método de achar o df pelo link, pq o csv do datasus é bem quebrado
    def _dataframe_from_link(self,file_link:str)->pd.DataFrame:
@@ -277,7 +285,7 @@ class DatasusLinkScrapper(AbstractScrapper):
 
       csv_table_button = driver.find_element(By.CLASS_NAME, 'mostra')
       csv_table_button.click() 
-      time.sleep(3)
+      time.sleep(4)
       window_handles = driver.window_handles
       driver.switch_to.window(window_handles[1])
 

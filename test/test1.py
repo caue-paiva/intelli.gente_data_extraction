@@ -6,8 +6,8 @@ from DataEnums import DataTypes, BaseFileType
 import pandas as pd
 from DBInterface import ProcessedDataCollection
 
-def run_datasus(url:str , abreviation:DatasusDataInfo)->pd.DataFrame:
-   scrapper = DatasusLinkScrapper(url ,abreviation)
+def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
+   scrapper = DatasusLinkScrapper(abreviation)
   
    extractor = DatasusDataExtractor()
    processed_data = extractor.extract_processed_collection(scrapper)
@@ -67,8 +67,8 @@ if __name__ == "__main__":
    url_datasus_medics = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?cnes/cnv/prid02br.def"
    url_datasus_hospital_beds = "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?cnes/cnv/leiintbr.def"
 
-   df = run_datasus(url_datasus_hospital_beds,DatasusDataInfo.NUMBER_HOSPITAL_BEDS)
-   df.to_csv("leitos.csv")
+   df = run_datasus(DatasusDataInfo.NUMBER_OF_MEDICS)
+   df.to_csv("testefinal.csv")
    
    
    

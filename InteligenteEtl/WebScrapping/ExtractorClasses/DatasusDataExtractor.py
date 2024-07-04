@@ -67,7 +67,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
       
       return df
 
-   def __join_df_parts(self,df_list:list[pd.DataFrame], list_of_years:list[int],data_identifier:str)->pd.DataFrame:
+   def __join_df_parts(self,df_list:list[pd.DataFrame], list_of_years:list[int],data_info:DatasusDataInfo)->pd.DataFrame:
          """
          Junta os CSVs extraidos de um ano específico do Datasus, cada CSV deve conter dados de apenas 1 ano
          Não é usado no caso especial dos dados do coef de gini
@@ -78,7 +78,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
             list_of_years(list[int]): lista de anos que cada dataframe se refere
             OBS: o indice do vetor dos 2 argumentos devem ser relacionados, ou seja o df do index 0 se refere ao ano de index 0
 
-            data_identifier (str): nome do dado
+            data_info (DatasusDataInfo): enum de infomação sobre o dado extraido do datasus
 
          Return:
                (pd.DataFrame): dataframe unido com os dados de todos os anos.
@@ -86,12 +86,12 @@ class DatasusDataExtractor(AbstractDataExtractor):
          
          final_df: pd.DataFrame = pd.DataFrame()
          for df,year in zip(df_list,list_of_years):
-            new_df =  self.__process_df_right_shape(df,[year],data_identifier)
+            new_df =  self.__process_df_right_shape(df,[year],data_info)
             final_df = pd.concat(objs=[final_df,new_df],axis="index",ignore_index=True)
          
          return final_df
 
-   def __process_df_right_shape(self,df:pd.DataFrame,list_of_years:list[int],data_identifier:str)->pd.DataFrame:
+   def __process_df_right_shape(self,df:pd.DataFrame,list_of_years:list[int],data_info:DatasusDataInfo)->pd.DataFrame:
       """
       Processa o df extraido em um formato padrão para ser inserido no BD, e também remove valores NULL/NaN
       
@@ -104,7 +104,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
 
          list_of_years(list[int]): lista de anos dos dados que o DF contém
 
-         data_identifier (str): nome do dado no df  
+         data_info (DatasusDataInfo): enum de infomação sobre o dado extraido do datasus
 
       Return:
           (pd.Dataframe): df no formato certo para ser inserido no banco de dados, mas não totalmente processado
@@ -125,8 +125,8 @@ class DatasusDataExtractor(AbstractDataExtractor):
          df = pd.melt(df, id_vars=[self.EXTRACTED_TABLE_CITY_COL], var_name=self.YEAR_COLUMN, value_name=self.DATA_VALUE_COLUMN)
 
       df = df.rename({self.EXTRACTED_TABLE_CITY_COL: self.CITY_CODE_COL},axis="columns") #troca o nome da coluna de municípios
-      df[self.DATA_IDENTIFIER_COLUMN] = data_identifier #coloca coluna do nome do dado
-      df[self.DTYPE_COLUMN] = "float" #coloca coluna do tipo de dado
+      df[self.DATA_IDENTIFIER_COLUMN] = data_info.value["data_name"] #coloca coluna do nome do dado
+      df[self.DTYPE_COLUMN] = data_info.value["dtype"].value #coloca coluna do tipo de dado
 
       return df
  
@@ -154,9 +154,9 @@ class DatasusDataExtractor(AbstractDataExtractor):
       
       data_info: DatasusDataInfo = scrapper.data_info
       if data_info == DatasusDataInfo.GINI_COEF: #df único, caso separado
-         processed_df:pd.DataFrame = self.__process_df_right_shape(dfs[0],time_series_years,data_info.value["data_name"])
+         processed_df:pd.DataFrame = self.__process_df_right_shape(dfs[0],time_series_years,data_info)
       else: #lista de dataframes, um para cada ano, caso padrão
-         processed_df:pd.DataFrame = self.__join_df_parts(dfs,time_series_years,data_info.value["data_name"])
+         processed_df:pd.DataFrame = self.__join_df_parts(dfs,time_series_years,data_info)
 
       processed_df = self.__convert_column_values(processed_df,scrapper.data_info.value["dtype"])
       processed_df = self.update_city_code(processed_df, self.CITY_CODE_COL)
