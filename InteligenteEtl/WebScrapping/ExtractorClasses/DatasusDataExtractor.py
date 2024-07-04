@@ -83,8 +83,6 @@ class DatasusDataExtractor(AbstractDataExtractor):
          Return:
                (pd.DataFrame): dataframe unido com os dados de todos os anos.
          """
-         if len(df_list) != len(list_of_years):
-            raise IOError("Tamanho da lista de DF é diferente do tamanho da lista de anos")
          
          final_df: pd.DataFrame = pd.DataFrame()
          for df,year in zip(df_list,list_of_years):

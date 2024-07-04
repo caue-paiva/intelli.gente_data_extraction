@@ -96,6 +96,8 @@ class DatasusLinkScrapper(AbstractScrapper):
 
       else: #caso base da extração da maioria dos dados
          csv_link_list, year_options_list = self.__selenium_page_interaction()
+         print(csv_link_list)
+         print(year_options_list)
          list_of_dfs:list[pd.DataFrame] = []
          for link  in csv_link_list:
             list_of_dfs.append(self._dataframe_from_link(link))
