@@ -64,9 +64,10 @@ if __name__ == "__main__":
    url_city_gdp = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
    url_datasus_maternal_mortality = "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sim/cnv/mat10br.def"
    url_datasus_live_births = "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sinasc/cnv/nvbr.def"
+   url_datasus_medics = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?cnes/cnv/prid02br.def"
 
-   df = run_datasus(url_datasus_live_births,DatasusDataInfo.LIVE_BIRTHS)
-   df.to_csv("nvbr.csv")
+   df = run_datasus(url_datasus_medics,DatasusDataInfo.NUMBER_OF_MEDICS)
+   df.to_csv("medicos.csv")
    
    
    

@@ -22,6 +22,9 @@ class DatasusDataInfo(Enum):
       "data_name":"Índice de GINI da renda domiciliar per capita",
       "data_topic": "saúde",
       "content_to_select":[],
+      "columns_to_select":[],
+      "lines_to_select":[],
+      "monthly_data":False,
       "dtype":DataTypes.FLOAT
    }
    ILLITERACY_RATE =  {
@@ -29,6 +32,9 @@ class DatasusDataInfo(Enum):
       "data_name":"Taxa de analfabetismo ",
       "data_topic": "Educação",
       "content_to_select":[],
+      "columns_to_select":[],
+      "lines_to_select":[],
+      "monthly_data":False,
       "dtype":DataTypes.FLOAT
    }
    MATERNAL_MORTALITY =  {
@@ -36,6 +42,9 @@ class DatasusDataInfo(Enum):
       "data_name":"obitos maternos",
       "data_topic": "saúde",
       "content_to_select":["Óbitos maternos"],
+      "columns_to_select":[],
+      "lines_to_select":[],
+      "monthly_data":False,
       "dtype":DataTypes.INT
    }
    LIVE_BIRTHS = {
@@ -43,6 +52,19 @@ class DatasusDataInfo(Enum):
       "data_name":"nascidos vivos",
       "data_topic": "saúde",
       "content_to_select":[],
+      "columns_to_select":[],
+      "lines_to_select":[],
+      "monthly_data":False,
+      "dtype":DataTypes.INT
+   }
+   NUMBER_OF_MEDICS = {
+      "data_abrev":"pfbr", 
+      "data_name":"nascidos vivos",
+      "data_topic": "saúde",
+      "content_to_select":[],
+      "columns_to_select":["Médicos"],
+      "lines_to_select":["Município"],
+      "monthly_data":True,
       "dtype":DataTypes.INT
    }
 
@@ -64,7 +86,8 @@ class DatasusLinkScrapper(AbstractScrapper):
    """
    HTML_YEAR_BUTTON_ID = "A" #id do botão de selecionar os anos na página do datasus
    HTML_CONTENT_SELECTION_DIV = "conteudo"
-
+   HTML_COLUMNS_SELECTION_DIV = "coluna"
+   HTML_LINE_SELECTION_DIV = "linha"
 
    website_url: str
    data_info:DatasusDataInfo
@@ -119,12 +142,18 @@ class DatasusLinkScrapper(AbstractScrapper):
       driver = webdriver.Chrome()
       driver.get(self.website_url) #driver do selenium vai pro site
       select_element = driver.find_element(By.ID, self.HTML_YEAR_BUTTON_ID) #acha o botão de selecionar os anos
-      self.__select_content_options(driver) #caso seja necessário, seleciona os conteúdos na página inicial do datasus para mostrar o dado certo
+      self.__select_data_options(driver) #caso seja necessário, seleciona as opções nas 3 tabelas do topo da página do datasus para mostrar os dados
+      #certos
 
       csv_link_list: list[str] = []
       select_button = Select(select_element) #elemento de selecionar o botão dos dados anuais
       
-      year_options_list: list[str] = list(map(lambda x :x.text, select_button.options)) #pega a lista de anos 
+      if self.data_info.value["monthly_data"]:
+         year_options_list: list[str] = list(map(lambda x :x.text, select_button.options)) #pega a lista de anos 
+         year_options_list: list[str] = list(filter( lambda x : "dez" in x.lower(),year_options_list))
+      else:
+         year_options_list: list[str] = list(map(lambda x :x.text, select_button.options)) #pega a lista de anos 
+      
       for year_option in year_options_list: #loop por todos os anos de dados disponíveis
          link  = self.__get_csv_link_by_year(driver, select_button,year_option)
          if not link: #não foi possívei extrair o link
@@ -154,28 +183,65 @@ class DatasusLinkScrapper(AbstractScrapper):
       print(df.info())
       return df
 
-   def __select_content_options(self,driver:webdriver.Chrome)->bool:
+   def __select_data_options(self,driver:webdriver.Chrome)->bool:
       """
-      Seleciona as opções de contéudo de uma tabela no site do datasus, usado em indicadores como o de Mortalidade materna
+      Seleciona as opções de filtragem dos dados nas 3 tabelas (linha,coluna e conteúdo) na parte superior do site do datasus
       
       """
-      content_to_select:list[str] = self.data_info.value["content_to_select"] #pega os conteúdos que precisam ser selecionados na página para mostrar o dado certo
-      if not content_to_select: #não tem conteúdo para selecionar, retorna
-         return True
+   
+      data_options_dict = { #dict onde a key é a tag html da tabela de filtragem do datasus e o valor é o uma key para o dict do ENUM, para acessar
+         self.HTML_CONTENT_SELECTION_DIV: "content_to_select", #os valores de cada tabela para extrair aquele dado
+         self.HTML_COLUMNS_SELECTION_DIV: "columns_to_select",
+         self.HTML_LINE_SELECTION_DIV: "lines_to_select"
+      }
+      for html_class,data_option_key in data_options_dict.items(): #loop pelas 3 tabelas de filtragem de conteúdo
+         content_to_select:list[str] = self.data_info.value[data_option_key] #pega os conteúdos que precisam ser selecionados na página para mostrar o dado certo
+         if not content_to_select: #não tem conteúdo para selecionar, continua loop
+            continue
 
-      try:
-         conteudo_div = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, self.HTML_CONTENT_SELECTION_DIV))
-         )
-         select_element = conteudo_div.find_element(By.NAME, 'Incremento')
-         select = Select(select_element)
-         select.deselect_all()
-         for content in content_to_select:
-            select.select_by_visible_text(content)
+         try:
+            conteudo_div = WebDriverWait(driver, 10).until(
+               EC.presence_of_element_located((By.CLASS_NAME, html_class))
+            )
+            select_element = conteudo_div.find_element(By.TAG_NAME, 'select')
+            select = Select(select_element)
+            if select_element.get_attribute('multiple'):
+                select.deselect_all()
 
-      except Exception as e:
-         print(f"Erro ao selecionar botão de conteúdo: {e}")
-         return False
+            for content in content_to_select: #seleciona os conteudos para mostrar o dado certo
+               select.select_by_visible_text(content)
+      
+         except Exception as e:
+            print(f"Erro ao selecionar botão de conteúdo: {e}")
+            return False
+      if self.data_info == DatasusDataInfo.NUMBER_OF_MEDICS:
+         self.__select_botton_page_option(driver)
+
+      return True
+
+   def __select_botton_page_option(self,driver:webdriver.Chrome)->bool:
+      """
+      Função para o caso específico de extrair a quantidade de médicos, seleciona a opção de "atende no sus" na parte de baixo da página
+      """
+      corposelecoes_div = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, 'corposelecoes'))
+      )
+
+      # Find all sub-divs inside the 'corposelecoes' div
+      subdivs = corposelecoes_div.find_elements(By.TAG_NAME, 'div')
+
+      # Iterate through the subdivs to find the one with the label text 'Atende no sus'
+      for subdiv in subdivs:
+        try:
+            label = subdiv.find_element(By.TAG_NAME, 'label')
+            if label.text.strip() == "Atende no SUS":
+                select_element = subdiv.find_element(By.TAG_NAME, 'select')
+                select = Select(select_element)
+                select.select_by_value('1')
+                break
+        except:
+            continue
+      time.sleep(3)
 
    def __get_csv_link_by_year(self, driver:webdriver.Chrome,select_elem:Select, year_str:str)->str:
       """
@@ -183,7 +249,10 @@ class DatasusLinkScrapper(AbstractScrapper):
       """
       
       last_two_digits:str = year_str[-2:] #ultimos dois dígitos do número em forma de str
-      year_button_identifier: str = self.data_info.value["data_abrev"] + last_two_digits + ".dbf"
+      if self.data_info.value["monthly_data"]:
+         year_button_identifier: str = self.data_info.value["data_abrev"] + last_two_digits +  "12" + ".dbf"
+      else:
+         year_button_identifier: str = self.data_info.value["data_abrev"] + last_two_digits + ".dbf"
       
       select_elem.deselect_all()
       select_elem.select_by_value(year_button_identifier)
@@ -228,6 +297,7 @@ class DatasusLinkScrapper(AbstractScrapper):
       re_pattern:str = r"(?<!\d)\d{4}(?!\d)"
       list_of_years:list[int] = list(map(int,re.findall(re_pattern,inner_text)))
       return list_of_years
+
 
 
 if __name__ == "__main__":
