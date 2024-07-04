@@ -51,11 +51,13 @@ class ProcessedDataCollection:
 
        complete_index = pd.MultiIndex.from_product([city_codes, years], names=[city_code_col, year_col]) #index vindo de um produto cartesiano dos municipios e anos
        complete_df = pd.DataFrame(index=complete_index).reset_index() #cria um df com esse index e as colunas de ano e cidades apenas
+       complete_df[city_code_col] = complete_df[city_code_col].astype("int")
+       
+       self.df = self.df.dropna(axis="index",subset=[city_code_col]) #remove as colunas com o código do município vazias
+       self.df[city_code_col] = self.df[city_code_col].astype("int") 
+     
+       merged_df:pd.DataFrame = pd.merge(complete_df, self.df, on=[city_code_col, year_col], how='left') #left join (df_cartesiano X df_antigo) para preencher todasas possíveis combinações   
 
-     
-     
-       merged_df:pd.DataFrame = pd.merge(complete_df, self.df, on=[city_code_col, year_col], how='left') #left join (df_cartesiano X df_antigo) para preencher todasas possíveis combinações
-    
        merged_df[data_identifier_col] = self.data_name #coluna de nome do dado vai ser preenchida novamente
        merged_df[dtype_col] = merged_df[dtype_col].fillna(DataTypes.NULL.value) #preenche valores NaN na coluna de tipos de dados com a string NULL
        merged_df[values_col] = merged_df[values_col].fillna(DataTypes.NULL.value) #preenche valores NaN na coluna de valores de dados com a string NULL

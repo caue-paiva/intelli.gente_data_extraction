@@ -1,7 +1,8 @@
 import pandas as pd
 import re
 from DBInterface.DataCollection import ProcessedDataCollection
-from WebScrapping.ScrapperClasses.DatasusLinkScrapper import DatasusAbreviations, DatasusLinkScrapper
+from DataEnums import DataTypes
+from WebScrapping.ScrapperClasses.DatasusLinkScrapper import DatasusDataInfo, DatasusLinkScrapper
 from .AbstractDataExtractor import AbstractDataExtractor
 from typing import Type
 
@@ -38,7 +39,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
 
       return df
 
-   def __convert_column_values(self,df:pd.DataFrame)->pd.DataFrame:
+   def __convert_column_values(self,df:pd.DataFrame, dtype: DataTypes)->pd.DataFrame:
       """
       Com o df no formato certo para ser carregado no BD, essa função transforma a coluna de municípios (com
       a função __remove_city_names() e transforma a coluna de valores em float 
@@ -51,15 +52,18 @@ class DatasusDataExtractor(AbstractDataExtractor):
       """
       
       df = self.__remove_city_names(df) #deixa so os códigos na coluna do município (tira os nomes)
+      city_code_is_valid = lambda x : x != "" and x != " "
+      df = df[ df[self.CITY_CODE_COL].apply(city_code_is_valid)] #remove linhas onde o código do município não é valido
+      
       try:
-         df[self.DATA_VALUE_COLUMN] = df[self.DATA_VALUE_COLUMN].astype("float64")
+         df.loc[:,self.DATA_VALUE_COLUMN] = df[self.DATA_VALUE_COLUMN].astype(dtype.value) #acessa todos os rows da coluna de valores de dados e modifica
       except ValueError as e:
-         if "could not convert string to float" in str(e): #erro na conversão de str para float
+         if "could not convert string to float" in str(e): #erro na conversão de str para float/int
             try:
-               df[self.DATA_VALUE_COLUMN] = df[self.DATA_VALUE_COLUMN].replace(",",".",regex=True) #troca , por . para o pandas converter certo
-               df[self.DATA_VALUE_COLUMN] = df[self.DATA_VALUE_COLUMN].astype("float64")
+               df.loc[:,self.DATA_VALUE_COLUMN] = df[self.DATA_VALUE_COLUMN].replace(",",".",regex=True) #troca , por . para o pandas converter certo
+               df.loc[:,self.DATA_VALUE_COLUMN] = df[self.DATA_VALUE_COLUMN].astype(dtype.value)
             except:
-               raise ValueError("Não foi possível converter valores do df de str pra float")
+               raise ValueError("Não foi possível converter valores do df de str pra float/int")
       
       return df
 
@@ -80,7 +84,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
                (pd.DataFrame): dataframe unido com os dados de todos os anos.
          """
          if len(df_list) != len(list_of_years):
-            raise IOError("Tamanho da lista de DF é difernte do tamanho da lista de anos")
+            raise IOError("Tamanho da lista de DF é diferente do tamanho da lista de anos")
          
          final_df: pd.DataFrame = pd.DataFrame()
          for df,year in zip(df_list,list_of_years):
@@ -109,7 +113,9 @@ class DatasusDataExtractor(AbstractDataExtractor):
       """
       
       df = df.dropna(how = "any", axis= "index") #da drop nos NaN que vem de linhas do CSV com informações sobre os estudos 
-      df = df[df[self.EXTRACTED_TABLE_CITY_COL] != "Total"]
+      get_only_valid_cities = lambda x : x != "Total" and "IGNORADO" not in x #funcao para filtrar as linhas cujo valor de municipio é ignorado ou valor total do brasil
+      df = df[df[self.EXTRACTED_TABLE_CITY_COL].apply(get_only_valid_cities)]
+
       for col in df.columns:
          df[col] = df[col].replace(self.NULL_VAL_IDENTIFIER,None) #remove os valores null em cada coluna
 
@@ -117,7 +123,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
          data_value_col:str = df.columns[1] #nome da coluna dos dados
          df = df.rename({data_value_col: self.DATA_VALUE_COLUMN},axis="columns") #troca o nome dela
          df["ano"] = list_of_years[0]
-      else:
+      else: #caso especial do coef de gini
          df = pd.melt(df, id_vars=[self.EXTRACTED_TABLE_CITY_COL], var_name=self.YEAR_COLUMN, value_name=self.DATA_VALUE_COLUMN)
 
       df = df.rename({self.EXTRACTED_TABLE_CITY_COL: self.CITY_CODE_COL},axis="columns") #troca o nome da coluna de municípios
@@ -126,7 +132,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
 
       return df
  
-   def extract_processed_collection(self,scrapper: Type[DatasusLinkScrapper], data_category:str,data_identifier:str)->ProcessedDataCollection:
+   def extract_processed_collection(self,scrapper: Type[DatasusLinkScrapper])->ProcessedDataCollection:
       """
       Função da interface que recebe um objeto scrapper, chama a função dele que retorna o df extraido do site do datasus.
       Esse DF retornado é processado, valores nulos são removidos, e o df é colocado no formato certo para ser inserido no BD.
@@ -145,24 +151,32 @@ class DatasusDataExtractor(AbstractDataExtractor):
       """
      
       dfs,time_series_years = scrapper.extract_database()
-
       if len(dfs) < 1:
          raise IOError("Lista de dataframes deve ter tamanho de pelo menos 1")
       
-      if scrapper.data_abrevia == DatasusAbreviations.GINI_COEF: #df único, caso separado
-         processed_df:pd.DataFrame = self.__process_df_right_shape(dfs[0],time_series_years,data_identifier)
+      data_info: DatasusDataInfo = scrapper.data_info
+      if data_info == DatasusDataInfo.GINI_COEF: #df único, caso separado
+         processed_df:pd.DataFrame = self.__process_df_right_shape(dfs[0],time_series_years,data_info.value["data_name"])
       else: #lista de dataframes, um para cada ano, caso padrão
-         processed_df:pd.DataFrame = self.__join_df_parts(dfs,time_series_years,data_identifier)
+         processed_df:pd.DataFrame = self.__join_df_parts(dfs,time_series_years,data_info.value["data_name"])
 
-      processed_df = self.__convert_column_values(processed_df)
-      return ProcessedDataCollection(data_category,data_identifier,time_series_years,processed_df).fill_non_existing_cities()
+      processed_df = self.__convert_column_values(processed_df,scrapper.data_info.value["dtype"])
+      processed_df = self.update_city_code(processed_df, self.CITY_CODE_COL)
+     
+      return ProcessedDataCollection(
+         category= data_info.value["data_topic"],
+         dtype= scrapper.data_info.value["dtype"],
+         data_name= data_info.value["data_name"],
+         time_series_years= time_series_years,
+         df = processed_df
+      ).fill_non_existing_cities()
 
 if __name__ == "__main__":
 
    url1 = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr"
    url2 = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
-   abreviation1 = DatasusAbreviations.ILLITERACY_RATE
-   abreviation2 = DatasusAbreviations.GINI_COEF
+   abreviation1 = DatasusDataInfo.ILLITERACY_RATE
+   abreviation2 = DatasusDataInfo.GINI_COEF
 
    extractor = DatasusDataExtractor()
    scrapper = DatasusLinkScrapper(url1,abreviation1)
@@ -170,12 +184,3 @@ if __name__ == "__main__":
    collection = extractor.extract_processed_collection(scrapper,"educacao","taxa de analfabetismo")
 
 
-   """
-   df = pd.read_csv(os.path.join("webscrapping","tempfiles","datasus_alfbr.csv"))
-   collection:ProcessedDataCollection = extractor.get_data_collection(df,"educa",[1991,2000,2010],"TAXA ANALFABETISMO","Município","Taxa_de_analfabetismo")
-
-   #df = __convert_column_values(df,"TAXA ANALFABETISMO","Município","Taxa_de_analfabetismo")
-
-   print(collection.df.head(5))
-   print(collection.df.info())
-   """

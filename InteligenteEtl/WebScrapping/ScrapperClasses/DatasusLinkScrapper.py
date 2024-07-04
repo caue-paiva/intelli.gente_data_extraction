@@ -3,15 +3,49 @@ from .AbstractScrapper import AbstractScrapper
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from DataEnums import DataTypes
 import time , os , re 
 from enum import Enum
 
-class DatasusAbreviations(Enum):
+class DatasusDataInfo(Enum):
    """
-   Abreviações que o DataSus usa para designar os dados, usados no HTML para identificar botões que quando clicados levam aos dados
+   Enums para cada dado a ser extraido do datasus, contém a abreviaçãoque o DataSus usa para designar os dados, 
+   no HTML para identificar botões que quando clicados levam aos link do csv.
+   Também tem outras infos como o nome do dado, seu tópico, tipo e se é necessário selecionar conteúdo na página para baixar o dado
+   certo (como o caso da mortalidade materna)
+   
    """
-   GINI_COEF = "ginibr"
-   ILLITERACY_RATE = "alfbr"
+   GINI_COEF = {
+      "data_abrev":"ginibr",
+      "data_name":"Índice de GINI da renda domiciliar per capita",
+      "data_topic": "saúde",
+      "content_to_select":[],
+      "dtype":DataTypes.FLOAT
+   }
+   ILLITERACY_RATE =  {
+      "data_abrev":"alfbr", 
+      "data_name":"Taxa de analfabetismo ",
+      "data_topic": "Educação",
+      "content_to_select":[],
+      "dtype":DataTypes.FLOAT
+   }
+   MATERNAL_MORTALITY =  {
+      "data_abrev":"matbr", 
+      "data_name":"obitos maternos",
+      "data_topic": "saúde",
+      "content_to_select":["Óbitos maternos"],
+      "dtype":DataTypes.INT
+   }
+   LIVE_BIRTHS = {
+      "data_abrev":"nvbr", 
+      "data_name":"nascidos vivos",
+      "data_topic": "saúde",
+      "content_to_select":[],
+      "dtype":DataTypes.INT
+   }
+
     
 
 
@@ -29,13 +63,15 @@ class DatasusLinkScrapper(AbstractScrapper):
    
    """
    HTML_YEAR_BUTTON_ID = "A" #id do botão de selecionar os anos na página do datasus
+   HTML_CONTENT_SELECTION_DIV = "conteudo"
+
 
    website_url: str
-   data_abrevia:DatasusAbreviations
+   data_info:DatasusDataInfo
 
-   def __init__(self,website_url:str, data_abrevia:DatasusAbreviations):
+   def __init__(self,website_url:str, data_info:DatasusDataInfo):
       self.website_url = website_url
-      self.data_abrevia = data_abrevia
+      self.data_info = data_info
    
    def extract_database(self)->tuple[list[pd.DataFrame], list[int]]:
       """
@@ -46,12 +82,14 @@ class DatasusLinkScrapper(AbstractScrapper):
          tuple[list[pd.DataFrame], list[int]]: tupla com a lista de dfs dos dados extraidos e a lista de anos a que eles se referem (em ordem)
       """
 
-      if self.data_abrevia == DatasusAbreviations.GINI_COEF: #caso específico do dado coeficiente de gini
+      if self.data_info == DatasusDataInfo.GINI_COEF: #caso específico do dado coeficiente de gini
          driver = webdriver.Chrome()
          driver.get(self.website_url) 
          time.sleep(3) #espera a página carrega
          html:str = driver.page_source
          link:str = self.__get_link_from_html(html)
+         if not link:
+            return [],[]
          list_of_years:list[int] = self.__get_years_from_html(driver)
          df =  self._dataframe_from_link(link)
          return [df], list_of_years
@@ -65,8 +103,8 @@ class DatasusLinkScrapper(AbstractScrapper):
          return list_of_dfs, year_options_list
     
    def download_database_locally(self)-> str:
-      df:pd.DataFrame =  self.extract_database(self.website_url,self.data_abrevia)
-      df.to_csv(os.path.join(self.EXTRACTED_FILES_DIR, "datasus_" + self.data_abrevia.value + ".csv"))
+      df:pd.DataFrame =  self.extract_database(self.website_url,self.data_info)
+      df.to_csv(os.path.join(self.EXTRACTED_FILES_DIR, "datasus_" + self.data_info.value["data_abrev"] + ".csv"))
 
    def __selenium_page_interaction(self)->tuple[list[str],list[int]]:
       """
@@ -79,12 +117,19 @@ class DatasusLinkScrapper(AbstractScrapper):
       driver = webdriver.Chrome()
       driver.get(self.website_url) #driver do selenium vai pro site
       select_element = driver.find_element(By.ID, self.HTML_YEAR_BUTTON_ID) #acha o botão de selecionar os anos
+      self.__select_content_options(driver) #caso seja necessário, seleciona os conteúdos na página inicial do datasus para mostrar o dado certo
 
       csv_link_list: list[str] = []
       select_button = Select(select_element) #elemento de selecionar o botão dos dados anuais
+      
       year_options_list: list[str] = list(map(lambda x :x.text, select_button.options)) #pega a lista de anos 
       for year_option in year_options_list: #loop por todos os anos de dados disponíveis
-         csv_link_list.append(self.__get_csv_link_by_year(driver, select_button,year_option)) #adiciona o link na lista de CSV
+         link  = self.__get_csv_link_by_year(driver, select_button,year_option)
+         if not link: #não foi possívei extrair o link
+            year_options_list.remove(year_option)
+            continue
+         csv_link_list.append(link) #adiciona o link na lista de CSV
+      
       driver.close() #fecha o driver do selenium
 
       return csv_link_list, year_options_list
@@ -97,24 +142,49 @@ class DatasusLinkScrapper(AbstractScrapper):
 
       """
       header_row:int
-      if self.data_abrevia == DatasusAbreviations.GINI_COEF:
+      if self.data_info == DatasusDataInfo.GINI_COEF:
          header_row = 2
       else:
          header_row = 3
       df = pd.read_csv(file_link, encoding="latin-1", sep=";",header=header_row)
       if df is None:
          raise RuntimeError("falha em gerar o df a partir do link")
-      
+      print(df.info())
       return df
 
+   def __select_content_options(self,driver:webdriver.Chrome)->bool:
+      """
+      Seleciona as opções de contéudo de uma tabela no site do datasus, usado em indicadores como o de Mortalidade materna
+      
+      """
+      content_to_select:list[str] = self.data_info.value["content_to_select"] #pega os conteúdos que precisam ser selecionados na página para mostrar o dado certo
+      if not content_to_select: #não tem conteúdo para selecionar, retorna
+         return True
+
+      try:
+         conteudo_div = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, self.HTML_CONTENT_SELECTION_DIV))
+         )
+         select_element = conteudo_div.find_element(By.NAME, 'Incremento')
+         select = Select(select_element)
+         select.deselect_all()
+         for content in content_to_select:
+            select.select_by_visible_text(content)
+
+      except Exception as e:
+         print(f"Erro ao selecionar botão de conteúdo: {e}")
+         return False
 
    def __get_csv_link_by_year(self, driver:webdriver.Chrome,select_elem:Select, year_str:str)->str:
+      """
+      Com um ano dos dados selecionado na pag web, pega o link do CSV para esse ano
+      """
+      
       last_two_digits:str = year_str[-2:] #ultimos dois dígitos do número em forma de str
-      year_button_identifier: str = self.data_abrevia.value + last_two_digits + ".dbf"
+      year_button_identifier: str = self.data_info.value["data_abrev"] + last_two_digits + ".dbf"
       
       select_elem.deselect_all()
       select_elem.select_by_value(year_button_identifier)
-      time.sleep(1)
 
       csv_table_button = driver.find_element(By.CLASS_NAME, 'mostra')
       csv_table_button.click() 
@@ -136,12 +206,13 @@ class DatasusLinkScrapper(AbstractScrapper):
      
       link_index:int = html.find(CSV_LINK_IDENTIFIER)
       if (link_index == -1):
-         raise RuntimeError("Não foi possível achar o link do CSV")
+         print("Não foi possível achar o link do CSV")
+         return ""
          
       link_end:int = html.find('"',link_index)
       link_start:int = html.rfind('"',0,link_index)
 
-      if self.data_abrevia == DatasusAbreviations.GINI_COEF: #caso especial do link pra pegar o coef de gini
+      if self.data_info == DatasusDataInfo.GINI_COEF: #caso especial do link pra pegar o coef de gini
          str_end = html[link_start+1:link_end]
          str_end = str_end[2:]
          return HTTP_REQUEST_STR + "/cgi/ibge/censo" + str_end
@@ -160,8 +231,8 @@ class DatasusLinkScrapper(AbstractScrapper):
 if __name__ == "__main__":
    url1 = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr"
    url2 = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
-   abreviation1 = DatasusAbreviations.ILLITERACY_RATE
-   abreviation2 = DatasusAbreviations.GINI_COEF
+   abreviation1 = DatasusDataInfo.ILLITERACY_RATE
+   abreviation2 = DatasusDataInfo.GINI_COEF
    scrapper = DatasusLinkScrapper(url1,abreviation1)
    df = scrapper.extract_database()[0]
 

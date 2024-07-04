@@ -1,16 +1,16 @@
 from WebScrapping.ExtractorClasses import DatasusDataExtractor, CategoryDataExtractor
-from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusAbreviations,IbgePibCidadesScrapper, IbgeBasesMunicScrapper
+from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper
 from WebScrapping.ExtractorClasses import TableDataPoints , FormalJobsExtractor
 from ApiExtractors import IbgeAgregatesApi
 from DataEnums import DataTypes, BaseFileType
 import pandas as pd
 from DBInterface import ProcessedDataCollection
 
-def run_datasus(url , abreviation:DatasusAbreviations)->pd.DataFrame:
+def run_datasus(url:str , abreviation:DatasusDataInfo)->pd.DataFrame:
    scrapper = DatasusLinkScrapper(url ,abreviation)
   
    extractor = DatasusDataExtractor()
-   processed_data = extractor.extract_processed_collection(scrapper,"educacao","taxa de analfabetismo")
+   processed_data = extractor.extract_processed_collection(scrapper)
 
    return processed_data.df
 
@@ -62,8 +62,12 @@ if __name__ == "__main__":
    url_datasus_literacy_rate = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr.csv"
    url_datasus_gini_coef = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
    url_city_gdp = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
+   url_datasus_maternal_mortality = "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sim/cnv/mat10br.def"
+   url_datasus_live_births = "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sinasc/cnv/nvbr.def"
 
+   df = run_datasus(url_datasus_live_births,DatasusDataInfo.LIVE_BIRTHS)
+   df.to_csv("nvbr.csv")
    
-   obj = FormalJobsExtractor()
+   
    
    
