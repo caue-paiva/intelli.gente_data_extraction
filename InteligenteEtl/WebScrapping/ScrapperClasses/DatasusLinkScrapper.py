@@ -59,7 +59,7 @@ class DatasusDataInfo(Enum):
    }
    NUMBER_OF_MEDICS = {
       "data_abrev":"pfbr", 
-      "data_name":"nascidos vivos",
+      "data_name":"Médicos disponíveis na rede pública municipal",
       "data_topic": "saúde",
       "content_to_select":[],
       "columns_to_select":["Médicos"],
@@ -88,6 +88,9 @@ class DatasusLinkScrapper(AbstractScrapper):
    HTML_CONTENT_SELECTION_DIV = "conteudo"
    HTML_COLUMNS_SELECTION_DIV = "coluna"
    HTML_LINE_SELECTION_DIV = "linha"
+   SELECTED_MONTH_NAME = "dez" #caso os dados sejam mensais, escolhe o mês de dezembro
+   SELECTED_MONTH_NUM = "12"
+   EXTRACTED_TABLE_CITY_COL = "Município"
 
    website_url: str
    data_info:DatasusDataInfo
@@ -150,11 +153,14 @@ class DatasusLinkScrapper(AbstractScrapper):
       
       if self.data_info.value["monthly_data"]:
          year_options_list: list[str] = list(map(lambda x :x.text, select_button.options)) #pega a lista de anos 
-         year_options_list: list[str] = list(filter( lambda x : "dez" in x.lower(),year_options_list))
+         year_options_list: list[str] = list(filter( lambda x : self.SELECTED_MONTH_NAME in x.lower(),year_options_list)) #filtra apenas os anos com de
+         year_options_list = list(map(lambda x: x[x.find("/")+1:], year_options_list)) #pega a string depois da / , que é o  ano
+      
       else:
          year_options_list: list[str] = list(map(lambda x :x.text, select_button.options)) #pega a lista de anos 
       
-      for year_option in year_options_list: #loop por todos os anos de dados disponíveis
+      print(year_options_list)
+      for year_option in year_options_list[:2]: #loop por todos os anos de dados disponíveis
          link  = self.__get_csv_link_by_year(driver, select_button,year_option)
          if not link: #não foi possívei extrair o link
             year_options_list.remove(year_option)
@@ -163,7 +169,7 @@ class DatasusLinkScrapper(AbstractScrapper):
       
       driver.close() #fecha o driver do selenium
 
-      return csv_link_list, year_options_list
+      return csv_link_list, year_options_list[:2]
 
    #overwride no método de achar o df pelo link, pq o csv do datasus é bem quebrado
    def _dataframe_from_link(self,file_link:str)->pd.DataFrame:
@@ -175,12 +181,19 @@ class DatasusLinkScrapper(AbstractScrapper):
       header_row:int
       if self.data_info == DatasusDataInfo.GINI_COEF:
          header_row = 2
+      elif self.data_info == DatasusDataInfo.NUMBER_OF_MEDICS:
+         header_row = 4
       else:
          header_row = 3
-      df = pd.read_csv(file_link, encoding="latin-1", sep=";",header=header_row)
+
+      if self.data_info == DatasusDataInfo.NUMBER_OF_MEDICS:
+         all_medic_types_col:str = "Total" #coluna com o total de médicos por município
+         df = pd.read_csv(file_link, encoding="latin-1", sep=";",header=header_row,usecols=[self.EXTRACTED_TABLE_CITY_COL,all_medic_types_col])
+      else:
+         df = pd.read_csv(file_link, encoding="latin-1", sep=";",header=header_row)
+      
       if df is None:
          raise RuntimeError("falha em gerar o df a partir do link")
-      print(df.info())
       return df
 
    def __select_data_options(self,driver:webdriver.Chrome)->bool:
@@ -227,21 +240,18 @@ class DatasusLinkScrapper(AbstractScrapper):
         EC.presence_of_element_located((By.CLASS_NAME, 'corposelecoes'))
       )
 
-      # Find all sub-divs inside the 'corposelecoes' div
-      subdivs = corposelecoes_div.find_elements(By.TAG_NAME, 'div')
+      img_element = corposelecoes_div.find_element(By.ID, 'fig31')
+      img_element.click()
 
-      # Iterate through the subdivs to find the one with the label text 'Atende no sus'
-      for subdiv in subdivs:
-        try:
-            label = subdiv.find_element(By.TAG_NAME, 'label')
-            if label.text.strip() == "Atende no SUS":
-                select_element = subdiv.find_element(By.TAG_NAME, 'select')
-                select = Select(select_element)
-                select.select_by_value('1')
-                break
-        except:
-            continue
-      time.sleep(3)
+      select_element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.NAME, 'SAtende_no_SUS'))
+      )
+
+      select = Select(select_element)
+      select.deselect_all()
+   
+      select.select_by_value('1') #seleciona o botão para filtrar os médicos que atendem no sus
+      time.sleep(1.5)
 
    def __get_csv_link_by_year(self, driver:webdriver.Chrome,select_elem:Select, year_str:str)->str:
       """
@@ -250,7 +260,7 @@ class DatasusLinkScrapper(AbstractScrapper):
       
       last_two_digits:str = year_str[-2:] #ultimos dois dígitos do número em forma de str
       if self.data_info.value["monthly_data"]:
-         year_button_identifier: str = self.data_info.value["data_abrev"] + last_two_digits +  "12" + ".dbf"
+         year_button_identifier: str = self.data_info.value["data_abrev"] + last_two_digits +  self.SELECTED_MONTH_NUM + ".dbf"
       else:
          year_button_identifier: str = self.data_info.value["data_abrev"] + last_two_digits + ".dbf"
       
