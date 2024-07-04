@@ -11,10 +11,10 @@ from enum import Enum
 
 class DatasusDataInfo(Enum):
    """
-   Enums para cada dado a ser extraido do datasus, contém a abreviaçãoque o DataSus usa para designar os dados, 
-   no HTML para identificar botões que quando clicados levam aos link do csv.
-   Também tem outras infos como o nome do dado, seu tópico, tipo e se é necessário selecionar conteúdo na página para baixar o dado
-   certo (como o caso da mortalidade materna)
+   Enums para cada dado a ser extraido do datasus, contém a abreviação que o DataSus usa para designar os dados 
+   no HTML para identificar botões que quando clicados levam ao link do csv.
+   Também tem outras infos como o nome do dado, seu tópico, tipo e se é necessário selecionar opções de linha,coluna e conteúdo na página para baixar o dado
+   certo
    
    """
    GINI_COEF = {
@@ -63,6 +63,16 @@ class DatasusDataInfo(Enum):
       "data_topic": "saúde",
       "content_to_select":[],
       "columns_to_select":["Médicos"],
+      "lines_to_select":["Município"],
+      "monthly_data":True,
+      "dtype":DataTypes.INT
+   }
+   NUMBER_HOSPITAL_BEDS = {
+      "data_abrev":"ltbr", 
+      "data_name":"Leitos hospitalares na rede pública municipal",
+      "data_topic": "saúde",
+      "content_to_select":["Quantidade SUS"],
+      "columns_to_select":[],
       "lines_to_select":["Município"],
       "monthly_data":True,
       "dtype":DataTypes.INT
@@ -122,8 +132,6 @@ class DatasusLinkScrapper(AbstractScrapper):
 
       else: #caso base da extração da maioria dos dados
          csv_link_list, year_options_list = self.__selenium_page_interaction()
-         print(csv_link_list)
-         print(year_options_list)
          list_of_dfs:list[pd.DataFrame] = []
          for link  in csv_link_list:
             list_of_dfs.append(self._dataframe_from_link(link))
@@ -160,7 +168,7 @@ class DatasusLinkScrapper(AbstractScrapper):
          year_options_list: list[str] = list(map(lambda x :x.text, select_button.options)) #pega a lista de anos 
       
       print(year_options_list)
-      for year_option in year_options_list[:2]: #loop por todos os anos de dados disponíveis
+      for year_option in year_options_list: #loop por todos os anos de dados disponíveis
          link  = self.__get_csv_link_by_year(driver, select_button,year_option)
          if not link: #não foi possívei extrair o link
             year_options_list.remove(year_option)
@@ -169,7 +177,7 @@ class DatasusLinkScrapper(AbstractScrapper):
       
       driver.close() #fecha o driver do selenium
 
-      return csv_link_list, year_options_list[:2]
+      return csv_link_list, year_options_list
 
    #overwride no método de achar o df pelo link, pq o csv do datasus é bem quebrado
    def _dataframe_from_link(self,file_link:str)->pd.DataFrame:
@@ -307,20 +315,3 @@ class DatasusLinkScrapper(AbstractScrapper):
       re_pattern:str = r"(?<!\d)\d{4}(?!\d)"
       list_of_years:list[int] = list(map(int,re.findall(re_pattern,inner_text)))
       return list_of_years
-
-
-
-if __name__ == "__main__":
-   url1 = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr"
-   url2 = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
-   abreviation1 = DatasusDataInfo.ILLITERACY_RATE
-   abreviation2 = DatasusDataInfo.GINI_COEF
-   scrapper = DatasusLinkScrapper(url1,abreviation1)
-   df = scrapper.extract_database()[0]
-
-   print(df.head())
-   print(df.info())
-
-   df.to_csv(os.path.join("tempfiles","gini_per_capita_processado.csv"))
-
-   #df.to_csv(os.path.join("tempfiles","datasus_analfabetismo.csv"))
