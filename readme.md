@@ -1,6 +1,6 @@
 ## Sobre o Projeto
 
-Esse projeto é parte maior da iniciativa **Intelli.gente do MCTI e do IARA Data Science** e visa **automatizar a coleta de dados de bases governamentais abertas** para alimentar um Data Warehouse com esses dados para serem futuramente usado nos cálculos dos indicadores.
+Esse projeto é parte maior da iniciativa **Intelli.gente do MCTI e do IARA Data Science**, com apoio da FAPESP, e visa **automatizar a coleta de dados de bases governamentais abertas** para alimentar um Data Warehouse com esses dados para serem futuramente usado nos cálculos dos indicadores.
 
 O nome do módulo principal se refere à sigla **ETL** (Extract Transform and Load), que denota o processo que os dados extraídos seguem antes de serem carregados.
 
@@ -22,9 +22,13 @@ O nome do módulo principal se refere à sigla **ETL** (Extract Transform and Lo
 
 2) **Dependency Injection** das Classes Scrapper nas Classes que extraem os dados: Esse padrão de Design em POO é bem comum , ele é implementado simplesmente passando a classe Scrapper como argum. para os métodos das classes extratoras, assim desacoplando as duas classes mas permitindo a mesma funcionalidade final.
 
-3) **Interfaces com classes Abstratas**:
+<br>
 
+3) **Interfaces com classes Abstratas**: Ao criar classes Abstratas para o propósito de fazer scrapping de um site é possível criar métodos abstratos que todas as classes filhas dela precisam implementar. Esses métodos são a interface das classes de scrapping e que todas as classes com esse propósito devem implementar, permitindo uma padronização do uso dessas classes. A mesma lógica foi aplicada para as classes de Extração e Limpeza dos dados.
 
+#### Diagrama da Arquitetura das Classes Abstratas e Interfaces
+
+![Diagrama da Arquitetura das Classes Abstratas e Interfaces](./readme_images/WebscrappingArchitecture.png)
 
 
 ## Módulos Principais
@@ -41,12 +45,18 @@ Classes que fazem o webscrapping de sites oficiais e retornam um dataframe extra
 Classes que recebem as classes de Scrapper como parâmetros (Dependecy Injection), chamam a função das classes Scrapper que retornam um DF e processam esse DF para retornar uma estrutura de dados que represeta os dados processados e prontos para serem inseridos no Banco de Dados / Data Warehouse
 
 ### Api Extractor
-Classes que implementam a extração de dados por meio de APIs do governo
+Classes que implementam a extração de dados por meio de APIs do governo, atualmente somente a API do IBGE é suportada.
 
 ### DB interface
 Lógica de conectar os dados extraídos com o Banco de Dados/Data Warehouse em nuvem para ingestão dos dados, também tem a classe ProcessedDataCollection, que é a estrutura de dados que representa os dados na forma processada e pronta para ser carregada no BD
 
-## problemas conhecidos
+### CityDataInfo
+Módulo com um CSV obtido do IBGE com todos os municípios do Brasil e um arquivo .py que permite extrair todos os nomes e códigos dos municípios desse CSV
+
+### Config
+Esse módulo tem um JSON com configurações e constantes do projetos (Ex: Número de dimensões dos dados, Num. de municípios no país, nomes de colunas para os dados) e um arquivo .py criado para permitir a recuperação desses dados.
+
+## Problemas conhecidos
 
 1) Auto-complete de imports do VSCODE n funciona com o package local do InteligenteEtl
 
