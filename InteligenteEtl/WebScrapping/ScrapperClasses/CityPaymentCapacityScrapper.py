@@ -33,18 +33,36 @@ if ul_element:
             result.append((href, text))
 
 def __parse_link_year_tuples(list_of_tuples:list[tuple[str]])->list[tuple[str]]:
-   
-   
    get_dataset_id = lambda x: x[x.rfind("/")+1: x.rfind("?")] #ex: dado a str: capag-municipios/resource/86636c19-b38a-4b9e-8fff-30fc4208dd04?inner_span=True retorna 
    #86636c19-b38a-4b9e-8fff-30fc4208dd04
 
    year_regex_pattern = r'\b\d{4}\b'
-   get_data_year = lambda x: re.findall(year_regex_pattern,x) #dado "CAPAG Municipios 2024" retorna 2024
+   get_data_year = lambda x: "" if len(re.findall(year_regex_pattern,x)) == 0 else re.findall(year_regex_pattern,x)[0]  #dado "CAPAG Municipios 2024" retorna 2024
    transform_tuples = lambda x: (get_dataset_id(x[0]), get_data_year(x[1])) #aplica ambas as funcoes em uma tupla e retorna uma nova tupla
    
-   return list(map(transform_tuples,list_of_tuples))
- 
+   transformed_list:list[tuple[str]] = list(map(transform_tuples,list_of_tuples))
+   transformed_list = list(filter(lambda x: x[1] != "",transformed_list))
+
+   return transformed_list
+
+def __most_recent_data_by_year(list_of_tuples:list[tuple[str]])->list[tuple[str]]:
+   """
+   Caso um ano apareça mais de uma vez na lista isso significa ou que teve um correção dos dados ou que os dados estão mensais ainda 
+   (o ano não acabou), em ambos os casos é melhor pegar o ultimo ID do dataset desse ano
+   """
+
+   non_repeated_years =  {} #dict para guardar os anos únicos como key e seu primeiro id como value
+   list_of_tuples.reverse() #reverte a lista, indo do mais recente pro mais novo
+
+   for data_id,year in list_of_tuples:
+      if year not in non_repeated_years: #caso o ano nao tenha aparecido
+         non_repeated_years[year] = data_id
+   
+   return [(data_id,year) for year,data_id in non_repeated_years.items()] #transforma o dict em uma lista de tuplas denovo
 
 # Output the result
 result = __parse_link_year_tuples(result)
+print(result)
+
+result = __most_recent_data_by_year(result)
 print(result)
