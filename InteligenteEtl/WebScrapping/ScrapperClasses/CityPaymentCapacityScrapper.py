@@ -173,26 +173,35 @@ def __match_links_with_their_years(list_of_links:list[str])->list[tuple[str,int]
 def dataframes_from_links_and_years(list_of_link_year_tuples:list[tuple[str,int]])->list[tuple[pd.DataFrame,str]]:
    list_dfs_years:list[tuple[pd.DataFrame,str]] = []
 
-   EXCEL_SHEET_NAME = "capag" #sheets do excel com esse nome são as buscadas
-   filter_sheet_names = lambda x: True if EXCEL_SHEET_NAME in x.lower() else False #filtra o nome da sheet do excel correta
+   filter_non_complete_sheet_names = lambda x: True if "prévia" in x.lower() else False
+
 
    for link,year in list_of_link_year_tuples:
       df:pd.DataFrame
       if "csv" in link:
-         df = pd.read_csv(link)
+         df = pd.read_csv(link,sep = ";")
       elif ".xlsx" in link : #arquivo é do tipo excel
          excel_file = pd.ExcelFile(link)
          sheet_names:list[str] = excel_file.sheet_names
-         print(sheet_names,year)
-         filtered_sheets:list[str] = list(filter(filter_sheet_names,sheet_names))
-         if len(filtered_sheets) > 1:
-            raise RuntimeError("Falha ao achar o nome da única sheet do excel correspondente aos dados buscados, mais de uma sheet correspondete foi encontrada")
-         correct_sheet:str = filtered_sheets[0]
-         df = pd.read_excel(excel_file,sheet_name=correct_sheet)
+         correct_sheet = ""
+         
+         if len(sheet_names) > 1: #caso de dados não representantes do ano todo (ex: 2024 17/05)
+            filtered_sheets:list[str] = list(filter(filter_non_complete_sheet_names,sheet_names))
+            if len(filtered_sheets) > 1:
+               raise RuntimeError("Falha ao achar sheet única do arquivo de excel para processar")
+            correct_sheet = filtered_sheets[0]
+            df = pd.read_excel(excel_file,sheet_name=correct_sheet,header=2)
+
+         else:
+            correct_sheet = sheet_names[0]
+            df = pd.read_excel(excel_file,sheet_name=correct_sheet)
+
+         
       else:
          raise RuntimeError("tipo de arquivo do link não é excel ou csv, falha no processamento")
       
-      list_dfs_years.append(df,year)
+      print(year,df.info())
+      list_dfs_years.append( (df,year) )
 
    return list_dfs_years
 
@@ -204,7 +213,7 @@ list_ = __most_recent_data_by_year(list_)
 
 dfs = dataframes_from_links_and_years(list_)
 
-print(dfs)
+
 
 """
 TODO
