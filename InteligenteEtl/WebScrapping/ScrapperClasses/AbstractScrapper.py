@@ -19,8 +19,15 @@ class AbstractScrapper(ABC):
    EXTRACTED_FILES_DIR:str = "tempfiles" #diretório temporário para guardar os arquivos .zip e de dados extraidos
 
    @abstractmethod
-   def extract_database(website_url:str, file_type:BaseFileType)->pd.DataFrame | list[pd.DataFrame]:
-      """Extrai um arquivo e retorna ele como um Dataframe da base de dados oficial dado um URL para uma página e o tipo de dado do arquivo"""
+   def extract_database(website_url:str, file_type:BaseFileType)->pd.DataFrame | list[pd.DataFrame | tuple[pd.DataFrame,str]]:
+      """Extrai um arquivo e retorna ele como um Dataframe da base de dados oficial dado um URL para uma página e o tipo de dado do arquivo
+      
+         Return:
+            (pd.Dataframe): Retorna apenas o dataframe ou
+            (list[pd.Dataframe]): retorna uma lista de dataframes ou
+            (list[tuple[pd.Dataframe,str]]): retorna uma lista de dataframes com tuplas dos dataframes e o ano que ele se refere
+      """
+      
       pass
 
    @abstractmethod
