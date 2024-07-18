@@ -4,8 +4,7 @@ from WebScrapping.ExtractorClasses import TableDataPoints
 from WebScrapping.ExtractorClasses import AbstractDataExtractor
 from WebScrapping.ScrapperClasses import IbgePibCidadesScrapper
 from typing import Type
-from DBInterface import ProcessedDataCollection
-from DataEnums import DataTypes, BaseFileType
+from DataClasses import DataTypes, BaseFileType, ProcessedDataCollection
 
 
 """

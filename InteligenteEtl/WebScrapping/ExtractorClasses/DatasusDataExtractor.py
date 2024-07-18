@@ -1,7 +1,7 @@
 import pandas as pd
 import re
-from DBInterface.DataCollection import ProcessedDataCollection
-from DataEnums import DataTypes
+from DataClasses.DataCollection import ProcessedDataCollection
+from DataClasses import DataTypes
 from WebScrapping.ScrapperClasses.DatasusLinkScrapper import DatasusDataInfo, DatasusLinkScrapper
 from .AbstractDataExtractor import AbstractDataExtractor
 from typing import Type

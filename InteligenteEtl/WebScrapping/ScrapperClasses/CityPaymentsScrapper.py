@@ -1,9 +1,9 @@
 import re, os
 import pandas as pd
-from DataEnums.DataEnums import BaseFileType
 from .AbstractScrapper import AbstractScrapper
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from DataClasses import YearDataPoint
 
 
 class CityPaymentsScrapper(AbstractScrapper):
@@ -72,7 +72,7 @@ class CityPaymentsScrapper(AbstractScrapper):
          if not year_regex_matches:
             continue
          year: str = year_regex_matches[0]
-         csv_link:str = __extract_csv_link(driver,link)
+         csv_link:str = self.__extract_csv_link(driver,link)
          list_of_csv_links.append(csv_link)
       
       driver.quit()
@@ -101,7 +101,7 @@ class CityPaymentsScrapper(AbstractScrapper):
       compose_funcs = lambda x: fix_year_of_corrected_data(replace_non_years_with_empty_str(get_link_year_tuple(x))) #compoe as funções acima
 
       list_of_tuples:list[tuple[str,int]] = list(map(compose_funcs,list_of_links))
-      __fill_non_existent_years(list_of_tuples)
+      self.__fill_non_existent_years(list_of_tuples)
 
       convert_years_to_str = lambda x: (x[0],str(x[1])) #o padrão no projeto é trabalho com anos como string, então os anos ints serão convertidos
       list_of_tuples = list(map(convert_years_to_str,list_of_tuples))
@@ -142,22 +142,22 @@ class CityPaymentsScrapper(AbstractScrapper):
 
       return list_dfs_years
 
-   def extract_database(self)->list[tuple[pd.DataFrame,str]]:
+   def extract_database(self)->list[YearDataPoint]:
       links:list[str] = self.__select_all_years()
       links_and_years:tuple[str,int] = self.__match_links_with_their_years(links)
       links_and_years:tuple[str,int] = self.__most_recent_data_by_year(links_and_years)
       dfs = self.__dataframes_from_links_and_years(links_and_years)
-
-      return dfs
+     
+      list_of_data_points:list[YearDataPoint] = list(map(YearDataPoint.from_tuple,dfs)) #transforma a lista de tuplas em uma lista de datapoints
+      return list_of_data_points
 
    def download_database_locally(self,path:str= "") -> str:
-      dfs = self.extract_database()
-      for i in range(len(dfs)):
+      data_points = self.extract_database()
+      for i in range(len(data_points)):
          if path:
-            dfs[i][0].to_csv(os.path.join(path,f"CAPAG{i}"))
+            data_points[i].df.to_csv(os.path.join(path,f"CAPAG{i}"))
          else:
-            dfs[i][0].to_csv(f"CAPAG{i}")
-      
+            data_points[i].df.to_csv(f"CAPAG{i}")
       if path:
          return path #caso o path seja dado retorna ele mesmo
       else:

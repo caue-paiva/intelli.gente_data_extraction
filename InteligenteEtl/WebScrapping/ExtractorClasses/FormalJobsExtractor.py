@@ -1,6 +1,6 @@
 import pandas as pd
-from DBInterface.DataCollection import ProcessedDataCollection
-from DataEnums import DataTypes
+from DataClasses.DataCollection import ProcessedDataCollection
+from DataClasses import DataTypes
 from WebScrapping.ScrapperClasses.FormalJobsScrapper import FormalJobsScrapper
 from .AbstractDataExtractor import AbstractDataExtractor
 

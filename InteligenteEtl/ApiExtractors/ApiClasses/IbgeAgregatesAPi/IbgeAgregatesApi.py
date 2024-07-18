@@ -1,7 +1,7 @@
 from ApiExtractors.ApiClasses import AbstractApiInterface
 from ApiExtractors.ApiDataClasses import DataLine, RawDataCollection
-from DBInterface.DataCollection import ProcessedDataCollection
-from DataEnums import DataTypes
+from DataClasses.DataCollection import ProcessedDataCollection
+from DataClasses import DataTypes
 import requests,json , os, urllib3, time
 
 #ao chamar a API do IBGE a lib de requests fica reclamando que a conexão é insegura, essa linha desabilita isso

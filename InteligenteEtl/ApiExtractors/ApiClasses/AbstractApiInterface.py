@@ -1,5 +1,5 @@
 from ApiExtractors.ApiDataClasses import DataLine ,RawDataCollection
-from DBInterface.DataCollection import ProcessedDataCollection
+from DataClasses.DataCollection import ProcessedDataCollection
 from abc import ABC , abstractmethod
 import pandas as pd
 

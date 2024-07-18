@@ -1,5 +1,5 @@
 from typing import Any
-from DataEnums import DataTypes
+from DataClasses import DataTypes
 
 
 class DataLine:

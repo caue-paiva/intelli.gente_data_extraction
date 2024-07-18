@@ -1,5 +1,5 @@
 from abc import ABC,abstractmethod
-from DBInterface.DataCollection import ProcessedDataCollection
+from DataClasses.DataCollection import ProcessedDataCollection
 from WebScrapping.ScrapperClasses.AbstractScrapper import AbstractScrapper
 import pandas as pd
 from typing import Type

@@ -2,9 +2,8 @@ from WebScrapping.ExtractorClasses import DatasusDataExtractor, CategoryDataExtr
 from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper
 from WebScrapping.ExtractorClasses import TableDataPoints , FormalJobsExtractor
 from ApiExtractors import IbgeAgregatesApi
-from DataEnums import DataTypes, BaseFileType
+from DataClasses import DataTypes, BaseFileType, ProcessedDataCollection
 import pandas as pd
-from DBInterface import ProcessedDataCollection
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
    scrapper = DatasusLinkScrapper(abreviation)

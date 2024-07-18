@@ -1,8 +1,7 @@
 from .DataLine import DataLine
-from DataEnums import DataTypes
+from DataClasses import DataTypes, ProcessedDataCollection
 from pandas import DataFrame
 from dataclasses import dataclass
-from DBInterface import ProcessedDataCollection
 
 @dataclass
 class RawDataCollection:
