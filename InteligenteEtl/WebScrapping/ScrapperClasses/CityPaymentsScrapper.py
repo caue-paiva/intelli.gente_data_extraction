@@ -137,7 +137,6 @@ class CityPaymentsScrapper(AbstractScrapper):
          else:
             raise RuntimeError("tipo de arquivo do link não é excel ou csv, falha no processamento")
          
-         print(year,df.info())
          list_dfs_years.append( (df,year) )
 
       return list_dfs_years
@@ -154,29 +153,12 @@ class CityPaymentsScrapper(AbstractScrapper):
    def download_database_locally(self,path:str= "") -> str:
       data_points = self.extract_database()
       for i in range(len(data_points)):
+         year = data_points[i].data_year
          if path:
-            data_points[i].df.to_csv(os.path.join(path,f"CAPAG{i}"))
+            data_points[i].df.to_csv(os.path.join(path,f"CAPAG{year}.csv"))
          else:
-            data_points[i].df.to_csv(f"CAPAG{i}")
+            data_points[i].df.to_csv(f"CAPAG{year}.csv")
       if path:
          return path #caso o path seja dado retorna ele mesmo
       else:
          return os.getcwd() # retorna diretório atual caso o path n seja dado
-
-
-
-obj = CityPaymentsScrapper()
-obj.download_database_locally()
-
-
-"""
-TODO
-o arquivo de revisão de 2022 está como "2023 corrigido, lembrar disso e colocar alguma lógica para lidar com isso
-"""
-
-# result = __get_data_ids_and_years()
-# result = __parse_link_year_tuples(result)
-# print(result)
-
-# result = __most_recent_data_by_year(result)
-# print(result)

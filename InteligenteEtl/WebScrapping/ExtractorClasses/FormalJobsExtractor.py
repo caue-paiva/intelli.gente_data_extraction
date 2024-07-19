@@ -14,7 +14,7 @@ class FormalJobsExtractor(AbstractDataExtractor):
    EXTRACTED_DTYPE: DataTypes = DataTypes.INT
    
    NULL_VAL_IDENTIFIER = "Não Disponível"
-   TIME_SERIES_YEARS:list[int] = [2000,2010] #anos da série histórica
+   TIME_SERIES_YEARS:list[int] = [2000,2010] #anos da série histórica,hard-coded por enquanto
    CATEGORY: str = "Emprego" #tópico do dado
 
 

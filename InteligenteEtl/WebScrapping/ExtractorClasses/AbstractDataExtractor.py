@@ -95,7 +95,6 @@ class AbstractDataExtractor(ABC):
          4) apagar as colunas com 6 dígitos e só deixa a com 7 dígitos 
          """
 
-
    def add_dimension_fks():
       """Função para adicionar as foreign keys para as dimensões município e dado"""
       pass

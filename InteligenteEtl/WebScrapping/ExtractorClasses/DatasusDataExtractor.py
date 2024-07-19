@@ -120,7 +120,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
       if len(list_of_years) == 1: #df so tem um ano de dados e 2 colunas
          data_value_col:str = df.columns[1] #nome da coluna dos dados
          df = df.rename({data_value_col: self.DATA_VALUE_COLUMN},axis="columns") #troca o nome dela
-         df["ano"] = list_of_years[0]
+         df[self.YEAR_COLUMN] = list_of_years[0]
       else: #caso especial do coef de gini
          df = pd.melt(df, id_vars=[self.EXTRACTED_TABLE_CITY_COL], var_name=self.YEAR_COLUMN, value_name=self.DATA_VALUE_COLUMN)
 

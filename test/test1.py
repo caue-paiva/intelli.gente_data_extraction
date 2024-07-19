@@ -1,8 +1,9 @@
-from WebScrapping.ExtractorClasses import DatasusDataExtractor, CategoryDataExtractor
-from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper
-from WebScrapping.ExtractorClasses import TableDataPoints , FormalJobsExtractor
+from WebScrapping.ExtractorClasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
+from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
+from WebScrapping.ExtractorClasses import TableDataPoints 
 from ApiExtractors import IbgeAgregatesApi
 from DataClasses import DataTypes, BaseFileType, ProcessedDataCollection
+
 import pandas as pd
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
@@ -55,19 +56,18 @@ def test_fill_non_existing_cities(df:pd.DataFrame):
    final_df =  data_col1.fill_non_existing_cities()
    final_df.to_csv("final_agr.csv")
 
-
+def run_CAPAG():
+   scrapper = CityPaymentsScrapper()
+   obj = CityPaymentsExtractor()
+   list_ = obj.extract_processed_collection(scrapper)
+   for  index, collection in enumerate(list_):
+      collection.df.to_csv(f"CAPAG_PROCESSADO{index}.csv")
 
 if __name__ == "__main__":
-   url_datasus_literacy_rate = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr.csv"
-   url_datasus_gini_coef = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
-   url_city_gdp = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
-   url_datasus_maternal_mortality = "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sim/cnv/mat10br.def"
-   url_datasus_live_births = "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sinasc/cnv/nvbr.def"
-   url_datasus_medics = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?cnes/cnv/prid02br.def"
-   url_datasus_hospital_beds = "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?cnes/cnv/leiintbr.def"
+   #obj = CityPaymentsScrapper()
+   #obj.download_database_locally()
 
-   df = run_datasus(DatasusDataInfo.NUMBER_OF_MEDICS)
-   df.to_csv("testefinal.csv")
+   run_CAPAG()
    
    
    
