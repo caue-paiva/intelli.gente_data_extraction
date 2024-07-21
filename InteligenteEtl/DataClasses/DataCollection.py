@@ -26,9 +26,17 @@ class ProcessedDataCollection:
    time_series_years:list[int]
    df: pd.DataFrame
 
+   def check_df_validity(self)->bool:
+     """
+     TODO
+     Checa se o DF contido no objeto é valido ou não
+     """
+
 
    def fill_non_existing_cities(self)->'ProcessedDataCollection':
        """
+       ESSE MÉTODO NÃO SERÁ MAIS UTILIZADO
+
        Pega a coleção de dados processados já existentes e retorna uma nova coleção, colocando valores nulos para todas as combinações de cidades e anos que estão faltando
        no DF da coleção. O resultado é uma coleção cujo DF tem o número de linhas múltiplo do número de municípios no brasil.
 

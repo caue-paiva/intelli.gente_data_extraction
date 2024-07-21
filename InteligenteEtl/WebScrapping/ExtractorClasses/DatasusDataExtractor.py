@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 from DataClasses.DataCollection import ProcessedDataCollection
-from DataClasses import DataTypes
+from DataClasses import DataTypes, YearDataPoint
 from WebScrapping.ScrapperClasses.DatasusLinkScrapper import DatasusDataInfo, DatasusLinkScrapper
 from .AbstractDataExtractor import AbstractDataExtractor
 from typing import Type
@@ -67,7 +67,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
       
       return df
 
-   def __join_df_parts(self,df_list:list[pd.DataFrame], list_of_years:list[int],data_info:DatasusDataInfo)->pd.DataFrame:
+   def __join_df_parts(self,data_list:list[YearDataPoint],data_info:DatasusDataInfo)->pd.DataFrame:
          """
          Junta os CSVs extraidos de um ano específico do Datasus, cada CSV deve conter dados de apenas 1 ano
          Não é usado no caso especial dos dados do coef de gini
@@ -85,13 +85,13 @@ class DatasusDataExtractor(AbstractDataExtractor):
          """
          
          final_df: pd.DataFrame = pd.DataFrame()
-         for df,year in zip(df_list,list_of_years):
-            new_df =  self.__process_df_right_shape(df,[year],data_info)
+         for data_point in data_list:
+            new_df =  self.__process_df_right_shape(data_point.df,data_point.data_year,data_info)
             final_df = pd.concat(objs=[final_df,new_df],axis="index",ignore_index=True)
          
          return final_df
 
-   def __process_df_right_shape(self,df:pd.DataFrame,list_of_years:list[int],data_info:DatasusDataInfo)->pd.DataFrame:
+   def __process_df_right_shape(self,df:pd.DataFrame,data_year:int,data_info:DatasusDataInfo)->pd.DataFrame:
       """
       Processa o df extraido em um formato padrão para ser inserido no BD, e também remove valores NULL/NaN
       
@@ -102,7 +102,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
       Args:
          df (pd.Dataframe): df bruto que vai ser processado
 
-         list_of_years(list[int]): lista de anos dos dados que o DF contém
+         data_year (int) : Ano dos dados que o DF contém
 
          data_info (DatasusDataInfo): enum de infomação sobre o dado extraido do datasus
 
@@ -115,14 +115,15 @@ class DatasusDataExtractor(AbstractDataExtractor):
       df = df[df[self.EXTRACTED_TABLE_CITY_COL].apply(get_only_valid_cities)]
 
       for col in df.columns:
-         df[col] = df[col].replace(self.NULL_VAL_IDENTIFIER,None) #remove os valores null em cada coluna
+         df[col] = df[col].replace(self.NULL_VAL_IDENTIFIER,None) #troca os valores nulos que o datasus coloca com o none
+      
+      df = df.dropna(axis="index") #remove valores nulos/none/NaN
 
-      if len(list_of_years) == 1: #df so tem um ano de dados e 2 colunas
-         data_value_col:str = df.columns[1] #nome da coluna dos dados
-         df = df.rename({data_value_col: self.DATA_VALUE_COLUMN},axis="columns") #troca o nome dela
-         df[self.YEAR_COLUMN] = list_of_years[0]
-      else: #caso especial do coef de gini
-         df = pd.melt(df, id_vars=[self.EXTRACTED_TABLE_CITY_COL], var_name=self.YEAR_COLUMN, value_name=self.DATA_VALUE_COLUMN)
+       #df so tem um ano de dados e 2 colunas
+      data_value_col:str = df.columns[1] #nome da coluna dos dados
+      df = df.rename({data_value_col: self.DATA_VALUE_COLUMN},axis="columns") #troca o nome dela
+      df[self.YEAR_COLUMN] = data_year
+
 
       df = df.rename({self.EXTRACTED_TABLE_CITY_COL: self.CITY_CODE_COL},axis="columns") #troca o nome da coluna de municípios
       df[self.DATA_IDENTIFIER_COLUMN] = data_info.value["data_name"] #coloca coluna do nome do dado
@@ -130,7 +131,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
 
       return df
  
-   def extract_processed_collection(self,scrapper: Type[DatasusLinkScrapper])->ProcessedDataCollection:
+   def extract_processed_collection(self, scrapper: Type[DatasusLinkScrapper])->ProcessedDataCollection:
       """
       Função da interface que recebe um objeto scrapper, chama a função dele que retorna o df extraido do site do datasus.
       Esse DF retornado é processado, valores nulos são removidos, e o df é colocado no formato certo para ser inserido no BD.
@@ -147,16 +148,14 @@ class DatasusDataExtractor(AbstractDataExtractor):
          (ProcessedDataCollection): Classe com os dados já processados e prontos para serem mandados pro BD
          
       """
-     
-      dfs,time_series_years = scrapper.extract_database()
-      if len(dfs) < 1:
+      data_list:list[YearDataPoint] = scrapper.extract_database()
+      time_series_years:list[str] = [x.data_year for x in data_list]
+
+      if len(data_list) < 1:
          raise IOError("Lista de dataframes deve ter tamanho de pelo menos 1")
       
       data_info: DatasusDataInfo = scrapper.data_info
-      if data_info == DatasusDataInfo.GINI_COEF: #df único, caso separado
-         processed_df:pd.DataFrame = self.__process_df_right_shape(dfs[0],time_series_years,data_info)
-      else: #lista de dataframes, um para cada ano, caso padrão
-         processed_df:pd.DataFrame = self.__join_df_parts(dfs,time_series_years,data_info)
+      processed_df:pd.DataFrame = self.__join_df_parts(data_list,data_info)
 
       processed_df = self.__convert_column_values(processed_df,scrapper.data_info.value["dtype"])
       processed_df = self.update_city_code(processed_df, self.CITY_CODE_COL)
@@ -167,7 +166,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
          data_name= data_info.value["data_name"],
          time_series_years= time_series_years,
          df = processed_df
-      ).fill_non_existing_cities()
+      )
 
 if __name__ == "__main__":
 

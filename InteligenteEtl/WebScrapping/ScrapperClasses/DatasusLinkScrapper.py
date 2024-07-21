@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from DataClasses import DataTypes
+from DataClasses import DataTypes, YearDataPoint
 import time , os , re 
 from enum import Enum
 
@@ -115,13 +115,13 @@ class DatasusLinkScrapper(AbstractScrapper):
       self.website_url = data_info.value["url"] #pega o url associada ao dado que vai ser extraido
       self.data_info = data_info
    
-   def extract_database(self)->tuple[list[pd.DataFrame], list[int]]:
+   def extract_database(self)->list[YearDataPoint]:
       """
       Função da interface das classes Scrapper, ela é um pouco fora do comum porque 
       retorna uma tupla com a lista de dataframes e a lista de anos dos dados.
 
       Return:
-         tuple[list[pd.DataFrame], list[int]]: tupla com a lista de dfs dos dados extraidos e a lista de anos a que eles se referem (em ordem)
+         list[YearDataPoint]: lista de objetos YearDataPoint, cada um com um df e o ano dos dados que ele se Refere
       """
 
       if self.data_info == DatasusDataInfo.GINI_COEF: #caso específico do dado coeficiente de gini
@@ -131,10 +131,14 @@ class DatasusLinkScrapper(AbstractScrapper):
          html:str = driver.page_source
          link:str = self.__get_link_from_html(html)
          if not link:
-            return [],[]
+            return []
          list_of_years:list[int] = self.__get_years_from_html(driver)
          df =  self._dataframe_from_link(link)
-         return [df], list_of_years
+         dfs_by_year = self.__separate_gini_coef_df(df)
+
+         print(len(dfs_by_year),len(list_of_years))
+         print(list_of_years)
+         return YearDataPoint.from_lists(dfs_by_year,list_of_years)
 
       else: #caso base da extração da maioria dos dados
          csv_link_list, year_options_list = self.__selenium_page_interaction()
@@ -142,11 +146,35 @@ class DatasusLinkScrapper(AbstractScrapper):
          for link  in csv_link_list:
             list_of_dfs.append(self._dataframe_from_link(link))
 
-         return list_of_dfs, year_options_list
-    
+         return YearDataPoint.from_lists(list_of_dfs,year_options_list) #retorna lista de objetos YearDataPoint
+   
    def download_database_locally(self)-> str:
       df:pd.DataFrame =  self.extract_database(self.website_url,self.data_info)
       df.to_csv(os.path.join(self.EXTRACTED_FILES_DIR, "datasus_" + self.data_info.value["data_abrev"] + ".csv"))
+
+
+   def __separate_gini_coef_df(self,df:pd.DataFrame)->list[pd.DataFrame]:
+      """
+      Como o DF do coeficiente de gini tem 3 colunas, uma para cada ano ele precisa ser quebrado em 3 dataframes diferentes
+      um para cada ano.
+      """
+      df_list:list[pd.DataFrame] = []
+      columns:list[str] = df.columns
+
+      for col in columns:
+         if col == self.EXTRACTED_TABLE_CITY_COL:
+            continue #pula coluna dos municípios
+         new_df = pd.DataFrame() #cria novo df
+         new_df[self.EXTRACTED_TABLE_CITY_COL] = df[self.EXTRACTED_TABLE_CITY_COL].copy() #copia coluna de municípios
+         new_df[DatasusDataInfo.GINI_COEF.value["data_name"]] = df[col] #copia a coluna dos dados daquele ano pra a coluna no novo df
+         #que é nomeada somente com o nome do dado
+
+         df_list.append(new_df)
+
+      return df_list
+      
+ 
+
 
    def __selenium_page_interaction(self)->tuple[list[str],list[int]]:
       """

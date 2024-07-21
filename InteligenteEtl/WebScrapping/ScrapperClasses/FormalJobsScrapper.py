@@ -7,6 +7,7 @@ import time , os
 import pandas as pd
 #from .AbstractScrapper import AbstractScrapper, BaseFileType
 from .AbstractScrapper import AbstractScrapper ,BaseFileType
+from  DataClasses import YearDataPoint
 
 class FormalJobsScrapper(AbstractScrapper):
     
@@ -20,6 +21,11 @@ class FormalJobsScrapper(AbstractScrapper):
     }
     BASE_URL: str = "https://www.ibge.gov.br/apps/snig/v1/?loc=0&cat=-1,-2,-3,128&ind=4732"
     FILE_TYPE: BaseFileType = BaseFileType.CSV
+    TIME_SERIES_YEARS:list[str] = ["2000","2010"] #anos da série histórica,hard-coded por enquanto
+    EXTRACTED_TABLE_CITY_COL = "Cod. Loc." #nome da coluna dos códigos do municípios na tabela extraida
+    EXTRACTED_DATA_NAME = "População ocupada com vínculo formal"
+
+
 
     def __click_return_button(self,driver:Chrome):
         
@@ -92,6 +98,29 @@ class FormalJobsScrapper(AbstractScrapper):
             except Exception as e:
                     print(f"Erro ao clicar no botão de selecionar o estado específico: {e}")
 
+    def __separate_df_by_year(self,df:pd.DataFrame)->list[YearDataPoint]:
+        """
+        Separa o dataframe em 2 dfs cada um com 2 colunas, um para cada ano do dado:
+        
+        Args:
+            df (pd.Dataframe): df original extraido
+
+        Return:
+            list[YearDataPoint]: lista de objetos desse tipo, cada um com o df e o ano dos dados dele
+        """
+
+        city_code_col:pd.Series = df[self.EXTRACTED_TABLE_CITY_COL]
+        data_list:list[YearDataPoint] = []
+        for col in df.columns:
+            if col in self.TIME_SERIES_YEARS:  
+                new_df = pd.DataFrame() 
+                new_df[self.EXTRACTED_TABLE_CITY_COL] = city_code_col.copy() #copia coluna de municípios
+                new_df[self.EXTRACTED_DATA_NAME] = df[col].copy() #copia coluna dos dados daquele ano
+                data_list.append(
+                    YearDataPoint(new_df,col) #novo objeto com o dataframe do ano e o ano desse dado
+                )           
+        return data_list 
+            
     def download_database_locally(self, url:str="")->str:
         """
         Método que realiza webscrapping, baixa os dados localmente e retorna o caminho para esse arquivo baixado localmente
@@ -177,24 +206,20 @@ class FormalJobsScrapper(AbstractScrapper):
             driver.quit() #fecha o webdriver
 
             downloaded_files = os.listdir(self.DOWNLOADED_FILES_DIR)            
-            if len(downloaded_files) > 1:
-                raise Exception("Mais de um arquivo no diretório temporário criado para extração dos dados")
-            
+           
             return os.path.join(self.DOWNLOADED_FILES_DIR,downloaded_files[0])
 
         except Exception as e:
             raise Exception(e)
-            print(f"falha ao extrair página web, erro: {e}")
-            return ""
 
-    def extract_database(self, website_url: str = "", delete_extracted_files:bool = True) -> pd.DataFrame:
+    def extract_database(self, website_url: str = "", delete_extracted_files:bool = True)->list[YearDataPoint]:
         path_to_csv:str = self.download_database_locally(website_url)
         df: pd.DataFrame = pd.read_csv(path_to_csv,sep=";")
 
         if delete_extracted_files:
             pass
             #self.__delete_download_files_dir()
-        return df
+        return self.__separate_df_by_year(df)
     
 if __name__ == "__main__":
     obj = FormalJobsScrapper()

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 @dataclass
 class YearDataPoint():
    """
-   Classe para presentar um dataframe com dados extraidos e seu ano de referência
+   Classe para presentar um dataframe com dados extraidos e seu ano de referência.
    Os dados nessa classe ainda estão brutos e devem ser processados para serem transformados numa classe processed data collection
    Essa classe foi criada para representar um conjunto de dados bem comum nas classes de WebScrapping
    
@@ -12,6 +12,8 @@ class YearDataPoint():
 
    df:pd.DataFrame
    data_year:str
+
+   #métodos de classe para interagir com a classe como um todo e não com uma instancia do objeto
 
    @classmethod
    def from_tuple(cls,data:tuple[pd.DataFrame,str] | tuple[str,pd.DataFrame])-> 'YearDataPoint':
@@ -23,3 +25,25 @@ class YearDataPoint():
       else:
             data_year, df = data
       return cls(df=df, data_year=data_year)
+   
+
+   @classmethod
+   def from_lists(cls,df_list:list[pd.DataFrame],years_list:list[str|int])->list['YearDataPoint']:
+      if not isinstance(df_list,list) or not isinstance(years_list,list):
+          raise TypeError("Argumento passado não é uma lista")
+      
+      return [YearDataPoint(x,str(y)) for x,y in zip(df_list,years_list)]
+   
+   @classmethod
+   def get_years_from_list(cls,data_point_list:list['YearDataPoint'])->list[str]:
+      """
+      Dado uma lista de objetos YearDataPoint, retorna uma lista de strings com os  campos anos desses objetos
+      """
+      return [x.data_year for x in data_point_list]
+   
+   @classmethod
+   def get_dfs_from_list(cls,data_point_list:list['YearDataPoint'])->list[pd.DataFrame]:
+      """
+      Dado uma lista de objetos YearDataPoint, retorna uma lista de sdataframes com os campos df desses objetos
+      """
+      return [x.df for x in data_point_list]

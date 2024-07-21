@@ -1,6 +1,7 @@
 from WebScrapping.ExtractorClasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
 from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
-from WebScrapping.ExtractorClasses import TableDataPoints 
+from WebScrapping.ScrapperClasses import FormalJobsScrapper
+from WebScrapping.ExtractorClasses import TableDataPoints, FormalJobsExtractor
 from ApiExtractors import IbgeAgregatesApi
 from DataClasses import DataTypes, BaseFileType, ProcessedDataCollection
 
@@ -63,11 +64,34 @@ def run_CAPAG():
    for  index, collection in enumerate(list_):
       collection.df.to_csv(f"CAPAG_PROCESSADO{index}.csv")
 
+def run_formal_jobs():
+   scrapper = FormalJobsScrapper()
+   obj = FormalJobsExtractor()
+
+   collection = obj.extract_processed_collection(scrapper)
+   return collection.df
+
 if __name__ == "__main__":
    #obj = CityPaymentsScrapper()
    #obj.download_database_locally()
 
-   run_CAPAG()
+   """obj = DatasusLinkScrapper(DatasusDataInfo.ILLITERACY_RATE)
+   list_ = obj.extract_database()
+
+   for i,x in enumerate(list_):
+      print(x.df.info(),x.data_year)
+
+      x.df.to_csv(f"ginicoef{i}.csv")"""
+   
+   """obj = FormalJobsScrapper()
+   df = obj.extract_database()
+   print(df.info())
+   df.to_csv("trb_forma.csv")"""
+
+   df = run_formal_jobs()
+   print(df.info())
+
+   df.to_csv("trb_formais_pro.csv")
    
    
    

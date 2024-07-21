@@ -21,7 +21,7 @@ class CityPaymentsExtractor(AbstractDataExtractor):
    DATA_CATEGORY = "Finanças Públicas"
    DTYPE = DataTypes.STRING
 
-   def extract_processed_collection(self, scrapper_class_obj: Type[CityPaymentsScrapper])-> list[ProcessedDataCollection]:
+   def extract_processed_collection(self, scrapper_class_obj: CityPaymentsScrapper)-> list[ProcessedDataCollection]:
       list_of_datapoints:list[YearDataPoint] = scrapper_class_obj.extract_database()
       
       acess_and_parse_dfs = lambda x: YearDataPoint(self.__parse_columns(x.df),x.data_year) #aplica a função de parsing das colunas no df de cada objeto
@@ -115,6 +115,10 @@ class CityPaymentsExtractor(AbstractDataExtractor):
       return df_list
 
    def test(self)-> list[ProcessedDataCollection]:
+      """
+      Método para testar a classe sem webscrapping, apenas processando arquivos locais.
+      Precisa dos arquivos CSV no mesmo diretório de onde é chamada o método para funcionar 
+      """
       first_year:int = 2018
       last_year:int = 2024
 
