@@ -26,7 +26,16 @@ class AbstractDataExtractor(ABC):
       pass
 
    @abstractmethod
-   def extract_processed_collection(self,scrapper_class_obj:Type[AbstractScrapper])->ProcessedDataCollection:
+   def extract_processed_collection(self,scrapper:Type[AbstractScrapper])->ProcessedDataCollection:
+      """
+      Dado um objeto que pertence a uma classe scrapper concreta (Herda de AbstractScrapper), chama função de extrair dados 
+      desse objeto, processa os dados e retorna um objeto ProcessedDataCollection
+
+      Args:
+         scrapper:Type[AbstractScrapper]: Objeto da família de classes Scrapper
+      Return:
+         ProcessedDataCollection: Objeto que representa os dados tratados e com os metadados presentes
+      """
       pass
  
    def _concat_data_points(self,list_of_datapoints:list[YearDataPoint])->pd.DataFrame:
