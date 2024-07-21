@@ -8,7 +8,6 @@ from .AbstractDataExtractor import AbstractDataExtractor
 class FormalJobsExtractor(AbstractDataExtractor):
    
    #constantes sobre o DF bruto extraido pelo webscrapping, como nome das colunas
-   EXTRACTED_LOCATION_CODE_COL = "Cod. Loc."
    EXTRACTED_DATA_NAME = "População ocupada com vínculo formal"
    EXTRACTED_DTYPE: DataTypes = DataTypes.INT
    NULL_VAL_IDENTIFIER = "Não Disponível"
@@ -56,54 +55,15 @@ class FormalJobsExtractor(AbstractDataExtractor):
 
       return df
    
-   def __make_df_into_right_shape(self,df:pd.DataFrame)->pd.DataFrame:
-      
-      final_df_year_col:str = self.YEAR_COLUMN
-      final_df_val_col:str = self.DATA_VALUE_COLUMN
-      df = pd.melt(df, id_vars=[self.EXTRACTED_LOCATION_CODE_COL], var_name=final_df_year_col, value_name=final_df_val_col)
-      
-      final_df_city_code_col:str = self.CITY_CODE_COL
-      df.columns = [final_df_city_code_col,final_df_year_col,final_df_val_col]
-      
-      return df
-
-   def __concat_dfs(self,data_points:list[YearDataPoint])->pd.DataFrame:
-      """
-      Concatena os dataframes de anos diferentes em um dataframe só
-      """
-
-      new_df = pd.DataFrame()
-      for point in data_points:
-         year:str = point.data_year
-         df = point.df
-         df[self.YEAR_COLUMN] = year
-         new_df = pd.concat([new_df,df],ignore_index=True)
-
-      new_df.columns = [self.CITY_CODE_COL,self.YEAR_COLUMN,self.DATA_VALUE_COLUMN] #novas colunas do df concatenado
-      return new_df
-
    def extract_processed_collection(self,formal_jobs_scrapper:FormalJobsScrapper)-> ProcessedDataCollection:
-      data_list = formal_jobs_scrapper.extract_database()
+      data_list = formal_jobs_scrapper.extract_database(delete_extracted_files=True)
       time_series_years:list[str] = YearDataPoint.get_years_from_list(data_list)
-      dfs:list[pd.DataFrame] = YearDataPoint.get_dfs_from_list(data_list)
 
-      df = self.__concat_dfs(data_list)
-      print(df.info())
+      df = self._concat_data_points(data_list) #junta os dataframes da lista de YearDataPoints em um unico df
+      df.columns = [self.CITY_CODE_COL,self.YEAR_COLUMN,self.DATA_VALUE_COLUMN] #coloca as colunas do novo df
       df = self.__remove_non_city_lines(df)
-      print(df.info())
-
-      #df = self.__make_df_into_right_shape(df)
       df = self.__treat_column_dtypes(df)
-      print(df.info())
-
       df = self.__treat_nulls_and_add_cols(df)
-      print(df.info())
-      if df.empty:
-            raise ValueError("DataFrame is empty")
-
-        # Check if the DataFrame contains the expected index
-      if 0 not in df.index:
-            raise KeyError(f"Index 0 not found in DataFrame. Available indices: {df.index}")
       df = super().update_city_code(df,self.CITY_CODE_COL) #atualiza código do município de 6 para 7 dígitos
 
       collection = ProcessedDataCollection(

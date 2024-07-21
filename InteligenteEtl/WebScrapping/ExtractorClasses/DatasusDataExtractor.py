@@ -69,19 +69,15 @@ class DatasusDataExtractor(AbstractDataExtractor):
 
    def __join_df_parts(self,data_list:list[YearDataPoint],data_info:DatasusDataInfo)->pd.DataFrame:
          """
-         Junta os CSVs extraidos de um ano específico do Datasus, cada CSV deve conter dados de apenas 1 ano
-         Não é usado no caso especial dos dados do coef de gini
+         Junta os DFs extraidos de um ano específico do Datasus, cada DF deve dados de apenas 1 ano, com o
+         DF e o ano sendo associados nos objeto YearDataPoint
 
          Args:
-            df_list(list[pd.DataFrame]): lista de dataframes
-
-            list_of_years(list[int]): lista de anos que cada dataframe se refere
-            OBS: o indice do vetor dos 2 argumentos devem ser relacionados, ou seja o df do index 0 se refere ao ano de index 0
+            data_list(list[YearDataPoint]): lista de YearDataPoints
 
             data_info (DatasusDataInfo): enum de infomação sobre o dado extraido do datasus
-
          Return:
-               (pd.DataFrame): dataframe unido com os dados de todos os anos.
+            (pd.DataFrame): dataframe unido com os dados de todos os anos.
          """
          
          final_df: pd.DataFrame = pd.DataFrame()

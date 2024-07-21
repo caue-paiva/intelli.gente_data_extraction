@@ -2,6 +2,7 @@
 import pandas as pd
 from .AbstractScrapper import  BaseFileType
 from .IbgePibCidadesScrapper import IbgePibCidadesScrapper
+from DataClasses import YearDataPoint
 
 class IbgeBasesMunicScrapper(IbgePibCidadesScrapper):
    
@@ -20,17 +21,18 @@ class IbgeBasesMunicScrapper(IbgePibCidadesScrapper):
       self.file_type = file_type
       self.priority_to_series_len = priority_to_series_len
 
-   def extract_database(self)-> list[pd.DataFrame]:
+   def extract_database(self)-> list[YearDataPoint]:
       file_links_by_year:dict = self._get_all_files()
       print(file_links_by_year)
 
-      df_list: list[pd.DataFrame] = []
+      data_list: list[pd.YearDataPoint] = []
       for year,url in file_links_by_year.items():
-          df = super()._dataframe_from_link(url,self.file_type,False)
-          df_list.append(df)
+         df = super()._dataframe_from_link(url,self.file_type,False)
+         data_list.append(
+             YearDataPoint(df,year)
+         )
       
-      return df_list
-      #fazer auguma lógica para concatenar os dados de todos os anos, mas para isso é preciso saber como manipular esses dados
+      return data_list
       
    def _get_all_files(self)->dict[str,str]:
       file_links_by_year:dict = {}

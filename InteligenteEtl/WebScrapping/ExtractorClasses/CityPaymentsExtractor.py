@@ -27,7 +27,7 @@ class CityPaymentsExtractor(AbstractDataExtractor):
       acess_and_parse_dfs = lambda x: YearDataPoint(self.__parse_columns(x.df),x.data_year) #aplica a função de parsing das colunas no df de cada objeto
       parsed_datapoints:list[YearDataPoint] = list(map(acess_and_parse_dfs,list_of_datapoints)) #da parsing na coluna de todos os dataframes
       
-      appended_df:pd.DataFrame = self.__append_data_from_all_years(parsed_datapoints) #junta os dataframes dos anos
+      appended_df:pd.DataFrame = self._concat_data_points(parsed_datapoints) #junta os dataframes dos anos
       separated_dfs:list[pd.DataFrame] = self.__separate_df_by_dataname(appended_df)
       time_series_years:list[int] = [int(x.data_year) for x in list_of_datapoints]
 
@@ -80,21 +80,6 @@ class CityPaymentsExtractor(AbstractDataExtractor):
       for name in self.DATA_NAME_FOR_EACH_COL:
          df[name] = df[name].astype("category") #os dados são notas A,B,C. então elas podem ser otimizadas mudando elas para categorias
       return df
-
-   def __append_data_from_all_years(self,list_of_datapoints:list[YearDataPoint])->pd.DataFrame:
-      """
-      Recebe uma lista de objetos YearDataPoints, adiciona as colunas de ano e tipo de dado para cada df deles e dá append em
-      cada df dos objetos da lista, até retornar um DF completo com todos os dados
-      """
-
-      appended_df = pd.DataFrame()
-      for datapoint in list_of_datapoints:
-         df = datapoint.df.copy()
-         df[self.YEAR_COLUMN] = datapoint.data_year
-
-         appended_df = pd.concat([appended_df,df],axis="index",ignore_index=True)
-
-      return appended_df
    
    def __separate_df_by_dataname(self,df:pd.DataFrame)->list[pd.DataFrame]:
       """
@@ -131,7 +116,7 @@ class CityPaymentsExtractor(AbstractDataExtractor):
       acess_and_parse_dfs = lambda x: YearDataPoint(self.__parse_columns(x.df),x.data_year) #aplica a função de parsing das colunas no df de cada objeto
       parsed_datapoints:list[YearDataPoint] = list(map(acess_and_parse_dfs,list_of_datapoints)) #da parsing na coluna de todos os dataframes
       
-      appended_df:pd.DataFrame = self.__append_data_from_all_years(parsed_datapoints) #junta os dataframes dos anos
+      appended_df:pd.DataFrame = self._concat_data_points(parsed_datapoints) #junta os dataframes dos anos
       separated_dfs:list[pd.DataFrame] = self.__separate_df_by_dataname(appended_df)
       time_series_years:list[int] = [int(x.data_year) for x in list_of_datapoints]
 

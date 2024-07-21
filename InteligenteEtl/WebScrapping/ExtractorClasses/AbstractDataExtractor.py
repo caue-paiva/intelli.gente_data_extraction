@@ -1,5 +1,5 @@
 from abc import ABC,abstractmethod
-from DataClasses.DataCollection import ProcessedDataCollection
+from DataClasses import ProcessedDataCollection, YearDataPoint
 from WebScrapping.ScrapperClasses.AbstractScrapper import AbstractScrapper
 import pandas as pd
 from typing import Type
@@ -28,6 +28,20 @@ class AbstractDataExtractor(ABC):
    @abstractmethod
    def extract_processed_collection(self,scrapper_class_obj:Type[AbstractScrapper])->ProcessedDataCollection:
       pass
+ 
+   def _concat_data_points(self,list_of_datapoints:list[YearDataPoint])->pd.DataFrame:
+      """
+      Recebe uma lista de objetos YearDataPoints, adiciona as colunas de ano e tipo de dado para cada df deles e dá append em
+      cada df dos objetos da lista, até retornar um DF completo com todos os dados
+      """
+
+      appended_df = pd.DataFrame()
+      for datapoint in list_of_datapoints:
+         df = datapoint.df.copy()
+         df[self.YEAR_COLUMN] = datapoint.data_year
+         appended_df = pd.concat([appended_df,df],axis="index",ignore_index=True)
+
+      return appended_df
 
    #funções genéricas para ajudar a processar os dados no modelo que o Data Warehouse precisa
    def parse_strings(self,str:str)->str:

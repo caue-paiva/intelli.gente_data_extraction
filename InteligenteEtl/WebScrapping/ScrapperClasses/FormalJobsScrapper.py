@@ -217,8 +217,7 @@ class FormalJobsScrapper(AbstractScrapper):
         df: pd.DataFrame = pd.read_csv(path_to_csv,sep=";")
 
         if delete_extracted_files:
-            pass
-            #self.__delete_download_files_dir()
+            self.__delete_download_files_dir()
         return self.__separate_df_by_year(df)
     
 if __name__ == "__main__":
