@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from config import get_config
+from etl_config import get_config
 
 """
 Módulo para pegar informações sobre os municípios (atualmente 5570) vindos de bases oficiais do IBGE.

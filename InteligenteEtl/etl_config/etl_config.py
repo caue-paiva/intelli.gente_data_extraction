@@ -6,7 +6,7 @@ Módulo para padronizar acesso a configurações globais do projeto, definidas n
 """
 
 __SCRIPT_DIR:str = os.path.dirname(os.path.abspath(__file__))
-__CONFIG_PATH: str = os.path.join(__SCRIPT_DIR,"config.json")
+__CONFIG_PATH: str = os.path.join(__SCRIPT_DIR,"etl_config.json")
 
 __config_dict: dict
 try:

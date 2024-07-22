@@ -3,10 +3,8 @@ from DataClasses import ProcessedDataCollection, YearDataPoint
 from WebScrapping.ScrapperClasses.AbstractScrapper import AbstractScrapper
 import pandas as pd
 from typing import Type
-from CityDataInfo import get_city_codes
-from config import get_config
-
-
+from citiesinfo import get_city_codes
+from etl_config import get_config
 
 class AbstractDataExtractor(ABC):
 

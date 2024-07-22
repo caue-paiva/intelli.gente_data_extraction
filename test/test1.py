@@ -4,7 +4,6 @@ from WebScrapping.ScrapperClasses import FormalJobsScrapper
 from WebScrapping.ExtractorClasses import TableDataPoints, FormalJobsExtractor
 from ApiExtractors import IbgeAgregatesApi
 from DataClasses import DataTypes, BaseFileType, ProcessedDataCollection
-
 import pandas as pd
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:

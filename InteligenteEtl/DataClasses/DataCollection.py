@@ -1,7 +1,7 @@
 import pandas as pd
 from dataclasses import dataclass
-from config import get_config
-from CityDataInfo import get_city_codes
+from etl_config import get_config
+from citiesinfo import get_city_codes
 from DataClasses import DataTypes
 
 """
