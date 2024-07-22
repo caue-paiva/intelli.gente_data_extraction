@@ -1,7 +1,7 @@
 import pandas as pd
 from DataClasses.DataCollection import ProcessedDataCollection
 from DataClasses import DataTypes , YearDataPoint
-from WebScrapping.ScrapperClasses.FormalJobsScrapper import FormalJobsScrapper
+from webscrapping.scrapperclasses.FormalJobsScrapper import FormalJobsScrapper
 from .AbstractDataExtractor import AbstractDataExtractor
 
 

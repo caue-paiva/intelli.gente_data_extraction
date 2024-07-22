@@ -1,7 +1,7 @@
-from WebScrapping.ExtractorClasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
-from WebScrapping.ScrapperClasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
-from WebScrapping.ScrapperClasses import FormalJobsScrapper
-from WebScrapping.ExtractorClasses import TableDataPoints, FormalJobsExtractor
+from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
+from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
+from webscrapping.scrapperclasses import FormalJobsScrapper
+from webscrapping.extractorclasses import TableDataPoints, FormalJobsExtractor
 from ApiExtractors import IbgeAgregatesApi
 from DataClasses import DataTypes, BaseFileType, ProcessedDataCollection
 import pandas as pd

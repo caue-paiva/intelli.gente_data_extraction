@@ -1,6 +1,6 @@
 from abc import ABC,abstractmethod
 from DataClasses import ProcessedDataCollection, YearDataPoint
-from WebScrapping.ScrapperClasses.AbstractScrapper import AbstractScrapper
+from webscrapping.scrapperclasses.AbstractScrapper import AbstractScrapper
 import pandas as pd
 from typing import Type
 from citiesinfo import get_city_codes

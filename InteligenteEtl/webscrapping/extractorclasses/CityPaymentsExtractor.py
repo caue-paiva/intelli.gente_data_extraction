@@ -1,7 +1,7 @@
 from typing import Type
 from DataClasses import ProcessedDataCollection, YearDataPoint , DataTypes
 from .AbstractDataExtractor import AbstractDataExtractor
-from WebScrapping.ScrapperClasses import CityPaymentsScrapper
+from webscrapping.scrapperclasses import CityPaymentsScrapper
 import pandas as pd
 import os
 

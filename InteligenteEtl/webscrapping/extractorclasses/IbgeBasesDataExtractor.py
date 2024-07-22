@@ -1,8 +1,8 @@
 import pandas as pd
 import os
-from WebScrapping.ExtractorClasses import TableDataPoints
-from WebScrapping.ExtractorClasses import AbstractDataExtractor
-from WebScrapping.ScrapperClasses import IbgePibCidadesScrapper
+from webscrapping.extractorclasses import TableDataPoints
+from webscrapping.extractorclasses import AbstractDataExtractor
+from webscrapping.scrapperclasses import IbgePibCidadesScrapper
 from typing import Type
 from DataClasses import DataTypes, BaseFileType, ProcessedDataCollection
 
