@@ -30,17 +30,6 @@ class AbstractScrapper(ABC):
       
       pass
 
-   @abstractmethod
-   def download_database_locally()->str:
-      """
-      Baixa um arquivo da base de dados oficial e retorna o caminho para ele
-      
-      Return:
-         (str): caminho para o arquivo baixado localmente
-      """
-      pass
-   
-
    def _download_and_extract_zipfile(self, file_url:str)->str:
       """
       Dado um URL para baixar um arquivo zip das bases oficiais, baixa esse arquivo zip e extrai seu conteúdo,

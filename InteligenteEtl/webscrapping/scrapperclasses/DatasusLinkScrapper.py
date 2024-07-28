@@ -147,11 +147,6 @@ class DatasusLinkScrapper(AbstractScrapper):
             list_of_dfs.append(self._dataframe_from_link(link))
 
          return YearDataPoint.from_lists(list_of_dfs,year_options_list) #retorna lista de objetos YearDataPoint
-   
-   def download_database_locally(self)-> str:
-      df:pd.DataFrame =  self.extract_database(self.website_url,self.data_info)
-      df.to_csv(os.path.join(self.EXTRACTED_FILES_DIR, "datasus_" + self.data_info.value["data_abrev"] + ".csv"))
-
 
    def __separate_gini_coef_df(self,df:pd.DataFrame)->list[pd.DataFrame]:
       """

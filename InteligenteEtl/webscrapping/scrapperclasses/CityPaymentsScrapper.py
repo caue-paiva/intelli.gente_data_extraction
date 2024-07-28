@@ -149,16 +149,3 @@ class CityPaymentsScrapper(AbstractScrapper):
      
       list_of_data_points:list[YearDataPoint] = list(map(YearDataPoint.from_tuple,dfs)) #transforma a lista de tuplas em uma lista de datapoints
       return list_of_data_points
-
-   def download_database_locally(self,path:str= "") -> str:
-      data_points = self.extract_database()
-      for i in range(len(data_points)):
-         year = data_points[i].data_year
-         if path:
-            data_points[i].df.to_csv(os.path.join(path,f"CAPAG{year}.csv"))
-         else:
-            data_points[i].df.to_csv(f"CAPAG{year}.csv")
-      if path:
-         return path #caso o path seja dado retorna ele mesmo
-      else:
-         return os.getcwd() # retorna diretório atual caso o path n seja dado

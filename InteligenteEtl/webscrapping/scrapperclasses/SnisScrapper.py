@@ -7,6 +7,9 @@ from selenium.webdriver.remote.webelement import WebElement
 
 
 class SnisScrapper():
+   """
+   TODO: completar a classe de scrapper a classe de extrator associada
+   """
 
    URL = "http://app4.mdr.gov.br/serieHistorica/municipio/index/"
    YEARS_EXTRACTED_PER_RUN = 4 #numero máximo de anos que devem ser extraidos em uma rodada, isso é feito porque qntds maiores quebram o sistema do snis

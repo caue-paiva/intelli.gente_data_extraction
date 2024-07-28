@@ -38,23 +38,7 @@ class IbgePibCidadesScrapper(AbstractScrapper):
       df =  super()._dataframe_from_link(file_link,self.file_type, self.file_is_zip) #retorna o dataframe do link extraido
       
       return  self.__separate_df_by_years(df,list_of_years)
-   
-   def download_database_locally(self)-> str:
-      """
-      Extrai um arquivo e baixa ele localmente apenas da base de dados do IBGE dado um URL para uma página do IBGE, um identificador da tag HTML que o link do arquivo está e o tipo de dado do arquivo
-
-      Args:
-         url (str) : URL da página do IBGE com os dados das bases
-         html_tag_identifier (str): uma tag HTML onde o link para o arquivo da base está, usada no web-scrapping
-         file_type (Enum BaseFileType): Um elemento do Enum que dita qual o tipo de arquivo será baixado
-
-      Return:
-         (str) : caminho para o arquivo baixado
-      """
       
-      file_link:str = self._get_file_link()
-      return super()._download_and_extract_zipfile(file_link)
-   
    def __separate_df_by_years(self,df:pd.DataFrame,years_in_data:list[int])->list[YearDataPoint]:
       data_by_year:list[YearDataPoint] = []
       df[self.EXTRACTED_DATA_YEAR_COL] = df[self.EXTRACTED_DATA_YEAR_COL].astype("int") #transforma a coluna de anos em int para a comparação
@@ -100,9 +84,7 @@ class IbgePibCidadesScrapper(AbstractScrapper):
       file_str_and_index: dict = {page_html[x.start():x.end()]:x.start() for x in databases_match} #cria um dict da string do link de bases e seu index na str do HTML
       
       str_list:list[str] = list(file_str_and_index.keys()) #lista das strings dos links
-      print(str_list)
       data_info:dict = self._extract_best_dataset(str_list) #extrai o melhor dataset baseado na qntd de dados e/ou dados mais recentes
-      print(data_info)
       
       file_name:str = data_info["file_name"] #nome do arquivo escolhido
       file_index: int = file_str_and_index[file_name] #index desse arquivo
