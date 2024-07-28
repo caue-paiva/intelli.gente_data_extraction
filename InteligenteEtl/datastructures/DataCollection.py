@@ -2,7 +2,7 @@ import pandas as pd
 from dataclasses import dataclass
 from etl_config import get_config
 from citiesinfo import get_city_codes
-from DataClasses import DataTypes
+from datastructures import DataTypes
 
 """
 Classe que representa o dado que vai ser carregado no BD/Data Warehouse, com o DF sendo os dados em si e com os outros

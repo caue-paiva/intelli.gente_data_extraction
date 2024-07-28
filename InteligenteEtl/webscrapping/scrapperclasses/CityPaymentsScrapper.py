@@ -3,7 +3,7 @@ import pandas as pd
 from .AbstractScrapper import AbstractScrapper
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from DataClasses import YearDataPoint
+from datastructures import YearDataPoint
 
 
 class CityPaymentsScrapper(AbstractScrapper):

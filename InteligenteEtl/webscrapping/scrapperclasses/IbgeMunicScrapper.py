@@ -2,7 +2,7 @@
 import pandas as pd
 from .AbstractScrapper import  BaseFileType
 from .IbgePibCidadesScrapper import IbgePibCidadesScrapper
-from DataClasses import YearDataPoint
+from datastructures import YearDataPoint
 
 class IbgeBasesMunicScrapper(IbgePibCidadesScrapper):
    
@@ -22,6 +22,10 @@ class IbgeBasesMunicScrapper(IbgePibCidadesScrapper):
       self.priority_to_series_len = priority_to_series_len
 
    def extract_database(self)-> list[YearDataPoint]:
+      """
+      TODO
+      como estamos falando de um arquivo EXCEL, ver se a sheet recuperada no dataframe por padrão é a sheet certa para a extração
+      """
       file_links_by_year:dict = self._get_all_files()
       print(file_links_by_year)
 

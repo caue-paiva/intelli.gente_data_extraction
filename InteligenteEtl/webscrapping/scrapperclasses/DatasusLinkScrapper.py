@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from DataClasses import DataTypes, YearDataPoint
+from datastructures import DataTypes, YearDataPoint
 import time , os , re 
 from enum import Enum
 

@@ -7,7 +7,7 @@ import time , os
 import pandas as pd
 #from .AbstractScrapper import AbstractScrapper, BaseFileType
 from .AbstractScrapper import AbstractScrapper ,BaseFileType
-from  DataClasses import YearDataPoint
+from  datastructures import YearDataPoint
 
 class FormalJobsScrapper(AbstractScrapper):
     

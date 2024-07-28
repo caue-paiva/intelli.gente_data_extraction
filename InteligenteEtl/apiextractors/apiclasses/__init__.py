@@ -1,2 +1,2 @@
 from . AbstractApiInterface import AbstractApiInterface
-from . IbgeAgregatesAPi import IbgeAgregatesApi
+from . ibgeagregatesapi import IbgeAgregatesApi

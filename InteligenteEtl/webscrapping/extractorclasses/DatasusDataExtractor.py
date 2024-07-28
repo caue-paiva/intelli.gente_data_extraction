@@ -1,7 +1,7 @@
 import pandas as pd
 import re
-from DataClasses.DataCollection import ProcessedDataCollection
-from DataClasses import DataTypes, YearDataPoint
+from datastructures.DataCollection import ProcessedDataCollection
+from datastructures import DataTypes, YearDataPoint
 from webscrapping.scrapperclasses.DatasusLinkScrapper import DatasusDataInfo, DatasusLinkScrapper
 from .AbstractDataExtractor import AbstractDataExtractor
 from typing import Type

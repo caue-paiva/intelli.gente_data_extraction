@@ -4,7 +4,7 @@ from webscrapping.extractorclasses import TableDataPoints
 from webscrapping.extractorclasses import AbstractDataExtractor
 from webscrapping.scrapperclasses import IbgePibCidadesScrapper
 from typing import Type
-from DataClasses import DataTypes, BaseFileType, ProcessedDataCollection
+from datastructures import DataTypes, BaseFileType, ProcessedDataCollection
 
 
 """
@@ -60,7 +60,7 @@ class CategoryDataExtractor(AbstractDataExtractor):
       if len(data_info.data_column_list) < 1:
          raise IOError("Lista de ponto de dados deve conter pelo menos 1 ponto de dado")
       
-      df = self.check_city_code(df,data_info.city_code_column) #checa se o código dos municípios está correto
+      df = self.update_city_code(df,data_info.city_code_column) #checa se o código dos municípios está correto
       df.columns = self.__parse_df_col_names(df.columns)
 
       final_df:pd.DataFrame = pd.DataFrame() #df final a ser retornado

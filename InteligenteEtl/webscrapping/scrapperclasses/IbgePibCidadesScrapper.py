@@ -3,7 +3,7 @@ import re
 from re import Match
 import pandas as pd
 from .AbstractScrapper import AbstractScrapper, BaseFileType
-
+from datastructures import YearDataPoint
 
 """
 TODO
@@ -16,28 +16,28 @@ url da página: https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais
 class IbgePibCidadesScrapper(AbstractScrapper):
 
    BASE_REGEX_PATTERN:str = r'base.{0,70}\.' #regex padrão pra qualquer substr com a palavra base
-   
-   url:str
+   URL = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?t=downloads&c=1100023"
+   EXTRACTED_DATA_YEAR_COL = "Ano"
+
    file_type:BaseFileType
    file_is_zip:bool
-   priority_to_series_len:bool
 
-   def __init__(self, url:str, file_type:BaseFileType, file_is_zip:bool, priority_to_series_len:bool = False) -> None:
-      self.url = url
+   def __init__(self, file_type:BaseFileType, file_is_zip:bool) -> None:
       self.file_type = file_type
       self.file_is_zip = file_is_zip
-      self.priority_to_series_len = priority_to_series_len
 
-   def extract_database(self)->pd.DataFrame:
+   def extract_database(self)->list[YearDataPoint]:
       """
       Extrai um arquivo e retorna ele como um Dataframe da base de dados do IBGE 
 
       Return:
-         (pd.Dataframe) : Dataframe do Pandas com os dados baixados   
+         list[YearDataPoint]: lista de objetos, cada um com um df e o ano dos dados associados a ele
       """
       
-      file_link: str = self._get_file_link()
-      return super()._dataframe_from_link(file_link,self.file_type, self.file_is_zip) #retorna o dataframe do link extraido
+      file_link,list_of_years  = self._get_file_link()
+      df =  super()._dataframe_from_link(file_link,self.file_type, self.file_is_zip) #retorna o dataframe do link extraido
+      
+      return  self.__separate_df_by_years(df,list_of_years)
    
    def download_database_locally(self)-> str:
       """
@@ -54,6 +54,19 @@ class IbgePibCidadesScrapper(AbstractScrapper):
       
       file_link:str = self._get_file_link()
       return super()._download_and_extract_zipfile(file_link)
+   
+   def __separate_df_by_years(self,df:pd.DataFrame,years_in_data:list[int])->list[YearDataPoint]:
+      data_by_year:list[YearDataPoint] = []
+      df[self.EXTRACTED_DATA_YEAR_COL] = df[self.EXTRACTED_DATA_YEAR_COL].astype("int") #transforma a coluna de anos em int para a comparação
+
+      for year in years_in_data:
+         data_single_year:pd.DataFrame = df[  df[self.EXTRACTED_DATA_YEAR_COL] == year  ]
+         data_by_year.append(
+            YearDataPoint(data_single_year,year)
+         )
+      
+      return data_by_year
+
 
    def _file_type_to_regex(self)->str:
       """
@@ -71,29 +84,39 @@ class IbgePibCidadesScrapper(AbstractScrapper):
       base_str +=  ")"
       return self.BASE_REGEX_PATTERN + base_str
 
-   def _get_file_link(self)->str:
+   def _get_file_link(self)->tuple[str,list[int]]:
       """
       realiza o web-scrapping e retorna o link para o arquivo da base mais atual e com o tipo de arquivo passado como argumento
+      
+      Return:
+         (tuple[str,list[int]]): tupla cujo primeiro elemento é o link pro arquivo e o segundo é a lista de anos dos dados
+      
       """
-      response = requests.get(self.url) #request get pro site
+      response = requests.get(self.URL) #request get pro site
       page_html: str = response.content.decode()  #pega conteudo html
-      regex_pattern:str = self._file_type_to_regex()
+      regex_pattern:str = self._file_type_to_regex() #cria regex para pegar o tipo de arquivo
       
       databases_match:list[Match] = list(re.finditer(regex_pattern, page_html,re.IGNORECASE)) #match no HTML com a string que identifica as bases de dados do ibge
       file_str_and_index: dict = {page_html[x.start():x.end()]:x.start() for x in databases_match} #cria um dict da string do link de bases e seu index na str do HTML
       
       str_list:list[str] = list(file_str_and_index.keys()) #lista das strings dos links
+      print(str_list)
       data_info:dict = self._extract_best_dataset(str_list) #extrai o melhor dataset baseado na qntd de dados e/ou dados mais recentes
+      print(data_info)
+      
       file_name:str = data_info["file_name"] #nome do arquivo escolhido
       file_index: int = file_str_and_index[file_name] #index desse arquivo
       final_link:str = self._get_whole_link(page_html,file_index)
 
-      return final_link
+      years_range:tuple[int] = data_info["series_range"]
+      list_of_years:list[int] = range(years_range[0],years_range[1]+1)
+
+      return final_link, list_of_years
 
    def _get_whole_link(self,html:str, substr_index:int)->str:
       """
       Dado uma substr de um link para um arquivo com dados e o index dessa substr, retorna o link completo desse arquivo.
-      Faz uma busca do index até achar um " na esq e direita, foi todos os links no html tem isso
+      Faz uma busca do index até achar um " na esq e direita, pois todos os links no html tem isso
       
       """
       link_end:int = html.find('"',substr_index)
@@ -103,7 +126,6 @@ class IbgePibCidadesScrapper(AbstractScrapper):
  
    def _extract_best_dataset(self,file_name_list:list[str])->dict:
       """
-
       Return:
          {
          "file_name": "base/base_de_dados_2002_2009_xls.zip"
@@ -118,28 +140,21 @@ class IbgePibCidadesScrapper(AbstractScrapper):
       series_range:tuple[int] = ()
       return_file:str = file_name_list[0]
 
-      for file in file_name_list:
+      for file in file_name_list: #loop pelos arquivos da lista de arquivos
          years_str: list[str] = list(re.findall(year_patern,file))
          if not years_str:
             raise RuntimeError("Não foi possível extrair o ano do link para o arquivo")
-         years_int: list[int] = list(map(int,years_str))
+         years_int: list[int] = list(map(int,years_str)) #lista de anos agora como int
          
          cur_years_in_series: int =  1 if len(years_int) == 1 else years_int[-1] - years_int[0] #numero de anos na série histórica
          cur_series_range: tuple[int] = (years_int[0],years_int[-1]) if len(years_int) != 1 else (years_int[0])
          #1 se a lista tiver so um ano ou o ano final - o inicial se tiver mais que 1 
          
-         if self.priority_to_series_len: #prioridade para coletar com a maior série histórica
-            if cur_years_in_series >= max_years_in_series and max(years_int) > most_recent_year: #só um ano no dataset
-               return_file = file
-               max_years_in_series = cur_years_in_series
-               most_recent_year = max(years_int)
-               series_range = cur_series_range
-         else:
-            if max(years_int) > most_recent_year:
-               return_file = file
-               max_years_in_series = cur_years_in_series
-               most_recent_year = max(years_int)
-               series_range = cur_series_range
+         if max(years_int) > most_recent_year: #se o ano máximo na lista for maior que a variável do ano mais recente
+            return_file = file #arquivo de retorno muda
+            max_years_in_series = cur_years_in_series #atualiza outras variável
+            most_recent_year = max(years_int)
+            series_range = cur_series_range
 
 
       return {

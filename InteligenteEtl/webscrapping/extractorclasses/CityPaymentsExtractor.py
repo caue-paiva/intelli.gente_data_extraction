@@ -1,5 +1,5 @@
 from typing import Type
-from DataClasses import ProcessedDataCollection, YearDataPoint , DataTypes
+from datastructures import ProcessedDataCollection, YearDataPoint , DataTypes
 from .AbstractDataExtractor import AbstractDataExtractor
 from webscrapping.scrapperclasses import CityPaymentsScrapper
 import pandas as pd

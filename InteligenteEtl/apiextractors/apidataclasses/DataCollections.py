@@ -1,5 +1,5 @@
 from .DataLine import DataLine
-from DataClasses import DataTypes, ProcessedDataCollection
+from datastructures import DataTypes, ProcessedDataCollection
 from pandas import DataFrame
 from dataclasses import dataclass
 

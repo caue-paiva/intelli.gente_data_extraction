@@ -1,5 +1,5 @@
 from abc import ABC,abstractmethod
-from DataClasses import ProcessedDataCollection, YearDataPoint
+from datastructures import ProcessedDataCollection, YearDataPoint
 from webscrapping.scrapperclasses.AbstractScrapper import AbstractScrapper
 import pandas as pd
 from typing import Type

@@ -1,7 +1,7 @@
 from abc import ABC,abstractmethod
 import pandas as pd
 import os , requests , zipfile
-from DataClasses import BaseFileType, YearDataPoint
+from datastructures import BaseFileType, YearDataPoint
 
 
 

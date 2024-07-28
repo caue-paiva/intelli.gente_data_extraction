@@ -1,5 +1,5 @@
 from typing import Any
-from DataClasses import DataTypes
+from datastructures import DataTypes
 
 
 class DataLine:

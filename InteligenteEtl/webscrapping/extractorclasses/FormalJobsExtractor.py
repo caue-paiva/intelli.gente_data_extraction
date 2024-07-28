@@ -1,11 +1,15 @@
 import pandas as pd
-from DataClasses.DataCollection import ProcessedDataCollection
-from DataClasses import DataTypes , YearDataPoint
+from datastructures.DataCollection import ProcessedDataCollection
+from datastructures import DataTypes , YearDataPoint
 from webscrapping.scrapperclasses.FormalJobsScrapper import FormalJobsScrapper
 from .AbstractDataExtractor import AbstractDataExtractor
 
 
 class FormalJobsExtractor(AbstractDataExtractor):
+   """
+   Extrator de dados do indicador Trabalhos Formais
+   
+   """
    
    #constantes sobre o DF bruto extraido pelo webscrapping, como nome das colunas
    EXTRACTED_DATA_NAME = "População ocupada com vínculo formal"

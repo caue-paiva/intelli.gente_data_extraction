@@ -2,8 +2,8 @@ from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtr
 from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
 from webscrapping.scrapperclasses import FormalJobsScrapper
 from webscrapping.extractorclasses import TableDataPoints, FormalJobsExtractor
-from ApiExtractors import IbgeAgregatesApi
-from DataClasses import DataTypes, BaseFileType, ProcessedDataCollection
+from apiextractors import IbgeAgregatesApi
+from datastructures import DataTypes, BaseFileType, ProcessedDataCollection
 import pandas as pd
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
@@ -14,9 +14,14 @@ def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
 
    return processed_data.df
 
-def run_city_gdp(url:str,file_type:BaseFileType,is_zip_file:bool)->pd.DataFrame:
-   scrapper = IbgePibCidadesScrapper(url,file_type,is_zip_file,False)
+def run_city_gdp(file_type:BaseFileType,is_zip_file:bool)->pd.DataFrame:
+   
+   scrapper = IbgePibCidadesScrapper(file_type,is_zip_file)
    raw_df = scrapper.extract_database()
+
+   for point in raw_df:
+      print(point.df.info())
+      print(point.data_year)
    extractor = CategoryDataExtractor()
 
    pib_percapita = {
@@ -35,11 +40,11 @@ def run_city_gdp(url:str,file_type:BaseFileType,is_zip_file:bool)->pd.DataFrame:
       "multiply_amount": 1000
    }
 
-   city_gdp_table_data = TableDataPoints("Ano","Código do Município")
-   city_gdp_table_data.add_data_points_dicts([pib_agro,pib_percapita])
-   processed_df = extractor.extract_data_points(raw_df,city_gdp_table_data)
+   #city_gdp_table_data = TableDataPoints("Ano","Código do Município")
+   # city_gdp_table_data.add_data_points_dicts([pib_agro,pib_percapita])
+   # processed_df = extractor.extract_data_points(raw_df,city_gdp_table_data)
 
-   return processed_df
+   return raw_df
 
 def run_MUNIC_base(file_type:BaseFileType)->list[pd.DataFrame]:
    scrapper = IbgeBasesMunicScrapper(file_type,False)
@@ -74,24 +79,7 @@ if __name__ == "__main__":
    #obj = CityPaymentsScrapper()
    #obj.download_database_locally()
 
-   """obj = DatasusLinkScrapper(DatasusDataInfo.ILLITERACY_RATE)
-   list_ = obj.extract_database()
-
-   for i,x in enumerate(list_):
-      print(x.df.info(),x.data_year)
-
-      x.df.to_csv(f"ginicoef{i}.csv")"""
-   
-   """obj = FormalJobsScrapper()
-   df = obj.extract_database()
-   print(df.info())
-   df.to_csv("trb_forma.csv")"""
-
-   df = run_formal_jobs()
-   print(df.info())
-
-   df.to_csv("trb_formais_pro.csv")
-   
+   run_city_gdp(BaseFileType.EXCEL,True)
    
    
    
