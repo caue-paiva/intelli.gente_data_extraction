@@ -75,8 +75,10 @@ class CategoryDataExtractor(AbstractDataExtractor):
    def extract_data(self,scrapper: IbgePibCidadesScrapper):
       list_datapoints:list[YearDataPoint] = scrapper.extract_database()
       parsed_datapoints:list[YearDataPoint] = self.__drop_cols(list_datapoints)
+      
       concatenated_df:pd.DataFrame = self._concat_data_points(parsed_datapoints,add_year_col=False)
-      concatenated_df.to_csv("concat.csv")
+      concatenated_df = self.__change_col_dtypes(concatenated_df)
+      
       time_series_years:list[int] = YearDataPoint.get_years_from_list(list_datapoints)
 
       processed_data_list:list[ProcessedDataCollection] = []
@@ -146,7 +148,15 @@ class CategoryDataExtractor(AbstractDataExtractor):
       return new_cols
 
    def __change_col_dtypes(self,df:pd.DataFrame)->pd.DataFrame:
-      pass
+      df[self.CITY_CODE_COL] = df[self.CITY_CODE_COL].astype("int")
+      df[self.YEAR_COLUMN] = df[self.YEAR_COLUMN].astype("category")
+
+      for point in CitiesGDPDataInfo:
+         dtype = point.value["dtype"] #tipo de dado do datapoint
+         col_name = self.parse_strings(point.value["column_name"])
+         df[col_name] = df[col_name].astype(dtype.value)
+
+      return df
 
    def __drop_cols(self,list_datapoints:list[YearDataPoint])->list[YearDataPoint]:
       """
@@ -180,15 +190,11 @@ class CategoryDataExtractor(AbstractDataExtractor):
             axis="columns"
          ) #muda o nome da coluna de código dos municípios e do ano dos dados
 
-         new_df[self.CITY_CODE_COL] = new_df[self.CITY_CODE_COL].astype("int")
-         new_df[self.YEAR_COLUMN] = new_df[self.YEAR_COLUMN].astype("category")
 
-         print(new_df.columns)
+
          parsed_data_points.append(
             YearDataPoint(new_df,datapoint.data_year)
          )   
-         new_df.to_csv("teste.csv")
-
       
       return parsed_data_points
 
@@ -199,14 +205,12 @@ class CategoryDataExtractor(AbstractDataExtractor):
       new_df[self.YEAR_COLUMN] = df[self.YEAR_COLUMN] #copia coluna do ano
 
       data_values_col:str =  self.parse_strings(data_info.value["column_name"]) #nome do dado com parsing
-      print(data_values_col)
       multiply_amount:int = data_info.value["multiply_amount"] #quantas vezes o dado deve ser multiplicado para atingir o valor não truncado
       new_df[self.DATA_VALUE_COLUMN] = df[data_values_col].apply(lambda x: x*multiply_amount) #cria uma coluna do valor dos dados, multiplicando ele caso seja necessário
 
       new_df[self.DATA_IDENTIFIER_COLUMN] = data_info.value["data_name"] #coluna do nome final do dado
       new_df[self.DTYPE_COLUMN] = data_info.value["dtype"].value #coluna do tipo de dado
 
-      print(new_df.info())
       return ProcessedDataCollection(
          category=data_info.value["data_category"],
          dtype=data_info.value["dtype"],
