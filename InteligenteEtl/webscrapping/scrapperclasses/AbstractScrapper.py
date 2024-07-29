@@ -16,7 +16,9 @@ class AbstractScrapper(ABC):
 
    """
 
-   EXTRACTED_FILES_DIR:str = "tempfiles" #diretório temporário para guardar os arquivos .zip e de dados extraidos
+   DOWNLOADED_FILES_DIR:str = "tempfiles" #diretório temporário para guardar os arquivos .zip e de dados extraidos
+   DOWNLOADED_FILES_PATH = os.path.join(os.getcwd(),DOWNLOADED_FILES_DIR)
+
 
    @abstractmethod
    def extract_database()->list[YearDataPoint]:
@@ -41,14 +43,14 @@ class AbstractScrapper(ABC):
       """
      
       #caso o diretório para guardar os arquivos extraidos não exista, vamos criar ele
-      if not os.path.exists(self.EXTRACTED_FILES_DIR):
-         os.makedirs(self.EXTRACTED_FILES_DIR)
+      if not os.path.exists(self.DOWNLOADED_FILES_DIR):
+         os.makedirs(self.DOWNLOADED_FILES_DIR)
 
       #baixando o arquivo zip
       response = requests.get(file_url) #request get para o link do arquivo zip 
       if response.status_code == 200: #request com sucesso
          zip_file_name =  "zipfile.zip"
-         zip_file_path = os.path.join(self.EXTRACTED_FILES_DIR, zip_file_name)
+         zip_file_path = os.path.join(self.DOWNLOADED_FILES_DIR, zip_file_name)
     
          with open(zip_file_path, "wb") as f:
             f.write(response.content) #escreve o arquivo zip no diretório de dados temporários
@@ -56,11 +58,11 @@ class AbstractScrapper(ABC):
          raise RuntimeError("Falhou em baixar o arquivo .zip, status code da resposta:", response.status_code)
 
       #extraindo o arquivo zip
-      with zipfile.ZipFile(os.path.join(self.EXTRACTED_FILES_DIR, zip_file_name), "r") as zip_ref:
-            zip_ref.extractall(self.EXTRACTED_FILES_DIR)
+      with zipfile.ZipFile(os.path.join(self.DOWNLOADED_FILES_DIR, zip_file_name), "r") as zip_ref:
+            zip_ref.extractall(self.DOWNLOADED_FILES_DIR)
 
       #no diretório de arquivos baixados e extraidos, vamos ter o .zip e o arquivo de dados extraido
-      extracted_files:list[str] = os.listdir(self.EXTRACTED_FILES_DIR)
+      extracted_files:list[str] = os.listdir(self.DOWNLOADED_FILES_DIR)
       
       data_file_name:str = ""
       for file in extracted_files:
@@ -71,7 +73,7 @@ class AbstractScrapper(ABC):
       if not extracted_files or not data_file_name: #nenhum arquivo foi extraido ou nenhum arquivo de dados foi encontrado
          raise RuntimeError("Extração do arquivo zip num diretório temporário falhou")
       
-      return os.path.join(self.EXTRACTED_FILES_DIR, data_file_name) #retorna o caminho para o arquivo extraido
+      return os.path.join(self.DOWNLOADED_FILES_DIR, data_file_name) #retorna o caminho para o arquivo extraido
    
    def _dataframe_from_link(self, file_url:str, file_type: BaseFileType, zipfile: bool = True)->pd.DataFrame:
       """
@@ -115,3 +117,16 @@ class AbstractScrapper(ABC):
       
       return df
      
+   def _delete_download_files_dir(self)->bool:
+        files:list[str] = os.listdir(self.DOWNLOADED_FILES_PATH)
+
+        for file in files:
+            try:
+               os.remove(os.path.join(self.DOWNLOADED_FILES_PATH,file))
+            except Exception as e:
+               print(f"falha ao deletar um arquivo extraído. Erro: {e}")
+        
+        try:
+            os.rmdir(self.DOWNLOADED_FILES_PATH)
+        except Exception as e:
+               print(f"falha ao deletar diretório do arquivo extraído. Erro: {e}")

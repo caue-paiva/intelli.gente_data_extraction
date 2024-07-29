@@ -77,4 +77,12 @@ class ProcessedDataCollection:
            time_series_years=self.time_series_years,
            df= merged_df
        )
+   
+   def __str__(self) -> str:
+      return   f"""
+            Nome do dado: {self.data_name},\n
+            Tópico do dado: {self.category},\n
+            Anos da série histórica: {self.time_series_years},\n
+            Tipo de dado: {self.dtype.value} \n
+            """
        

@@ -36,20 +36,20 @@ class IbgePibCidadesScrapper(AbstractScrapper):
       
       file_link,list_of_years  = self._get_file_link()
       df =  super()._dataframe_from_link(file_link,self.file_type, self.file_is_zip) #retorna o dataframe do link extraido
-      
+      self._delete_download_files_dir()
+
       return  self.__separate_df_by_years(df,list_of_years)
       
    def __separate_df_by_years(self,df:pd.DataFrame,years_in_data:list[int])->list[YearDataPoint]:
       data_by_year:list[YearDataPoint] = []
       df[self.EXTRACTED_DATA_YEAR_COL] = df[self.EXTRACTED_DATA_YEAR_COL].astype("int") #transforma a coluna de anos em int para a comparação
 
-      for year in years_in_data:
-         data_single_year:pd.DataFrame = df[  df[self.EXTRACTED_DATA_YEAR_COL] == year  ]
-         data_by_year.append(
+      for year in years_in_data: #loop pelos anos presentes nos df
+         data_single_year:pd.DataFrame = df[ df[self.EXTRACTED_DATA_YEAR_COL] == year ] #filtra o df para um ano em específico
+         data_by_year.append( #cria um objeto YearDataPoint e coloca ele na lista
             YearDataPoint(data_single_year,year)
          )
-      
-      return data_by_year
+      return data_by_year #retorna a lista de objetos YearDataPoint
 
 
    def _file_type_to_regex(self)->str:
@@ -150,6 +150,6 @@ if __name__ == "__main__":
    url = "https://www.ibge.gov.br/estatisticas/sociais/educacao/10586-pesquisa-de-informacoes-basicas-municipais.html?edicao=29466&t=downloads"
    url2 =  "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?=&t=downloads"
    url2020 = "https://www.ibge.gov.br/estatisticas/sociais/educacao/10586-pesquisa-de-informacoes-basicas-municipais.html?edicao=32141&t=downloads"
-   scrapper = IbgePibCidadesScrapper(url2,BaseFileType.EXCEL,True)
-   df:pd.DataFrame = scrapper.extract_database()
-   print(df.head())
+  # scrapper = IbgePibCidadesScrapper(url2,BaseFileType.EXCEL,True)
+  #df:pd.DataFrame = scrapper.extract_database()
+  # print(df.head())

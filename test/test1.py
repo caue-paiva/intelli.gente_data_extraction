@@ -17,12 +17,18 @@ def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
 def run_city_gdp(file_type:BaseFileType,is_zip_file:bool)->pd.DataFrame:
    
    scrapper = IbgePibCidadesScrapper(file_type,is_zip_file)
-   raw_df = scrapper.extract_database()
+   # raw_df = scrapper.extract_database()
 
-   for point in raw_df:
-      print(point.df.info())
-      print(point.data_year)
+   # for point in raw_df:
+   #    print(point.df.info())
+   #    print(point.data_year)
    extractor = CategoryDataExtractor()
+   list_ = extractor.extract_data(scrapper)
+
+   for collec in list_:
+      #print(collec)
+      collec.df.to_csv(f"{collec.data_name}.csv")
+
 
    pib_percapita = {
       "data_category": "caracterizacao_socio_economica",
@@ -44,7 +50,6 @@ def run_city_gdp(file_type:BaseFileType,is_zip_file:bool)->pd.DataFrame:
    # city_gdp_table_data.add_data_points_dicts([pib_agro,pib_percapita])
    # processed_df = extractor.extract_data_points(raw_df,city_gdp_table_data)
 
-   return raw_df
 
 def run_MUNIC_base(file_type:BaseFileType)->list[pd.DataFrame]:
    scrapper = IbgeBasesMunicScrapper(file_type,False)

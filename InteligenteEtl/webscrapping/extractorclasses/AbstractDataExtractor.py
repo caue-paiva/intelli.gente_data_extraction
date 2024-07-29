@@ -17,7 +17,7 @@ class AbstractDataExtractor(ABC):
    CITY_CODE_COL:str = get_config("CITY_CODE_COL") #constantes da configuração para o nome das colunas no dataframe final 
    YEAR_COLUMN:str = get_config("YEAR_COL")
    DATA_IDENTIFIER_COLUMN:str = get_config("DATA_IDENTIFIER_COL")
-   DATA_VALUE_COLUMN:str =  get_config("DATA_VALUE_COL")
+   DATA_VALUE_COLUMN:str =  get_config("DATA_VALUE_COL") #nome da coluna dos valores de cada registro de dado
    DTYPE_COLUMN:str = get_config("DTYPE_COL")
 
    def __init__(self) -> None:
@@ -36,7 +36,7 @@ class AbstractDataExtractor(ABC):
       """
       pass
  
-   def _concat_data_points(self,list_of_datapoints:list[YearDataPoint])->pd.DataFrame:
+   def _concat_data_points(self,list_of_datapoints:list[YearDataPoint],add_year_col:bool=True)->pd.DataFrame:
       """
       Recebe uma lista de objetos YearDataPoints, adiciona as colunas de ano e tipo de dado para cada df deles e dá append em
       cada df dos objetos da lista, até retornar um DF completo com todos os dados
@@ -44,10 +44,13 @@ class AbstractDataExtractor(ABC):
 
       appended_df = pd.DataFrame()
       for datapoint in list_of_datapoints:
+         print(datapoint.df.info())
          df = datapoint.df.copy()
-         df[self.YEAR_COLUMN] = datapoint.data_year
+         if add_year_col:
+            df[self.YEAR_COLUMN] = datapoint.data_year
          appended_df = pd.concat([appended_df,df],axis="index",ignore_index=True)
 
+      print(appended_df.info())
       return appended_df
 
    #funções genéricas para ajudar a processar os dados no modelo que o Data Warehouse precisa
