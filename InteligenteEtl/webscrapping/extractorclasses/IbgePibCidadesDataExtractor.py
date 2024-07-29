@@ -32,9 +32,9 @@ class CitiesGDPDataInfo(Enum):
       "dtype": DataTypes.FLOAT,
       "multiply_amount": 1000
    }
-   INDUSTRY_GDP = {
+   #INDUSTRY_GDP = {
 
-   }
+  # }
 
 class CategoryDataExtractor(AbstractDataExtractor):
 
@@ -143,30 +143,6 @@ class CategoryDataExtractor(AbstractDataExtractor):
       )
 
       
-
-if __name__ == "__main__":
-
-
-   pib_percapita = {
-      "data_category": "caracterizacao_socio_economica",
-      "data_name": "PIB per capita",
-      "column_name": """Produto Interno Bruto per capita, 
-   a preços correntes
-   (R$ 1,00)""",
-      "data_type": DataTypes.FLOAT,
-      "multiply_amount": 1
-   }
-
-   pib_agro = {
-      "data_category": "caracterizacao_socio_economica",
-      "data_name": "PIB Agropecuária",
-      "column_name": """Valor adicionado bruto da Agropecuária, 
-   a preços correntes
-   (R$ 1.000)""",
-      "data_type": DataTypes.FLOAT,
-      "multiply_amount": 1000
-   }
-   
 
 
 

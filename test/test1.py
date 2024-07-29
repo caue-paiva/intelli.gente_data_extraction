@@ -1,7 +1,7 @@
 from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
 from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
 from webscrapping.scrapperclasses import FormalJobsScrapper
-from webscrapping.extractorclasses import TableDataPoints, FormalJobsExtractor
+from webscrapping.extractorclasses import  FormalJobsExtractor
 from apiextractors import IbgeAgregatesApi
 from datastructures import DataTypes, BaseFileType, ProcessedDataCollection
 import pandas as pd
@@ -23,7 +23,7 @@ def run_city_gdp(file_type:BaseFileType,is_zip_file:bool)->pd.DataFrame:
    #    print(point.df.info())
    #    print(point.data_year)
    extractor = CategoryDataExtractor()
-   list_ = extractor.extract_data(scrapper)
+   list_ = extractor.extract_processed_collection(scrapper)
 
    for collec in list_:
       #print(collec)

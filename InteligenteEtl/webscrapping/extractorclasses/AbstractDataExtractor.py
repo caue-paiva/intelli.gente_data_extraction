@@ -24,7 +24,7 @@ class AbstractDataExtractor(ABC):
       pass
 
    @abstractmethod
-   def extract_processed_collection(self,scrapper:Type[AbstractScrapper])->ProcessedDataCollection:
+   def extract_processed_collection(self,scrapper:Type[AbstractScrapper])->ProcessedDataCollection|list[ProcessedDataCollection]:
       """
       Dado um objeto que pertence a uma classe scrapper concreta (Herda de AbstractScrapper), chama função de extrair dados 
       desse objeto, processa os dados e retorna um objeto ProcessedDataCollection
@@ -32,7 +32,9 @@ class AbstractDataExtractor(ABC):
       Args:
          scrapper:Type[AbstractScrapper]: Objeto da família de classes Scrapper
       Return:
-         ProcessedDataCollection: Objeto que representa os dados tratados e com os metadados presentes
+         ProcessedDataCollection: Objeto que representa os dados tratados e com os metadados presentes   
+         ou
+         list[ProcessedDataCollection]: lista do objeto acima, caso mais de um dado seja extraido de uma vez
       """
       pass
  
