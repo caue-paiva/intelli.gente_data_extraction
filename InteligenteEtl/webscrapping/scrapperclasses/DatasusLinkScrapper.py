@@ -22,10 +22,10 @@ class DatasusDataInfo(Enum):
       "data_abrev":"ginibr",
       "data_name":"Índice de GINI da renda domiciliar per capita",
       "data_topic": "saúde",
-      "content_to_select":[],
-      "columns_to_select":[],
-      "lines_to_select":[],
-      "monthly_data":False,
+      "content_to_select":[], #botões de conteúdo para clicar
+      "columns_to_select":[], #botões de colunas para clicar
+      "lines_to_select":[],  #botões de linha para clicar
+      "monthly_data":False, #dado é mensal, se não for é anual
       "dtype":DataTypes.FLOAT
    }
    ILLITERACY_RATE =  {
