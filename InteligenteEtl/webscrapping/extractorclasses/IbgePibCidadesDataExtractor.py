@@ -68,12 +68,12 @@ class CategoryDataExtractor(AbstractDataExtractor):
          processed_data_list.append(
             collection
          )
-      
+      print(processed_data_list[0].df.info())
       return processed_data_list
 
    def __change_col_dtypes(self,df:pd.DataFrame)->pd.DataFrame:
       df[self.CITY_CODE_COL] = df[self.CITY_CODE_COL].astype("int")
-      df[self.YEAR_COLUMN] = df[self.YEAR_COLUMN].astype("category")
+      df[self.YEAR_COLUMN] = df[self.YEAR_COLUMN].astype("int")
 
       for point in CitiesGDPDataInfo:
          dtype = point.value["dtype"] #tipo de dado do datapoint

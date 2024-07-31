@@ -18,13 +18,10 @@ class IbgePibCidadesScrapper(AbstractScrapper):
    BASE_REGEX_PATTERN:str = r'base.{0,70}\.' #regex padrão pra qualquer substr com a palavra base
    URL = "https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?t=downloads&c=1100023"
    EXTRACTED_DATA_YEAR_COL = "Ano"
-
    file_type:BaseFileType
-   file_is_zip:bool
 
-   def __init__(self, file_type:BaseFileType, file_is_zip:bool) -> None:
+   def __init__(self, file_type:BaseFileType,) -> None:
       self.file_type = file_type
-      self.file_is_zip = file_is_zip
 
    def extract_database(self)->list[YearDataPoint]:
       """
@@ -35,7 +32,7 @@ class IbgePibCidadesScrapper(AbstractScrapper):
       """
       
       file_link,list_of_years  = self._get_file_link()
-      df =  super()._dataframe_from_link(file_link,self.file_type, self.file_is_zip) #retorna o dataframe do link extraido
+      df =  super()._dataframe_from_link(file_link,self.file_type, True) #retorna o dataframe do link extraido
       self._delete_download_files_dir()
 
       return  self.__separate_df_by_years(df,list_of_years)

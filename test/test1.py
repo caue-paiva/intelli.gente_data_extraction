@@ -14,9 +14,9 @@ def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
 
    return processed_data.df
 
-def run_city_gdp(file_type:BaseFileType,is_zip_file:bool)->pd.DataFrame:
+def run_city_gdp(file_type:BaseFileType)->pd.DataFrame:
    
-   scrapper = IbgePibCidadesScrapper(file_type,is_zip_file)
+   scrapper = IbgePibCidadesScrapper(file_type)
    # raw_df = scrapper.extract_database()
 
    # for point in raw_df:
@@ -28,7 +28,6 @@ def run_city_gdp(file_type:BaseFileType,is_zip_file:bool)->pd.DataFrame:
    for collec in list_:
       #print(collec)
       collec.df.to_csv(f"{collec.data_name}.csv")
-
 
 def run_MUNIC_base(file_type:BaseFileType)->list[pd.DataFrame]:
    scrapper = IbgeBasesMunicScrapper(file_type,False)
@@ -60,7 +59,5 @@ def run_formal_jobs():
    return collection.df
 
 if __name__ == "__main__":
-   df = run_formal_jobs() 
-   df.to_csv("processado.csv")  
-   
+   run_city_gdp(BaseFileType.EXCEL)
    
