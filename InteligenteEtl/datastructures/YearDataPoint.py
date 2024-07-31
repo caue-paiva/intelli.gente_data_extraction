@@ -11,12 +11,12 @@ class YearDataPoint():
    """
 
    df:pd.DataFrame
-   data_year:str
+   data_year:int
 
    #métodos de classe para interagir com a classe como um todo e não com uma instancia do objeto
 
    @classmethod
-   def from_tuple(cls,data:tuple[pd.DataFrame,str] | tuple[str,pd.DataFrame])-> 'YearDataPoint':
+   def from_tuple(cls,data:tuple[pd.DataFrame,int] | tuple[int,pd.DataFrame])-> 'YearDataPoint':
       """
       Método estático para criar um objeto a partir de uma tupla de Dataframes e str (ano do dado)
       """
@@ -28,14 +28,14 @@ class YearDataPoint():
    
 
    @classmethod
-   def from_lists(cls,df_list:list[pd.DataFrame],years_list:list[str|int])->list['YearDataPoint']:
+   def from_lists(cls,df_list:list[pd.DataFrame],years_list:list[int])->list['YearDataPoint']:
       if not isinstance(df_list,list) or not isinstance(years_list,list):
           raise TypeError("Argumento passado não é uma lista")
       
-      return [YearDataPoint(x,str(y)) for x,y in zip(df_list,years_list)]
+      return [YearDataPoint(x,y) for x,y in zip(df_list,years_list)]
    
    @classmethod
-   def get_years_from_list(cls,data_point_list:list['YearDataPoint'])->list[str]:
+   def get_years_from_list(cls,data_point_list:list['YearDataPoint'])->list[int]:
       """
       Dado uma lista de objetos YearDataPoint, retorna uma lista de strings com os  campos anos desses objetos
       """

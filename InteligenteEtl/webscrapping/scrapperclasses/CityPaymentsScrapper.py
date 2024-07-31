@@ -79,6 +79,10 @@ class CityPaymentsScrapper(AbstractScrapper):
       return list_of_csv_links  
 
    def __fill_non_existent_years(self,list_of_link_year_tuples:list[tuple[str,int]])->None:
+      """
+      Alguns links não tem o ano dos dados, mas como os links são extraidos em ordem é possível inferir qual o ano
+      baseado no ano anterior.
+      """
       previous_year:int = 0
       for i in range(len(list_of_link_year_tuples)):
          link:str = list_of_link_year_tuples[i][0]
@@ -94,21 +98,20 @@ class CityPaymentsScrapper(AbstractScrapper):
       NON_FOUND_YEAR = 0 #valor para quando o ano não foi inferido do link
 
       get_link_year_tuple = lambda x: (x, int(re.findall(year_regex_pattern,x)[-1])) if len(re.findall(year_regex_pattern,x)) > 0 else (x,NON_FOUND_YEAR) #cria uma tupla do link e seu ano 
-      replace_non_years_with_empty_str = lambda x: (x[0], x[1]) if x[1] < 2050 else (x[0],NON_FOUND_YEAR) #caso um número  extraido não seja um ano ele vai ser trocado por uma string vazia
+      replace_incorrect_numbers = lambda x: (x[0], x[1]) if x[1] < 2050 else (x[0],NON_FOUND_YEAR) #caso um número  extraido não seja um ano ele vai ser trocado por um valor que representa um ano inválido
+      #esse tratament existe por que algumas vezes não tem o ano do dado no link mas tem outros padrões numéricos que o regex pega
+
       fix_year_of_corrected_data = lambda x: (x[0],x[1]) if "corrigido" not in x[0] else (x[0], x[1]-1) #caso o dado seja corrigido, ele tem um ano no nome mas se refere ao ano anterior
       #pelo menos isso é o caso nos dados corrigidos de 2022
 
-      compose_funcs = lambda x: fix_year_of_corrected_data(replace_non_years_with_empty_str(get_link_year_tuple(x))) #compoe as funções acima
+      compose_funcs = lambda x: fix_year_of_corrected_data(replace_incorrect_numbers(get_link_year_tuple(x))) #compoe as funções acima
 
-      list_of_tuples:list[tuple[str,int]] = list(map(compose_funcs,list_of_links))
+      list_of_tuples:list[tuple[str,int]] = list(map(compose_funcs,list_of_links)) #aplica as funções na lista de links
       self.__fill_non_existent_years(list_of_tuples)
-
-      convert_years_to_str = lambda x: (x[0],str(x[1])) #o padrão no projeto é trabalho com anos como string, então os anos ints serão convertidos
-      list_of_tuples = list(map(convert_years_to_str,list_of_tuples))
 
       return list_of_tuples
 
-   def __dataframes_from_links_and_years(self,list_of_link_year_tuples:list[tuple[str,int]])->list[tuple[pd.DataFrame,str]]:
+   def __dataframes_from_links_and_years(self,list_of_link_year_tuples:list[tuple[str,int]])->list[tuple[pd.DataFrame,int]]:
       list_dfs_years:list[tuple[pd.DataFrame,str]] = []
       filter_non_complete_sheet_names = lambda x: True if "prévia" in x.lower() else False #arquivos de anos não finalizados (ex: 2024 17/05) tem prévia como o nome da sheet
       #do arquivo excel com prévia no nome
@@ -137,15 +140,17 @@ class CityPaymentsScrapper(AbstractScrapper):
          else:
             raise RuntimeError("tipo de arquivo do link não é excel ou csv, falha no processamento")
          
-         list_dfs_years.append( (df,year) )
+         list_dfs_years.append( (df,int(year)))
 
       return list_dfs_years
 
    def extract_database(self)->list[YearDataPoint]:
       links:list[str] = self.__select_all_years()
+      print(links)
       links_and_years:tuple[str,int] = self.__match_links_with_their_years(links)
       links_and_years:tuple[str,int] = self.__most_recent_data_by_year(links_and_years)
       dfs = self.__dataframes_from_links_and_years(links_and_years)
      
       list_of_data_points:list[YearDataPoint] = list(map(YearDataPoint.from_tuple,dfs)) #transforma a lista de tuplas em uma lista de datapoints
+      
       return list_of_data_points

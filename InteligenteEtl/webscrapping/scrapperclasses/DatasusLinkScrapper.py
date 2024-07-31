@@ -136,8 +136,6 @@ class DatasusLinkScrapper(AbstractScrapper):
          df =  self._dataframe_from_link(link)
          dfs_by_year = self.__separate_gini_coef_df(df)
 
-         print(len(dfs_by_year),len(list_of_years))
-         print(list_of_years)
          return YearDataPoint.from_lists(dfs_by_year,list_of_years)
 
       else: #caso base da extração da maioria dos dados
@@ -202,7 +200,7 @@ class DatasusLinkScrapper(AbstractScrapper):
          if not link: #não foi possívei extrair o link
             continue
 
-         extracted_years.append(year_option) #extraiu o ano com sucesso
+         extracted_years.append(int(year_option)) #extraiu o ano com sucesso
          csv_link_list.append(link) #adiciona o link na lista de CSV
       
       driver.close() #fecha o driver do selenium

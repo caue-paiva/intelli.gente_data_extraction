@@ -46,13 +46,10 @@ class AbstractDataExtractor(ABC):
 
       appended_df = pd.DataFrame()
       for datapoint in list_of_datapoints:
-         print(datapoint.df.info())
          df = datapoint.df.copy()
          if add_year_col:
             df[self.YEAR_COLUMN] = datapoint.data_year
          appended_df = pd.concat([appended_df,df],axis="index",ignore_index=True)
-
-      print(appended_df.info())
       return appended_df
 
    #funções genéricas para ajudar a processar os dados no modelo que o Data Warehouse precisa

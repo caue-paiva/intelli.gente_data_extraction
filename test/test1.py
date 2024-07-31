@@ -30,27 +30,6 @@ def run_city_gdp(file_type:BaseFileType,is_zip_file:bool)->pd.DataFrame:
       collec.df.to_csv(f"{collec.data_name}.csv")
 
 
-   pib_percapita = {
-      "data_category": "caracterizacao_socio_economica",
-      "data_name": "PIB per capita",
-      "column_name": """Produto Interno Bruto per capita,  a preços correntes (R$ 1,00)""",
-      "data_type": DataTypes.FLOAT,
-      "multiply_amount": 1
-   }
-
-   pib_agro = {
-      "data_category": "caracterizacao_socio_economica",
-      "data_name": "PIB Agropecuária",
-      "column_name": """Valor adicionado bruto da Agropecuária,  a preços correntes (R$ 1.000)""",
-      "data_type": DataTypes.FLOAT,
-      "multiply_amount": 1000
-   }
-
-   #city_gdp_table_data = TableDataPoints("Ano","Código do Município")
-   # city_gdp_table_data.add_data_points_dicts([pib_agro,pib_percapita])
-   # processed_df = extractor.extract_data_points(raw_df,city_gdp_table_data)
-
-
 def run_MUNIC_base(file_type:BaseFileType)->list[pd.DataFrame]:
    scrapper = IbgeBasesMunicScrapper(file_type,False)
    return scrapper.extract_database()
@@ -81,10 +60,7 @@ def run_formal_jobs():
    return collection.df
 
 if __name__ == "__main__":
-   #obj = CityPaymentsScrapper()
-   #obj.download_database_locally()
-
-   run_city_gdp(BaseFileType.EXCEL,True)
-   
+   df = run_formal_jobs() 
+   df.to_csv("processado.csv")  
    
    

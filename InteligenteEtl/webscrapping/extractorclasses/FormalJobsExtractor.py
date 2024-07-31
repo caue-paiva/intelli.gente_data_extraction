@@ -16,6 +16,9 @@ class FormalJobsExtractor(AbstractDataExtractor):
    EXTRACTED_DTYPE: DataTypes = DataTypes.INT
    NULL_VAL_IDENTIFIER = "Não Disponível"
    CATEGORY: str = "Emprego" #tópico do dado
+   
+   EXTRACTED_TABLE_CITY_COL = "Cod. Loc." #nome da coluna dos códigos do municípios na tabela extraida
+   EXTRACTED_DATA_NAME = "População ocupada com vínculo formal"
 
 
    def __treat_nulls_and_add_cols(self,df:pd.DataFrame)->pd.DataFrame:
@@ -25,10 +28,8 @@ class FormalJobsExtractor(AbstractDataExtractor):
       final_df_val_col:str = self.DATA_VALUE_COLUMN #coluna de valores
       final_dtype_col:str = self.DTYPE_COLUMN #coluna de tipo de dado
       
-      df[final_df_val_col] = df[final_df_val_col].replace({self.NULL_VAL_IDENTIFIER : DataTypes.NULL.value})
-      infer_dtype = lambda x: self.EXTRACTED_DTYPE.value if x.isdigit() else DataTypes.NULL.value
-      dtype_col:pd.Series = df[final_df_val_col].apply(infer_dtype)
-      df[final_dtype_col] = dtype_col
+      df = df[df[final_df_val_col] !=  self.NULL_VAL_IDENTIFIER] #tira valores nulos
+      df[final_dtype_col] =  self.EXTRACTED_DTYPE.value # coloca coluna de tipo do dado
 
       return df
 
@@ -61,15 +62,21 @@ class FormalJobsExtractor(AbstractDataExtractor):
    
    def extract_processed_collection(self,formal_jobs_scrapper:FormalJobsScrapper)-> ProcessedDataCollection:
       data_list = formal_jobs_scrapper.extract_database(delete_extracted_files=True)
-      time_series_years:list[str] = YearDataPoint.get_years_from_list(data_list)
+      time_series_years:list[int] = YearDataPoint.get_years_from_list(data_list)
 
       df = self._concat_data_points(data_list) #junta os dataframes da lista de YearDataPoints em um unico df
-      df.columns = [self.CITY_CODE_COL,self.YEAR_COLUMN,self.DATA_VALUE_COLUMN] #coloca as colunas do novo df
+      df = df.rename( #renomear as colunas do DF antigo para os padrões de dados processados
+         {
+         self.EXTRACTED_TABLE_CITY_COL: self.CITY_CODE_COL,
+         self.EXTRACTED_DATA_NAME: self.DATA_VALUE_COLUMN
+         },
+         axis="columns"
+      )
       df = self.__remove_non_city_lines(df)
       df = self.__treat_column_dtypes(df)
       df = self.__treat_nulls_and_add_cols(df)
       df = super().update_city_code(df,self.CITY_CODE_COL) #atualiza código do município de 6 para 7 dígitos
-
+      
       collection = ProcessedDataCollection(
          category=self.CATEGORY,
          dtype=self.EXTRACTED_DTYPE,

@@ -21,7 +21,8 @@ class FormalJobsScrapper(AbstractScrapper):
     }
     BASE_URL: str = "https://www.ibge.gov.br/apps/snig/v1/?loc=0&cat=-1,-2,-3,128&ind=4732"
     FILE_TYPE: BaseFileType = BaseFileType.CSV
-    TIME_SERIES_YEARS:list[str] = ["2000","2010"] #anos da série histórica,hard-coded por enquanto
+    TIME_SERIES_YEARS:list[str] = ["2000","2010"] #anos da série histórica, hard-coded por enquanto e colocada como string para se comparar com o nome das colunas
+    #no dataframe
     EXTRACTED_TABLE_CITY_COL = "Cod. Loc." #nome da coluna dos códigos do municípios na tabela extraida
     EXTRACTED_DATA_NAME = "População ocupada com vínculo formal"
 
@@ -76,7 +77,7 @@ class FormalJobsScrapper(AbstractScrapper):
                     #clica na div com o nome do estado, va aparecer todos os municípios de lá
                     local_tag = state_to_be_clicked.find_element(By.CLASS_NAME, 'local')
                     local_tag.click()
-                    time.sleep(0.3)
+                    time.sleep(0.7)
 
                     #acha denovo o elemento ul, dessa vez pra  lista de opções de municipios dentro de um estado
                     city_selection_box = WebDriverWait(driver, 10).until(
@@ -87,7 +88,7 @@ class FormalJobsScrapper(AbstractScrapper):
                     select_all_cities_button = city_selection_box.find_element(By.CSS_SELECTOR, 'li.option')
                     input_tag = select_all_cities_button.find_element(By.CSS_SELECTOR, 'div.input > input')
                     input_tag.click()
-                    time.sleep(0.3)
+                    time.sleep(0.7)
 
                     #clica o botão de voltar para voltar pro menu com todos os estados e clicar num novo
                     self.__click_return_button(driver)
@@ -117,7 +118,7 @@ class FormalJobsScrapper(AbstractScrapper):
                 new_df[self.EXTRACTED_TABLE_CITY_COL] = city_code_col.copy() #copia coluna de municípios
                 new_df[self.EXTRACTED_DATA_NAME] = df[col].copy() #copia coluna dos dados daquele ano
                 data_list.append(
-                    YearDataPoint(new_df,col) #novo objeto com o dataframe do ano e o ano desse dado
+                    YearDataPoint(new_df,int(col)) #novo objeto com o dataframe do ano e o ano desse dado
                 )           
         return data_list 
             
@@ -193,8 +194,7 @@ class FormalJobsScrapper(AbstractScrapper):
             span_inside_li.click()
 
             self.__click_on_all_states(driver) #clica na opção "todos os municípios" de cada estado na página
-
-            time.sleep(2)
+            time.sleep(3)
             download_div = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CLASS_NAME, 'downloadDiv'))
             ) #espera achar o botão de baixar os arquivos
@@ -215,6 +215,8 @@ class FormalJobsScrapper(AbstractScrapper):
     def extract_database(self, website_url: str = "", delete_extracted_files:bool = True)->list[YearDataPoint]:
         path_to_csv:str = self.download_database_locally(website_url)
         df: pd.DataFrame = pd.read_csv(path_to_csv,sep=";")
+        #df = pd.read_csv("teste2.csv",sep=",")
+        print(df.info())
 
         if delete_extracted_files:
             self.__delete_download_files_dir()
