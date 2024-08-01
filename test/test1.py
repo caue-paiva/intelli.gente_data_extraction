@@ -48,8 +48,7 @@ def run_CAPAG():
    scrapper = CityPaymentsScrapper()
    obj = CityPaymentsExtractor()
    list_ = obj.extract_processed_collection(scrapper)
-   for  index, collection in enumerate(list_):
-      collection.df.to_csv(f"CAPAG_PROCESSADO{index}.csv")
+   list_.df.to_csv(f"CAPAG_PROCESSADO{1}.csv")
 
 def run_formal_jobs():
    scrapper = FormalJobsScrapper()
@@ -59,5 +58,4 @@ def run_formal_jobs():
    return collection.df
 
 if __name__ == "__main__":
-   run_city_gdp(BaseFileType.EXCEL)
-   
+   run_CAPAG()   

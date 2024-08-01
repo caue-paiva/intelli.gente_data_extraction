@@ -41,7 +41,7 @@ class CityPaymentsScrapper(AbstractScrapper):
          a_inside_p = p_tag.find_element(By.TAG_NAME, 'a')
          href = a_inside_p.get_attribute('href')
       except Exception as e:
-         print(f'Error extracting href: {e}')
+         print(f'Erro ao extrair href: {e}')
 
       # Close the new window
       driver.close()
@@ -146,7 +146,6 @@ class CityPaymentsScrapper(AbstractScrapper):
 
    def extract_database(self)->list[YearDataPoint]:
       links:list[str] = self.__select_all_years()
-      print(links)
       links_and_years:tuple[str,int] = self.__match_links_with_their_years(links)
       links_and_years:tuple[str,int] = self.__most_recent_data_by_year(links_and_years)
       dfs = self.__dataframes_from_links_and_years(links_and_years)
