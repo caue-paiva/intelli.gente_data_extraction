@@ -1,6 +1,6 @@
 import os,json
 from typing import Any
-
+from datetime import datetime
 """
 Módulo para padronizar acesso a configurações globais do projeto, definidas num arquivo JSON
 """
@@ -32,3 +32,8 @@ def get_config(config_name:str)-> str|int:
     else:
        raise RuntimeError("Não foi possível acessar uma configuração com esse nome")
 
+def get_current_year()->int:
+   """
+   Retorna o ano atual como int
+   """
+   return datetime.now().year

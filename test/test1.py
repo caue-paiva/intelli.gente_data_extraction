@@ -3,7 +3,7 @@ from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,Ib
 from webscrapping.scrapperclasses import FormalJobsScrapper
 from webscrapping.extractorclasses import  FormalJobsExtractor
 from apiextractors import IbgeAgregatesApi
-from datastructures import DataTypes, BaseFileType, ProcessedDataCollection
+from datastructures import BaseFileType, ProcessedDataCollection
 import pandas as pd
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
@@ -14,14 +14,8 @@ def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
 
    return processed_data.df
 
-def run_city_gdp(file_type:BaseFileType)->pd.DataFrame:
-   
+def run_city_gdp(file_type:BaseFileType)->None:
    scrapper = IbgePibCidadesScrapper(file_type)
-   # raw_df = scrapper.extract_database()
-
-   # for point in raw_df:
-   #    print(point.df.info())
-   #    print(point.data_year)
    extractor = CategoryDataExtractor()
    list_ = extractor.extract_processed_collection(scrapper)
 
@@ -53,4 +47,4 @@ def run_formal_jobs():
    return collection.df
 
 if __name__ == "__main__":
-   run_CAPAG()   
+   run_api_agregados()

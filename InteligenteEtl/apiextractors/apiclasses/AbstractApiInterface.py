@@ -78,7 +78,11 @@ class AbstractApiInterface(ABC):
             dict_index+=1
          columns:list[str] = [self.DB_CITY_ID_COLUMN, self.DB_YEAR_COLUMN, self.DB_DATA_IDENTIFIER_COLUMN, self.DB_DATA_VALUE_COLUMN, self.DB_DTYPE_COLUMN]
          df: pd.DataFrame = pd.DataFrame.from_dict(data_point_dict,orient="index",columns=columns) #cria um dataframe a partir do dicionário criado
-         processed_data_list.append(collection.create_processed_collection(df)
+         df[self.DB_YEAR_COLUMN] = df[self.DB_YEAR_COLUMN].astype("int") #transforma essas colunas em inteiros
+         df[self.DB_CITY_ID_COLUMN] = df[self.DB_CITY_ID_COLUMN].astype("int")
+         
+         df = df.dropna(axis="index",subset=[self.DB_DATA_VALUE_COLUMN]) #remove as linhas com valores nulos
+         processed_data_list.append(collection.create_processed_collection(df))
   
       return processed_data_list
    

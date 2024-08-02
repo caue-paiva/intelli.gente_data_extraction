@@ -1,7 +1,6 @@
 import pandas as pd
-from dataclasses import dataclass
-from etl_config import get_config
-from citiesinfo import get_city_codes
+from etl_config import get_config, get_current_year
+import pandera as pa 
 from datastructures import DataTypes
 
 """
@@ -10,8 +9,6 @@ campos da classe sendo metadadas como a categoria, nome do dado e os anos da sé
 """
 
 
-#dataclass cria automaticamente métodos __init__, __eq__ entre outros, além de que mostra que o propósito principal da classe é guardar dados
-@dataclass
 class ProcessedDataCollection:
    """
    Essa classe representa um conjunto de um dado específico pronta para ser inserida no banco de dados
@@ -26,12 +23,29 @@ class ProcessedDataCollection:
    time_series_years:list[int]
    df: pd.DataFrame
 
-   def check_df_validity(self)->bool:
-     """
-     TODO
-     Checa se o DF contido no objeto é valido ou não
-     """
-   
+
+   #constante de classe para o schema dos dataframes. Força as colunas do dataframe a serem de um certo tipo de dado e seguirem certas regras de valores
+   DF_SCHEMA = pa.DataFrameSchema(
+          columns={
+            get_config("YEAR_COL"): pa.Column(int,pa.Check(lambda x : x <= get_current_year() and x >= get_config("OLDEST_YEAR") ,element_wise=True)), #valores da coluna de ano devem estrar entre um numero do ano mais antigo e o ano atual
+            get_config("CITY_CODE_COL"): pa.Column(int, pa.Check(lambda x: x >= get_config("SMALLEST_CITY_CODE") and x <= get_config("HIGHEST_CITY_CODE"),element_wise=True)), #numero de município deve estar entre o range permitido para 7 dígitos
+            get_config("DATA_IDENTIFIER_COL"): pa.Column(str),
+            get_config("DTYPE_COL"):pa.Column(str,pa.Check(lambda x: x in [y.value for y in DataTypes],element_wise=True)), #valor da coluna de tipos de dados deve pertencer aos valores do enum DataTypes
+            get_config("DATA_VALUE_COL"): pa.Column() #tipo da coluna de dados não é padronizado
+          },
+          index=pa.Index(int) #index numérico
+    )
+
+    
+   def __init__(self, category: str, dtype: DataTypes, data_name: str, time_series_years: list[int], df: pd.DataFrame) -> None:
+        df = self.DF_SCHEMA.validate(df) #valida o schema do df passado como argumento
+        print("schema validado")
+        self.category = category
+        self.dtype = dtype
+        self.data_name = data_name
+        self.time_series_years = time_series_years
+        self.df = df
+
    def __str__(self) -> str:
       return   f"""
             Nome do dado: {self.data_name},\n

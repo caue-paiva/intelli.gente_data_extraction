@@ -12,6 +12,8 @@ um código quase identico porém com 6 dígitos e não 7, isso deve ser levado e
 
 class CitiesGDPDataInfo(Enum):
    """
+   TODO: Colocar os 2 dados faltando dessa basa
+
    Enum para representar todas as possibilidades de dados que estão presentes do DF/tabela extraida do WebScrapping
    """
    PERCAPITA_GDP = {

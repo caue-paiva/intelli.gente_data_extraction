@@ -7,5 +7,8 @@
    "YEAR_COL": "ano",
    "DATA_IDENTIFIER_COL": "dado_identificador",
    "DATA_VALUE_COL": "valor",
-   "DTYPE_COL": "tipo_dado"
+   "DTYPE_COL": "tipo_dado",
+   "OLDEST_YEAR": 1980,
+   "SMALLEST_CITY_CODE": 1000000,
+   "HIGHEST_CITY_CODE": 9999999
 }

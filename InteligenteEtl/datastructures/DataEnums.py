@@ -1,8 +1,9 @@
 from enum import Enum
-"""
-Enums gerais que identificar tipos de dados ou tipos de arquivos
 
 """
+Enums gerais que identificar tipos de dados ou tipos de arquivos
+"""
+
 
 
 class BaseFileType(Enum): #enum para os tipos de arquivos que são comumente encontrados em bases oficiais do governo
@@ -18,5 +19,4 @@ class DataTypes(Enum): #Enum para os tipos de dados encontrados nas bases
    BOOL = "bool"
    UNKNOWN = "str"
    NULL = "NULL"
-
 
