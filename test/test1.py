@@ -39,11 +39,6 @@ def run_api_agregados():
    api.print_processed_data(data_points)
    api.save_processed_data_in_csv(data_points,1)
 
-def test_fill_non_existing_cities(df:pd.DataFrame):
-   data_col1 = ProcessedDataCollection("PIB Agropecuária",DataTypes.FLOAT,"PIB Agropecuária",[1],df)
-   final_df =  data_col1.fill_non_existing_cities()
-   final_df.to_csv("final_agr.csv")
-
 def run_CAPAG():
    scrapper = CityPaymentsScrapper()
    obj = CityPaymentsExtractor()
