@@ -1,5 +1,5 @@
 import pandas as pd
-from webscrapping.extractorclasses import AbstractDataExtractor
+from .AbstractDataExtractor import AbstractDataExtractor
 from webscrapping.scrapperclasses import IbgePibCidadesScrapper
 from datastructures import DataTypes, ProcessedDataCollection, YearDataPoint
 from enum import Enum

@@ -1,4 +1,5 @@
 /intelienv 
+/intellienv
 *.csv
 *.xlsx
 *.env
