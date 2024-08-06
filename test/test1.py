@@ -2,8 +2,8 @@ from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtr
 from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
 from webscrapping.scrapperclasses import FormalJobsScrapper
 from webscrapping.extractorclasses import  FormalJobsExtractor
-from apiextractors import IbgeAgregatesApi
-from datastructures import BaseFileType, ProcessedDataCollection
+from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi
+from datastructures import BaseFileType
 import pandas as pd
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
@@ -33,6 +33,11 @@ def run_api_agregados():
    api.print_processed_data(data_points)
    api.save_processed_data_in_csv(data_points,1)
 
+def run_api_ipea():
+   api_extractor = IpeaViolenceMapApi()
+   list_data_collect = api_extractor.extract_data_points()
+   api_extractor.save_processed_data_in_csv(list_data_collect,0)
+
 def run_CAPAG():
    scrapper = CityPaymentsScrapper()
    obj = CityPaymentsExtractor()
@@ -47,4 +52,4 @@ def run_formal_jobs():
    return collection.df
 
 if __name__ == "__main__":
-   run_api_agregados()
+   run_api_ipea()

@@ -6,7 +6,7 @@ charset-normalizer==3.3.2
 et-xmlfile==1.1.0
 h11==0.14.0
 idna==3.7
--e git+https://github.com/caue-paiva/intelli.gente_webscrapping@467aae95b5f656d393507a529e6e8fb11c3c4f1c#egg=InteligenteEtl&subdirectory=InteligenteEtl
+-e InteligenteEtl
 multimethod==1.10
 mypy-extensions==1.0.0
 numpy==1.26.4

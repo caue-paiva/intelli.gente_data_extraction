@@ -39,7 +39,6 @@ class ProcessedDataCollection:
     
    def __init__(self, category: str, dtype: DataTypes, data_name: str, time_series_years: list[int], df: pd.DataFrame) -> None:
         df = self.DF_SCHEMA.validate(df) #valida o schema do df passado como argumento
-        print("schema validado")
         self.category = category
         self.dtype = dtype
         self.data_name = data_name

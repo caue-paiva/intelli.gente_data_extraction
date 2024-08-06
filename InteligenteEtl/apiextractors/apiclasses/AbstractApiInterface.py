@@ -50,7 +50,7 @@ class AbstractApiInterface(ABC):
       pass
 
    @abstractmethod   
-   def extract_data_points(self, cities:list[int] = [] , data_point_names:list[str] = [] ,  time_series_len: int = 0)->list[ProcessedDataCollection]:
+   def extract_data_points(self)->list[ProcessedDataCollection]:
       pass
 
    def process_raw_data(self,data_collections: list[RawDataCollection])->list[ProcessedDataCollection]:
@@ -72,10 +72,11 @@ class AbstractApiInterface(ABC):
       dict_index = 0
       for collection in data_collections: #loop por todas as variáveis
          data_point_dict: dict [int, list] = {} #dicionário com a chave sendo o index da linha e o valor sendo uma lista com os valores da linha a ser colocada no df
-         
+         data_name:str = collection.data_name #nome do dado da coleção
          for point in collection.data_lines : #constroi o dict com os dados da lista de DataPoints de cada variável
-            data_point_dict[dict_index] = [point.city_id, point.year, point.data_name,point.value ,point.data_type.value]
+            data_point_dict[dict_index] = [point.city_id, point.year, data_name, point.value ,point.data_type.value]
             dict_index+=1
+         
          columns:list[str] = [self.DB_CITY_ID_COLUMN, self.DB_YEAR_COLUMN, self.DB_DATA_IDENTIFIER_COLUMN, self.DB_DATA_VALUE_COLUMN, self.DB_DTYPE_COLUMN]
          df: pd.DataFrame = pd.DataFrame.from_dict(data_point_dict,orient="index",columns=columns) #cria um dataframe a partir do dicionário criado
          df[self.DB_YEAR_COLUMN] = df[self.DB_YEAR_COLUMN].astype("int") #transforma essas colunas em inteiros
@@ -95,4 +96,4 @@ class AbstractApiInterface(ABC):
    
    def save_processed_data_in_csv(self,data_list:list[ProcessedDataCollection], index_of_data_list:int)->None:
         df = data_list[index_of_data_list].df
-        df.to_csv("dados_extraidos_teste.csv") 
+        df.to_csv("dados_extraidos_teste.csv",index=False) 

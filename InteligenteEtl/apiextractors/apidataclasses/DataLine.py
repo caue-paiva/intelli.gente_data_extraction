@@ -10,7 +10,6 @@ class DataLine:
    """
    city_id: int
    year: int
-   data_name: str
    data_type: DataTypes
    value: Any
    multiply_amount:int|float
@@ -20,7 +19,6 @@ class DataLine:
       self, 
       city_id: int, 
       year: int, 
-      data_name: str, 
       value: Any,
       data_type: DataTypes = DataTypes.STRING, 
       multiply_amount: int|float = 1,
@@ -28,7 +26,6 @@ class DataLine:
       
       self.city_id = city_id
       self.year = year
-      self.data_name = data_name
       self.data_type = data_type
       self.value = value
       self.multiply_amount = multiply_amount

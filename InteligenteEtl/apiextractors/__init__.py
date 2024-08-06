@@ -1,2 +1,3 @@
-from . apiclasses import IbgeAgregatesApi
 from . import apidataclasses
+from .apiclasses.ibgeagregatesapi.IbgeAgregatesApi import IbgeAgregatesApi
+from .apiclasses.ipeaviolencemap.IpeaViolenceMapApi import IpeaViolenceMapApi

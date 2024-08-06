@@ -20,3 +20,13 @@ class DataTypes(Enum): #Enum para os tipos de dados encontrados nas bases
    UNKNOWN = "str"
    NULL = "NULL"
 
+   @classmethod
+   def from_string(cls,dtype_string:str):
+        """
+        Retorna um objeto do ENUM a partir de uma string de tipo de dado
+        """
+        for member in DataTypes:
+            if member.value == dtype_string:
+                return member
+        raise ValueError(f"{dtype_string} não é uma string válida para essa enum")
+

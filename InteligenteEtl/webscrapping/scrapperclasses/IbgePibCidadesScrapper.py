@@ -6,8 +6,8 @@ from .AbstractScrapper import AbstractScrapper, BaseFileType
 from datastructures import YearDataPoint
 
 """
-TODO
-1) Atualmente esse código foi testado apenas na página de PIB de cidades do IBGE, testar em páginas similares
+Os dados desse código também são obtidos a partir da API do Ibge
+
 url da página: https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html?t=downloads&c=1100023
 
 

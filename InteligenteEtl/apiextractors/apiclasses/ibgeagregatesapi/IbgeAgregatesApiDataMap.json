@@ -10,7 +10,7 @@
             "População total estimada do município": {"variavel":93, "agregado":9606 }
       },
 
-      "domicilios ": {
+      "habitação": {
             "Domicílios particulares permanentes urbanos" : {"variavel":96, "agregado": 2409, "classificacao": "12235[all]|1[1]" },
             "Domicílios particulares permanentes urbanos com existência de calçamento/pavimentação da rua" : {"variavel":96, "agregado": 2409, "classificacao": "12235[104562,104563]|1[1]" }
       }              

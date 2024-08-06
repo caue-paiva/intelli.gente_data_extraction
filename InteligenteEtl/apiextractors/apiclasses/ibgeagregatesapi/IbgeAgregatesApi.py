@@ -1,4 +1,4 @@
-from apiextractors.apiclasses import AbstractApiInterface
+from apiextractors.apiclasses.AbstractApiInterface import AbstractApiInterface
 from apiextractors.apidataclasses import DataLine, RawDataCollection
 from datastructures.DataCollection import ProcessedDataCollection
 from datastructures import DataTypes
@@ -103,7 +103,7 @@ class IbgeAgregatesApi(AbstractApiInterface):
             series_years = new_series_years
         
          for year, value in time_series.items(): #loop pelo dicionario com o ano como chave e o valor do dado como value
-            new_data_point:DataLine = DataLine(city_id, year, data_name,value) #cria um novo ponto de dado, mas sem o numero de multiplicação #nem o valor   
+            new_data_point:DataLine = DataLine(city_id, year,value) #cria um novo ponto de dado, mas sem o numero de multiplicação #nem o valor   
             if value in self.IBGE_NAN_CODES:  #o valor representa um código especial do IBGE para valores com problemas
                new_data_point.value = self.IBGE_NAN_CODES[value]["val"]
                new_data_point.data_type = self.IBGE_NAN_CODES[value]["type"]
