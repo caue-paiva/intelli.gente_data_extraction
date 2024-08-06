@@ -59,12 +59,21 @@ def merge_two_csv()->None:
    parse_str = lambda x: x.lower().replace(" ","")
 
    df1 = pd.read_csv(__CSV_FILE_PATH)
+   print(df1.info())
    df2 = pd.read_csv(csv2_path)
 
+   df1_copy = df1.copy()
+
    df2["Unidade Federativa"] = df2["Unidade Federativa"].apply(parse_str)
-   df1["nome_uf"] =  df1["nome_uf"].apply(parse_str)
+   df2["Sigla"] = df2["Sigla"].apply(lambda x: x.replace(" ","").replace("\t",""))
+   df1_copy["nome_uf"] =  df1_copy["nome_uf"].apply(parse_str)
 
-   df1.merge(df2,how="left",left_on="nome_uf",right_on="Unidade Federativa")
+   merged = df1_copy.merge(df2,how="left",left_on="nome_uf",right_on="Unidade Federativa")
+
+   position = df1.columns.get_loc("nome_uf") + 1
+   df1.insert(position,"sigla_uf", merged["Sigla"])
+  
+   df1 = df1.drop(["Unnamed: 0"],axis="columns")
+   df1.to_csv("info_municipios_ibge.csv",index=False)
    print(df1.info())
-
-   df1.to_csv("mergado.csv")
+   print(df1["sigla_uf"].value_counts())

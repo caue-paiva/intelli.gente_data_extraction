@@ -1,6 +1,7 @@
 /intelienv 
 /intellienv
 *.csv
+!InteligenteEtl/citiesinfo/info_municipios_ibge.csv
 *.xlsx
 *.env
 *.egg-info
