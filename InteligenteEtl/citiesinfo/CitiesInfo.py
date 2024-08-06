@@ -48,3 +48,23 @@ def get_city_codes_names_map(codes_as_keys:bool = False)->dict[str,int]:
 def get_number_of_cities()->int:
    df:pd.DataFrame = pd.read_csv(__CSV_FILE_PATH)
    return len(df[__CITY_CODE_COL])
+
+def get_city_code_from_string(city_name:str,city_state:str)->int:
+   parse_string = lambda x: x.lower().replace(" ","") #parsing nas strings
+   city_name = parse_string(city_name)
+
+
+def merge_two_csv()->None:
+   csv2_path = os.path.join(__CURRENT_DIR,"codigos.csv")
+   parse_str = lambda x: x.lower().replace(" ","")
+
+   df1 = pd.read_csv(__CSV_FILE_PATH)
+   df2 = pd.read_csv(csv2_path)
+
+   df2["Unidade Federativa"] = df2["Unidade Federativa"].apply(parse_str)
+   df1["nome_uf"] =  df1["nome_uf"].apply(parse_str)
+
+   df1.merge(df2,how="left",left_on="nome_uf",right_on="Unidade Federativa")
+   print(df1.info())
+
+   df1.to_csv("mergado.csv")
