@@ -1,9 +1,9 @@
 from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
 from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
-from webscrapping.scrapperclasses import FormalJobsScrapper
+from webscrapping.scrapperclasses import FormalJobsScrapper, IdhScrapper
 from webscrapping.extractorclasses import  FormalJobsExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi
-from datastructures import BaseFileType
+from datastructures import BaseFileType, YearDataPoint
 import pandas as pd
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
@@ -51,5 +51,12 @@ def run_formal_jobs():
    collection = obj.extract_processed_collection(scrapper)
    return collection.df
 
+def run_IDH():
+   scrapper = IdhScrapper()
+   list_data_points:list[YearDataPoint] = scrapper.extract_database()
+   for point in list_data_points:
+      point.df.to_csv("teste.csv")
+
+
 if __name__ == "__main__":
-   run_api_ipea()
+   run_IDH()
