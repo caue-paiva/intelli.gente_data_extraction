@@ -1,15 +1,13 @@
-from typing import Type
 from datastructures import ProcessedDataCollection, YearDataPoint , DataTypes
 from .AbstractDataExtractor import AbstractDataExtractor
 from webscrapping.scrapperclasses import CityPaymentsScrapper
 import pandas as pd
-import os
 
 class CityPaymentsExtractor(AbstractDataExtractor):
 
    EXTRACTED_DATA_COL = "CAPAG" #nome da coluna dos dados que buscamos
    EXTRACTED_CITY_CODE_COLS = ("código município completo","cod.ibge") #2 possibilidades pra a coluna com os códigos dos municípios
-   DATA_NAME = "CAPAG municipio"
+   DATA_NAME = "Capacidade de pagamento dos municípios (CAPAG)"
    NULL_IDENTIFIER = ("n.d.","N.D.","n.e.","N.E.")
    DATA_CATEGORY = "Finanças Públicas"
    DTYPE = DataTypes.STRING
