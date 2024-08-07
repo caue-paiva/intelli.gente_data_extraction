@@ -127,7 +127,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
 
       return df
  
-   def extract_processed_collection(self, scrapper: Type[DatasusLinkScrapper])->ProcessedDataCollection:
+   def extract_processed_collection(self, scrapper: Type[DatasusLinkScrapper])->list[ProcessedDataCollection]:
       """
       Função da interface que recebe um objeto scrapper, chama a função dele que retorna o df extraido do site do datasus.
       Esse DF retornado é processado, valores nulos são removidos, e o df é colocado no formato certo para ser inserido no BD.
@@ -140,8 +140,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
          data_identifier (str): nome do dado
       
       Return:
-
-         (ProcessedDataCollection): Classe com os dados já processados e prontos para serem mandados pro BD
+         (list[ProcessedDataCollection]): Lista contendo objetos dessa Classe com os dados já processados e prontos para serem mandados pro BD
          
       """
       data_list:list[YearDataPoint] = scrapper.extract_database()
@@ -156,13 +155,14 @@ class DatasusDataExtractor(AbstractDataExtractor):
       processed_df = self.__convert_column_values(processed_df,scrapper.data_info.value["dtype"])
       processed_df = self.update_city_code(processed_df, self.CITY_CODE_COL)
      
-      return ProcessedDataCollection(
+      collection =  ProcessedDataCollection(
          category= data_info.value["data_topic"],
          dtype= scrapper.data_info.value["dtype"],
          data_name= data_info.value["data_name"],
          time_series_years= time_series_years,
          df = processed_df
       )
+      return [collection]
 
 if __name__ == "__main__":
 

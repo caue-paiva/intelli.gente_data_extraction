@@ -69,8 +69,7 @@ class CategoryDataExtractor(AbstractDataExtractor):
          collection = self.__get_processed_collection(concatenated_df,data_point,time_series_years)
          processed_data_list.append(
             collection
-         )
-      print(processed_data_list[0].df.info())
+      )
       return processed_data_list
 
    def __change_col_dtypes(self,df:pd.DataFrame)->pd.DataFrame:

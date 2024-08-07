@@ -3,7 +3,7 @@ from datastructures import ProcessedDataCollection, YearDataPoint
 from datastructures import DataTypes
 from .AbstractDataExtractor import AbstractDataExtractor
 import pandas as pd
-from citiesinfo import get_city_code_from_string, match_city_names_with_codes
+from citiesinfo import  match_city_names_with_codes
 
 
 class IdhExtractor(AbstractDataExtractor):
@@ -20,7 +20,7 @@ class IdhExtractor(AbstractDataExtractor):
       time_series_years:list[int] = YearDataPoint.get_years_from_list(data_points)
 
       df = self._concat_data_points(data_points) #junta todos os dfs da lista de datapoint e add coluna do ano
-      df = self.__replace_city_names_for_codes2(df) #troca o nome da cidade por códigos de municípios
+      df = self.__replace_city_names_for_codes(df) #troca o nome da cidade por códigos de municípios
       df = self.__drop_unnecessary_cols(df) #retira as colunas desnecessárias
       final_df = self.__add_and_rename_cols(df) #add colunas e renomeia algumas
 
@@ -45,21 +45,6 @@ class IdhExtractor(AbstractDataExtractor):
       return df
    
    def __replace_city_names_for_codes(self,df:pd.DataFrame)->pd.DataFrame:
-      get_city_state_code = lambda x: x[ x.find("(")+1:x.find("(")+3 ] #string: "São Paulo (SP) vira SP"
-      extract_city_name_and_state = lambda x: get_city_code_from_string(
-         city_name=x[ : x.find("(") ], #toda a string até os parênteses
-         city_state=get_city_state_code(x) #pega código da cidade
-      )
-      print("antes do apply")
-      df[self.CITY_CODE_COL] = df[self.EXTRACTED_CITY_NAME_COL].apply(extract_city_name_and_state) #cria a coluna de códigos dos municípios
-      print("depois do apply")
-      print(df.value_counts())
-      df = df[ df[self.CITY_CODE_COL] != -1 ] #função de inferir código do município retorna -1 caso não seja possível inferir o município
-      df = df.drop(self.EXTRACTED_CITY_NAME_COL,axis="columns") #tira coluna de nomes dos municípios
-
-      return df
-   
-   def __replace_city_names_for_codes2(self,df:pd.DataFrame)->pd.DataFrame:
       get_city_state_code = lambda x: x[ x.find("(")+1:x.find("(")+3 ] #string: "São Paulo (SP) vira SP"
       df["codigo_uf"] = df[self.EXTRACTED_CITY_NAME_COL].apply(get_city_state_code) #cria coluna de siglas do estado
       df[self.EXTRACTED_CITY_NAME_COL] = df[self.EXTRACTED_CITY_NAME_COL].apply(lambda x: x[ : x.find("(") ])
