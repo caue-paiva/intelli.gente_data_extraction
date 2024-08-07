@@ -1,6 +1,6 @@
 from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
 from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
-from webscrapping.scrapperclasses import FormalJobsScrapper, IdhScrapper
+from webscrapping.scrapperclasses import FormalJobsScrapper, IdhScrapper, SnisScrapper
 from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi
 from datastructures import BaseFileType, YearDataPoint
@@ -61,4 +61,5 @@ def run_IDH():
 
 
 if __name__ == "__main__":
-   run_IDH()
+   obj = SnisScrapper(4)
+   obj.extract_snis()

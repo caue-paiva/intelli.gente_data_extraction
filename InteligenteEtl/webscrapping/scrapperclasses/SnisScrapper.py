@@ -4,7 +4,7 @@ import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
-
+import pandas as pd
 
 class SnisScrapper():
    """
@@ -16,10 +16,10 @@ class SnisScrapper():
    INDICATOR_CATEGORIES = ["AE - Informações gerais","AE - Indicadores operacionais - água","AE - Indicadores operacionais - esgotos",
    "RS - Informações sobre coleta domiciliar e pública","RS - Informações sobre coleta seletiva e triagem"]
 
-   years_to_extract: int #numero máximo de anos que será extraido da base, é um valor dado na instanciação do objeto
+   num_years_to_extract: int #numero máximo de anos que será extraido da base, é um valor dado na instanciação do objeto
 
-   def __init__(self,years_to_extract:int) -> None:
-      years_to_extract = years_to_extract
+   def __init__(self,num_years_to_extract:int) -> None:
+      self.num_years_to_extract = num_years_to_extract
 
    def __close_select_window(self,element)->bool:
       try:
@@ -98,19 +98,42 @@ class SnisScrapper():
       except:
          return False
          
-   def __select_necessary_indicators(self,element:WebElement)->bool:
+   def __select_necessary_indicators_families(self,element:WebElement)->bool:
       try: 
          options_list = element.find_elements(By.TAG_NAME,"input")
          parsed_categories:list[str] = list(map(lambda x: x.lower().replace(" ","") ,self.INDICATOR_CATEGORIES))
          for option in options_list:
-            option_name:str = option.get_attribute("title")
-            parsed_option:str = option_name.lower().replace(" ","")  
-            if parsed_option in parsed_categories:
-               option.click()
+            option.click()
          return True
       except Exception as e:
          print(f"Falha ao selecionar os indicadores necessários: {e}")
          return False
+
+   def __select_necessary_indicators(self,driver:webdriver.Chrome)->bool:
+      p_tag = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//p[label[@for='fk_glossario']]"))
+      )
+      print("achou o p")
+      
+      button = p_tag.find_element(By.TAG_NAME, "button")
+      button.click()
+      print("clicou")
+      time.sleep(3)
+
+      first_input_num: int = 0
+      while True:
+         try:
+          label = driver.find_element(By.XPATH, f"//label[@for='ui-multiselect-fk_glossario-option-{first_input_num}']")
+          input = label.find_element(By.TAG_NAME,"input")
+          indicator:str = input.get_attribute("title")  
+          print(indicator) 
+          first_input_num+= 1
+         except:
+            break
+      time.sleep(4)
+      menu_div = driver.find_element(By.ID,"multiselect_menu_fk_glossario")
+      self.__close_select_window(menu_div)
+      print(first_input_num)
 
    def __extraction_run(self,driver:webdriver.Chrome, all_years:list[int] ,first_run:bool = False)->tuple[str,list[int]]:   
       """
@@ -151,7 +174,7 @@ class SnisScrapper():
             for input_element in input_elements:
                year:str = input_element.get_attribute('value')
                all_years.append(int(year))
-               if len(all_years) >= self.years_to_extract:
+               if len(all_years) >= self.num_years_to_extract:
                   break
 
          years_to_extract_in_run = all_years[:self.YEARS_EXTRACTED_PER_RUN] #anos para serem extraidos nessa rodada
@@ -196,7 +219,7 @@ class SnisScrapper():
          )
          #acha o elemento <p> com o botão para clicar que mostra as opções de indicadores
          p_element = WebDriverWait(driver, 10).until(
-         EC.presence_of_element_located((By.XPATH, "//p[label[@for='cod_fam_info']]"))
+                EC.presence_of_element_located((By.XPATH, "//p[label[@for='cod_fam_info']]"))
          )
 
          #clica no botão para mostra o menu de selecionar os indicadores
@@ -207,11 +230,15 @@ class SnisScrapper():
             EC.presence_of_element_located((By.ID, "multiselect_menu_cod_fam_info"))
          )
 
+         time.sleep(4)
+         self.__select_necessary_indicators_families(indacator_options_div) #seleciona os indicadores necessários
          time.sleep(3)
-         self.__select_necessary_indicators(indacator_options_div) #seleciona os indicadores necessários
-         
-         time.sleep(2)
          self.__close_select_window(indacator_options_div) #fecha janela de seleção das opções
+         time.sleep(3)
+         print("selecionar indacores")
+         self.__select_necessary_indicators(driver)
+         time.sleep(3)
+
          time.sleep(2)
          self.__click_query_button(driver)
          self.__wait_for_progress_bar(driver,True)
@@ -220,7 +247,7 @@ class SnisScrapper():
          return csv_link,years_to_extract_in_run #retorna o link do CSV e a lista de anos a que ele se refere
       
       except Exception as e:
-         print(f"Falha ao tentar extrair os anos {years_to_extract_in_run}: {e}")
+         print(f"Falha ao tentar extrair os dados do Snis: {e}")
          return "",[]
 
    def extract_snis(self)->bool:
@@ -240,16 +267,22 @@ class SnisScrapper():
       years_to_extract_list:list[int] = []
       list_of_csvs_and_their_years:list[tuple[str,list[int]]] = []
 
-      self.__extraction_run(driver,years_to_extract_list,True) #primeira rodada do algoritmo, pega a lista de todos os anos
-      print(years_to_extract_list)
+      run_result:tuple[str,list[int]] =  self.__extraction_run(driver,years_to_extract_list,True) #primeira rodada do algoritmo, pega a lista de todos os anos
+      list_of_csvs_and_their_years.append(run_result)
+      print(list_of_csvs_and_their_years)
+
+      #df = pd.read_csv(list_of_csvs_and_their_years[0][0],encoding="latin",sep=";")
+      #df.to_csv("snis.csv")
       
-      years_to_extract_list = years_to_extract_list[self.YEARS_EXTRACTED_PER_RUN:]
-      while years_to_extract_list:
+      """
+      years_to_extract_list = years_to_extract_list[self.YEARS_EXTRACTED_PER_RUN:] #o algoritmo já rodou, os anos iniciais já foram extraídos
+      while years_to_extract_list: #enquanto tiver anos para extrair
          driver.refresh()
          time.sleep(3)
-         run_result:tuple[str,list[int]] = self.__extraction_run(driver,years_to_extract_list,False)
+         run_result = self.__extraction_run(driver,years_to_extract_list,False)
          list_of_csvs_and_their_years.append(run_result)
          years_to_extract_list = years_to_extract_list[self.YEARS_EXTRACTED_PER_RUN:]
+      """
 
 if __name__ == "__main__":
    scrapper = SnisScrapper()
