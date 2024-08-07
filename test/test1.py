@@ -1,11 +1,10 @@
 from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
 from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
 from webscrapping.scrapperclasses import FormalJobsScrapper, IdhScrapper
-from webscrapping.extractorclasses import  FormalJobsExtractor
+from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi
 from datastructures import BaseFileType, YearDataPoint
 import pandas as pd
-from citiesinfo import get_city_code_from_string
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
    scrapper = DatasusLinkScrapper(abreviation)
@@ -54,9 +53,11 @@ def run_formal_jobs():
 
 def run_IDH():
    scrapper = IdhScrapper()
-   list_data_points:list[YearDataPoint] = scrapper.extract_database()
-   for point in list_data_points:
-      point.df.to_csv("teste.csv")
+   extractor = IdhExtractor()
+   collections = extractor.extract_processed_collection(scrapper)
+   for collect in collections:
+      print(collect.df.info())
+      collect.df.to_csv("local.csv")
 
 
 if __name__ == "__main__":

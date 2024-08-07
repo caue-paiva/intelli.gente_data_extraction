@@ -3,3 +3,4 @@ from .DatasusDataExtractor import DatasusDataExtractor
 from .IbgePibCidadesDataExtractor import CategoryDataExtractor
 from .FormalJobsExtractor import FormalJobsExtractor
 from .CityPaymentsExtractor import CityPaymentsExtractor
+from .IdhExtractor import IdhExtractor

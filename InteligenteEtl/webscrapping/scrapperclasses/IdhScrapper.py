@@ -65,7 +65,7 @@ class IdhScrapper(AbstractScrapper):
 
             button = driver.find_element(By.XPATH, '//button[@onclick="listarConsulta()"]') #acha o botão para baixar os arquivos
             button.click()
-            time.sleep(8)
+            time.sleep(6)
             data_point:YearDataPoint = self.__get_year_data_collection(int(option.text)) #extrai o df e cria um objeto YearDataPoint
             data_points.append(data_point)
 
