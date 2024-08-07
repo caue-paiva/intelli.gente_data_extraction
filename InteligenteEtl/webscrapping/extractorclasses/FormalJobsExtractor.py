@@ -60,7 +60,7 @@ class FormalJobsExtractor(AbstractDataExtractor):
 
       return df
    
-   def extract_processed_collection(self,formal_jobs_scrapper:FormalJobsScrapper)-> ProcessedDataCollection:
+   def extract_processed_collection(self,formal_jobs_scrapper:FormalJobsScrapper)-> list[ProcessedDataCollection]:
       data_list = formal_jobs_scrapper.extract_database(delete_extracted_files=True)
       time_series_years:list[int] = YearDataPoint.get_years_from_list(data_list)
 
@@ -84,5 +84,5 @@ class FormalJobsExtractor(AbstractDataExtractor):
          time_series_years=time_series_years,
          df= df
       )
-      return collection
+      return [collection]
    

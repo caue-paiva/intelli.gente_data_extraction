@@ -1,4 +1,4 @@
-import re, os
+import re
 import pandas as pd
 from .AbstractScrapper import AbstractScrapper
 from selenium import webdriver

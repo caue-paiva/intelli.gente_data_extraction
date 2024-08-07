@@ -1,9 +1,9 @@
 from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
 from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
-from webscrapping.scrapperclasses import FormalJobsScrapper
-from webscrapping.extractorclasses import  FormalJobsExtractor
+from webscrapping.scrapperclasses import FormalJobsScrapper, IdhScrapper
+from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi
-from datastructures import BaseFileType
+from datastructures import BaseFileType, YearDataPoint
 import pandas as pd
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
@@ -12,7 +12,7 @@ def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
    extractor = DatasusDataExtractor()
    processed_data = extractor.extract_processed_collection(scrapper)
 
-   return processed_data.df
+   return processed_data[0].df
 
 def run_city_gdp(file_type:BaseFileType)->None:
    scrapper = IbgePibCidadesScrapper(file_type)
@@ -23,7 +23,7 @@ def run_city_gdp(file_type:BaseFileType)->None:
       #print(collec)
       collec.df.to_csv(f"{collec.data_name}.csv")
 
-def run_MUNIC_base(file_type:BaseFileType)->list[pd.DataFrame]:
+def run_MUNIC_base(file_type:BaseFileType)->list[YearDataPoint]:
    scrapper = IbgeBasesMunicScrapper(file_type,False)
    return scrapper.extract_database()
 
@@ -42,14 +42,23 @@ def run_CAPAG():
    scrapper = CityPaymentsScrapper()
    obj = CityPaymentsExtractor()
    list_ = obj.extract_processed_collection(scrapper)
-   list_.df.to_csv(f"CAPAG_PROCESSADO{1}.csv")
+   list_[0].df.to_csv(f"CAPAG_PROCESSADO{1}.csv")
 
 def run_formal_jobs():
    scrapper = FormalJobsScrapper()
    obj = FormalJobsExtractor()
 
-   collection = obj.extract_processed_collection(scrapper)
-   return collection.df
+   collection_list = obj.extract_processed_collection(scrapper)
+   return collection_list[0].df
+
+def run_IDH():
+   scrapper = IdhScrapper()
+   extractor = IdhExtractor()
+   collections = extractor.extract_processed_collection(scrapper)
+   for collect in collections:
+      print(collect.df.info())
+      collect.df.to_csv("idh-m.csv",index=False)
+
 
 if __name__ == "__main__":
-   run_api_ipea()
+   run_IDH()

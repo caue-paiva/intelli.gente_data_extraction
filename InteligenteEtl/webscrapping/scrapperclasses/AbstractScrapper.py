@@ -130,3 +130,10 @@ class AbstractScrapper(ABC):
             os.rmdir(self.DOWNLOADED_FILES_PATH)
         except Exception as e:
                print(f"falha ao deletar diretório do arquivo extraído. Erro: {e}")
+
+   def _create_downloaded_files_dir(self)->str:
+        dir_path: str = os.path.join(os.getcwd(),self.DOWNLOADED_FILES_DIR)
+        if not os.path.exists(dir_path):
+            os.mkdir(dir_path)
+        
+        return dir_path

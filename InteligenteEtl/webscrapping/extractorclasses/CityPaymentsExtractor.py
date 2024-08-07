@@ -12,7 +12,7 @@ class CityPaymentsExtractor(AbstractDataExtractor):
    DATA_CATEGORY = "Finanças Públicas"
    DTYPE = DataTypes.STRING
 
-   def extract_processed_collection(self, scrapper_class_obj: CityPaymentsScrapper)->ProcessedDataCollection:
+   def extract_processed_collection(self, scrapper_class_obj: CityPaymentsScrapper)->list[ProcessedDataCollection]:
       list_of_datapoints:list[YearDataPoint] = scrapper_class_obj.extract_database()
       
       acess_and_parse_dfs = lambda x: YearDataPoint(self.__parse_columns(x.df),x.data_year) #aplica a função de parsing das colunas no df de cada objeto
@@ -22,13 +22,14 @@ class CityPaymentsExtractor(AbstractDataExtractor):
       final_df:pd.DataFrame = self.__add_missing_cols(appended_df)
       time_series_years:list[int] = YearDataPoint.get_years_from_list(list_of_datapoints)
 
-      return ProcessedDataCollection(
+      collection = ProcessedDataCollection(
             category=self.DATA_CATEGORY,
             dtype=self.DTYPE,
             data_name=self.DATA_NAME,
             time_series_years=time_series_years,
             df=final_df
       )
+      return [collection]
       
    def __parse_columns(self,df:pd.DataFrame)->pd.DataFrame:
       """
