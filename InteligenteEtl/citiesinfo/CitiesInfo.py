@@ -70,9 +70,10 @@ def match_city_names_with_codes(df_with_city_names:pd.DataFrame,city_names_col:s
 
    df:pd.DataFrame = pd.read_csv(__CSV_FILE_PATH)
    df["nome_municipio"] = df["nome_municipio"].apply(parse_string) #parsing na coluna de nome de municípios
-   df_with_city_names[city_names_col] = df_with_city_names[city_names_col].apply(parse_string)
+   df_filtered = df.loc[:,["nome_municipio","sigla_uf","codigo_municipio"]]
 
-   merged = df_with_city_names.merge(df,how="inner",left_on=[city_names_col,states_col],right_on=["nome_municipio","sigla_uf"])
+   df_with_city_names[city_names_col] = df_with_city_names[city_names_col].apply(parse_string)
+   merged = df_with_city_names.merge(df_filtered,how="inner",left_on=[city_names_col,states_col],right_on=["nome_municipio","sigla_uf"])
 
    merged.to_csv("merged.csv")
    return merged

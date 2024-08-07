@@ -57,7 +57,7 @@ def run_IDH():
    collections = extractor.extract_processed_collection(scrapper)
    for collect in collections:
       print(collect.df.info())
-      collect.df.to_csv("local.csv")
+      collect.df.to_csv("local.csv",index=False)
 
 
 if __name__ == "__main__":

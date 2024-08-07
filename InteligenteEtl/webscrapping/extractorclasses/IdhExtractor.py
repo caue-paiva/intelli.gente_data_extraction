@@ -18,12 +18,10 @@ class IdhExtractor(AbstractDataExtractor):
    def extract_processed_collection(self, scrapper: IdhScrapper)-> list[ProcessedDataCollection]:
       data_points:list[YearDataPoint] = scrapper.extract_database()
       time_series_years:list[int] = YearDataPoint.get_years_from_list(data_points)
-      df2 = data_points[0].df
-      df2.to_csv("intermediario.csv")
 
       df = self._concat_data_points(data_points) #junta todos os dfs da lista de datapoint e add coluna do ano
-      df = self.__drop_unnecessary_cols(df) #retira as colunas desnecessárias
       df = self.__replace_city_names_for_codes2(df) #troca o nome da cidade por códigos de municípios
+      df = self.__drop_unnecessary_cols(df) #retira as colunas desnecessárias
       final_df = self.__add_and_rename_cols(df) #add colunas e renomeia algumas
 
       collection = ProcessedDataCollection(
@@ -67,15 +65,12 @@ class IdhExtractor(AbstractDataExtractor):
       df[self.EXTRACTED_CITY_NAME_COL] = df[self.EXTRACTED_CITY_NAME_COL].apply(lambda x: x[ : x.find("(") ])
       
       df = match_city_names_with_codes(df,self.EXTRACTED_CITY_NAME_COL,"codigo_uf")
-      
-      print("depois do apply")
-      print(df.value_counts())
       df = df.drop(self.EXTRACTED_CITY_NAME_COL,axis="columns") #tira coluna de nomes dos municípios
 
       return df
    
    def __drop_unnecessary_cols(self,df:pd.DataFrame)->pd.DataFrame:
-      necessary_cols: list[str] = [self.EXTRACTED_CITY_NAME_COL,self.EXTRACTED_DATA_VALUES_COL]#lista de colunas necessárias
+      necessary_cols: list[str] = [self.EXTRACTED_CITY_NAME_COL,self.EXTRACTED_DATA_VALUES_COL,self.YEAR_COLUMN,self.CITY_CODE_COL]#lista de colunas necessárias
       all_cols:list[str] = df.columns
 
       cols_to_drop:list[str] = [x for x in all_cols if x not in necessary_cols]
