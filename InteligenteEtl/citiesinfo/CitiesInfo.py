@@ -53,27 +53,20 @@ def get_city_code_from_string(city_name:str,city_state:str)->int:
    parse_string = lambda x: x.lower().replace(" ","") #parsing nas strings
    city_name = parse_string(city_name)
 
+   df:pd.DataFrame = pd.read_csv(__CSV_FILE_PATH)
 
-def merge_two_csv()->None:
-   csv2_path = os.path.join(__CURRENT_DIR,"codigos.csv")
-   parse_str = lambda x: x.lower().replace(" ","")
+   df = df[df["sigla_uf"] == city_state] #filtra por estado
+   df["nome_municipio"] = df["nome_municipio"].apply(parse_string) #parsing na coluna de nome de municípios
 
-   df1 = pd.read_csv(__CSV_FILE_PATH)
-   print(df1.info())
-   df2 = pd.read_csv(csv2_path)
+   df = df[ df["nome_municipio"] == city_name]
 
-   df1_copy = df1.copy()
+   if df.empty:
+      raise RuntimeError("Não foi possível achar cidade no csv de referência do IBGE")
+   elif df.shape[0] > 1:
+      raise RuntimeError("Foi possível achado mais de uma cidade de match no csv de referência do IBGE")
+   
+   return df["codigo_municipio"].iloc[-1]
 
-   df2["Unidade Federativa"] = df2["Unidade Federativa"].apply(parse_str)
-   df2["Sigla"] = df2["Sigla"].apply(lambda x: x.replace(" ","").replace("\t",""))
-   df1_copy["nome_uf"] =  df1_copy["nome_uf"].apply(parse_str)
 
-   merged = df1_copy.merge(df2,how="left",left_on="nome_uf",right_on="Unidade Federativa")
 
-   position = df1.columns.get_loc("nome_uf") + 1
-   df1.insert(position,"sigla_uf", merged["Sigla"])
-  
-   df1 = df1.drop(["Unnamed: 0"],axis="columns")
-   df1.to_csv("info_municipios_ibge.csv",index=False)
-   print(df1.info())
-   print(df1["sigla_uf"].value_counts())
+

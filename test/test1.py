@@ -5,7 +5,7 @@ from webscrapping.extractorclasses import  FormalJobsExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi
 from datastructures import BaseFileType, YearDataPoint
 import pandas as pd
-from citiesinfo import merge_two_csv, get_city_codes, get_city_names
+from citiesinfo import get_city_code_from_string
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
    scrapper = DatasusLinkScrapper(abreviation)
@@ -60,4 +60,4 @@ def run_IDH():
 
 
 if __name__ == "__main__":
-   print(get_city_codes())
+   run_IDH()
