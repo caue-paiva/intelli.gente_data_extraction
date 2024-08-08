@@ -1,25 +1,33 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import time
+import time,csv,re, unicodedata
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
+import pandas as pd
 
+from datastructures import YearDataPoint
+from .AbstractScrapper import AbstractScrapper
 
-class SnisScrapper():
+class SnisScrapper(AbstractScrapper):
    """
    TODO: completar a classe de scrapper a classe de extrator associada
    """
 
    URL = "http://app4.mdr.gov.br/serieHistorica/municipio/index/"
-   YEARS_EXTRACTED_PER_RUN = 4 #numero máximo de anos que devem ser extraidos em uma rodada, isso é feito porque qntds maiores quebram o sistema do snis
-   INDICATOR_CATEGORIES = ["AE - Informações gerais","AE - Indicadores operacionais - água","AE - Indicadores operacionais - esgotos",
-   "RS - Informações sobre coleta domiciliar e pública","RS - Informações sobre coleta seletiva e triagem"]
-
-   years_to_extract: int #numero máximo de anos que será extraido da base, é um valor dado na instanciação do objeto
-
-   def __init__(self,years_to_extract:int) -> None:
-      years_to_extract = years_to_extract
+   INDICATORS = [
+    "IN015_AE",  # Índice de coleta de esgoto
+    "IN015_RS",  # Taxa de cobertura do serviço de coleta de resíduo doméstico em relação à população total do município
+    "IN022_AE",  # Consumo médio percapita de água
+    "IN049_AE",  # Índice de perdas na distribuição
+    "IN055_AE",  # Índice de atendimento total de água
+    "CS001",     # Existe coleta seletiva formalizada pela prefeitura no município?
+    "IN056_AE",  # Índice de atendimento total de esgoto referido aos municípios atendidos com água
+    "IN024_AE",  # Índice de atendimento urbano de esgoto referido aos municípios atendidos com água
+    "IN053_RS",  # Taxa de material recolhido pela coleta seletiva (exceto mat. orgânica) em relação à quantidade total coletada de resíduos sól. domésticos
+    "IN016_AE"   # Índice de tratamento de esgoto
+   ]
+   EXTRACTED_YEAR_COL = 'Ano de Referência'
 
    def __close_select_window(self,element)->bool:
       try:
@@ -60,11 +68,12 @@ class SnisScrapper():
          )
 
    def __get_csv_link(self,driver:webdriver.Chrome)->str:
+      print("get_csv_link")
       try:
-         time.sleep(6)
+         time.sleep(15)
          generate_table_button: WebElement = driver.find_element(By.ID,"bt_relatorio")
          generate_table_button.click()
-         time.sleep(10)
+         time.sleep(30)
       
          class HrefContainsCsv: #classe para usar no selenium,dando overwrite na classe padrão de um método ,serve para verificar e esperar caso o link do CSV n apareça
             def __init__(self, locator):
@@ -88,39 +97,62 @@ class SnisScrapper():
          print(e)
          return ""
 
-   def __select_years(self,input_elements:list[WebElement], list_of_years:list[int])->bool:
+   def __select_years(self,input_elements:list[WebElement])->bool:
       try:
          for input_element in input_elements:
-            year:int = int(input_element.get_attribute('value'))
-            if year in list_of_years:
-               input_element.click()
+            #year:int = int(input_element.get_attribute('value'))
+            #if year in list_of_years:
+            input_element.click()
          return True
       except:
          return False
          
-   def __select_necessary_indicators(self,element:WebElement)->bool:
+   def __select_necessary_indicators_families(self,element:WebElement)->bool:
       try: 
          options_list = element.find_elements(By.TAG_NAME,"input")
-         parsed_categories:list[str] = list(map(lambda x: x.lower().replace(" ","") ,self.INDICATOR_CATEGORIES))
          for option in options_list:
-            option_name:str = option.get_attribute("title")
-            parsed_option:str = option_name.lower().replace(" ","")  
-            if parsed_option in parsed_categories:
-               option.click()
+            option.click()
          return True
       except Exception as e:
          print(f"Falha ao selecionar os indicadores necessários: {e}")
          return False
 
-   def __extraction_run(self,driver:webdriver.Chrome, all_years:list[int] ,first_run:bool = False)->tuple[str,list[int]]:   
+   def __select_necessary_indicators(self,driver:webdriver.Chrome)->bool:
+      p_tag = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//p[label[@for='fk_glossario']]"))
+      )
+      print("achou o p")
+      
+      button = p_tag.find_element(By.TAG_NAME, "button")
+      button.click()
+      time.sleep(3)
+
+      first_input_num: int = 0
+      while True:
+         try:
+          label = driver.find_element(By.XPATH, f"//label[@for='ui-multiselect-fk_glossario-option-{first_input_num}']")
+          input = label.find_element(By.TAG_NAME,"input")
+          indicator_text:str = input.get_attribute("title").upper() #deixa em maiusculo por que os indicadores estão em maiúsculo
+          for indicator in self.INDICATORS: #todos ja estão selecionados, vamos clicar para deselecionar os que não queremos
+            if indicator in indicator_text:  #ele é um dos buscados, não desclica
+                 break
+          else: #não teve break no for
+             input.click() 
+             
+          first_input_num += 1
+         except:
+            break
+      time.sleep(4)
+      menu_div = driver.find_element(By.ID,"multiselect_menu_fk_glossario")
+      self.__close_select_window(menu_div)
+
+   def __extraction_run(self,driver:webdriver.Chrome)->str:   
       """
       Realiza uma rodada da extração (carregar a página, selecionar os todos e uma lista de X anos) e extrair esses dados
       Múltiplas rodadas são necessárias pois o sistema da problema quando muitos anos são selecionados de uma vez
 
       Args:
          driver (webdriver.chrome): driver do selenium pro chrome
-         all_years (list[int]): lista com todos os anos disponíveis na base, inicialmente vazia na primeira chamada a essa função
-         first_run (bool): flag para ditar se essa foi a primeira rodada de extração dos dados, usado na lógica da função
       Return:
          tuple[str,list[int]]: link para o arquivo CSV com os dados e os anos contidos nele
       """
@@ -147,20 +179,8 @@ class SnisScrapper():
          select_years_div = driver.find_element(By.ID, "multiselect_menu_ano_ref")
          input_elements = select_years_div.find_elements(By.NAME, "multiselect_ano_ref")
 
-         if first_run: #primeira rodada da extração
-            for input_element in input_elements:
-               year:str = input_element.get_attribute('value')
-               all_years.append(int(year))
-               if len(all_years) >= self.years_to_extract:
-                  break
-
-         years_to_extract_in_run = all_years[:self.YEARS_EXTRACTED_PER_RUN] #anos para serem extraidos nessa rodada
-         
-         self.__select_years(input_elements,years_to_extract_in_run) #seleciona o anos que vão ser extraidos
+         self.__select_years(input_elements) #seleciona o anos que vão ser extraidos
          self.__close_select_window(select_years_div)  #fecha a janela de opções de ano
-
-         print("List of years cur:", years_to_extract_in_run)
-         print("List of years next:", all_years[self.YEARS_EXTRACTED_PER_RUN:])
 
          fieldsets = driver.find_elements(By.CLASS_NAME, "grupo")
          for fieldset in fieldsets:
@@ -196,7 +216,7 @@ class SnisScrapper():
          )
          #acha o elemento <p> com o botão para clicar que mostra as opções de indicadores
          p_element = WebDriverWait(driver, 10).until(
-         EC.presence_of_element_located((By.XPATH, "//p[label[@for='cod_fam_info']]"))
+                EC.presence_of_element_located((By.XPATH, "//p[label[@for='cod_fam_info']]"))
          )
 
          #clica no botão para mostra o menu de selecionar os indicadores
@@ -207,50 +227,89 @@ class SnisScrapper():
             EC.presence_of_element_located((By.ID, "multiselect_menu_cod_fam_info"))
          )
 
+         time.sleep(6)
+         self.__select_necessary_indicators_families(indacator_options_div) #seleciona todas as famílias de indicadores
          time.sleep(3)
-         self.__select_necessary_indicators(indacator_options_div) #seleciona os indicadores necessários
-         
-         time.sleep(2)
          self.__close_select_window(indacator_options_div) #fecha janela de seleção das opções
-         time.sleep(2)
+         time.sleep(3)
+         self.__select_necessary_indicators(driver) #seleciona os indicadores necessários
+         time.sleep(3)
+
+         time.sleep(5)
+         print("query")
          self.__click_query_button(driver)
+         print("começouu de esperar")
          self.__wait_for_progress_bar(driver,True)
+         print("terminou de esperar")
          time.sleep(2)
          csv_link = self.__get_csv_link(driver)
-         return csv_link,years_to_extract_in_run #retorna o link do CSV e a lista de anos a que ele se refere
+         return csv_link #retorna o link do CSV 
       
       except Exception as e:
-         print(f"Falha ao tentar extrair os anos {years_to_extract_in_run}: {e}")
-         return "",[]
+         print(f"Falha ao tentar extrair os dados do Snis: {e}")
+         return ""
 
-   def extract_snis(self)->bool:
+   def __char_is_printable(self,char: str) -> bool:
+    category = unicodedata.category(char)
+    return category.startswith(('L', 'M', 'N', 'P', 'Z', 'S'))
+
+   def __only_alphanum_or_space(self,input_str:str)->str:
       """
-      Função (Não finalizada) para extrair os dados da base do SNIS.
-
-      Args:
-
-
-      Return:
-         TODO    
-         fazer o retorno ser dos dataframes
+      parsing nas strings para somente conter chars alfa-numericos ou espaço
       """
+      return ''.join(char for char in input_str if self.__char_is_printable(char))
+
+   def __parse_col_names_and_vals(self,df:pd.DataFrame)->pd.DataFrame:
+      """
+      Parsing básico nas colunas do df para remover espaços e outros chars chatos que tornam difícil de trabalhar com as colunas
+      """
+
+      cols:list[str] = df.columns
+      remove_weird_chars = lambda x: self.__only_alphanum_or_space(re.sub(r'["\n\t\r]', '', x).strip())
+      parse_float_nums = lambda x: x.replace(".","").replace(",",".") # '.' é a divisão do milhar (ex: 1.210) no CSV e ',' é a casa decimal
+      #o pandas precisa que o . do milhar seja removido e o ',' vire '.'
+      parse_cols = lambda x: parse_float_nums(remove_weird_chars(x))
+      cols = list(map(parse_cols,cols))
+      
+      
+      df = df.drop(df.columns[-1], axis=1) #tira a ultima coluna do df
+      cols = cols[1:] #a primeira coluna de código do IBGE não é lida corretamente, isso faz com que as colunas do DF fiquem erradas, precisamos
+      #remover ela e reassinalar as colunas
+      df.columns = cols
+
+      df = df.dropna(axis="index",ignore_index=True)
+      for col in df.columns:
+         df[col] = df[col].apply(parse_cols)
+
+      return df
+      
+   def __create_datapoints(self,df:pd.DataFrame,years:list[int])->list[YearDataPoint]:
+      data_points:list[YearDataPoint] = []
+      for year in years:
+         df_for_year = df[df[self.EXTRACTED_YEAR_COL] == year]
+         data_points.append(
+            YearDataPoint(df_for_year,year)
+         )
+      return data_points
+
+   def extract_database(self) -> list[YearDataPoint]:
       driver = webdriver.Chrome()
       driver.get(self.URL)
       driver.maximize_window()
-      years_to_extract_list:list[int] = []
-      list_of_csvs_and_their_years:list[tuple[str,list[int]]] = []
+      csv_link:str =  self.__extraction_run(driver) #primeira rodada do algoritmo, pega a lista de todos os anos
+      df = pd.read_csv(csv_link,
+                encoding="latin",
+                sep=";",
+                quotechar='"',
+                doublequote=False,
+                quoting=csv.QUOTE_MINIMAL,
+                engine='python',
+      ) 
+      df = self.__parse_col_names_and_vals(df) #parsing nos nomes das colunas e valores,
+      df = df.reset_index(drop=True) #reseta o index
 
-      self.__extraction_run(driver,years_to_extract_list,True) #primeira rodada do algoritmo, pega a lista de todos os anos
-      print(years_to_extract_list)
-      
-      years_to_extract_list = years_to_extract_list[self.YEARS_EXTRACTED_PER_RUN:]
-      while years_to_extract_list:
-         driver.refresh()
-         time.sleep(3)
-         run_result:tuple[str,list[int]] = self.__extraction_run(driver,years_to_extract_list,False)
-         list_of_csvs_and_their_years.append(run_result)
-         years_to_extract_list = years_to_extract_list[self.YEARS_EXTRACTED_PER_RUN:]
+      df = df[df[self.EXTRACTED_YEAR_COL] != '---']  #tira esse valor estranho da coluna de anos
+      df[self.EXTRACTED_YEAR_COL] = df[self.EXTRACTED_YEAR_COL].astype("int")
+      time_series_years:list[int] = df[self.EXTRACTED_YEAR_COL].value_counts().index.to_list()
 
-if __name__ == "__main__":
-   scrapper = SnisScrapper()
-   scrapper.extract_snis()
+      return self.__create_datapoints(df,time_series_years)
