@@ -43,8 +43,10 @@ class AbstractScrapper(ABC):
       """
      
       #caso o diretório para guardar os arquivos extraidos não exista, vamos criar ele
-      if not os.path.exists(self.DOWNLOADED_FILES_DIR):
-         os.makedirs(self.DOWNLOADED_FILES_DIR)
+      print("criando o dir")
+      if not os.path.exists(self.DOWNLOADED_FILES_PATH):
+         os.makedirs(self.DOWNLOADED_FILES_PATH)
+      print("criou o dir")
 
       #baixando o arquivo zip
       response = requests.get(file_url) #request get para o link do arquivo zip 
@@ -53,9 +55,10 @@ class AbstractScrapper(ABC):
          zip_file_path = os.path.join(self.DOWNLOADED_FILES_DIR, zip_file_name)
     
          with open(zip_file_path, "wb") as f:
-            f.write(response.content) #escreve o arquivo zip no diretório de dados temporários
+             f.write(response.content) #escreve o arquivo zip no diretório de dados temporários
       else:
-         raise RuntimeError("Falhou em baixar o arquivo .zip, status code da resposta:", response.status_code)
+          raise RuntimeError("Falhou em baixar o arquivo .zip, status code da resposta:", response.status_code)
+      
 
       #extraindo o arquivo zip
       with zipfile.ZipFile(os.path.join(self.DOWNLOADED_FILES_DIR, zip_file_name), "r") as zip_ref:

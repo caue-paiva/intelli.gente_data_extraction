@@ -2,7 +2,7 @@ from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtr
 from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
 from webscrapping.scrapperclasses import FormalJobsScrapper, IdhScrapper, SnisScrapper
 from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor
-from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi
+from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
 from datastructures import BaseFileType, YearDataPoint
 import pandas as pd
 
@@ -59,10 +59,12 @@ def run_IDH():
       print(collect.df.info())
       collect.df.to_csv("idh-m.csv",index=False)
 
+def run_ANATEL():
+   obj = AnatelApi()
+   list_ = obj.extract_data_points()
+   for collect in list_:
+      print(collect.df.info())
+      collect.df.to_csv(f"{collect.data_name}.csv")
 
 if __name__ == "__main__":
-   obj = SnisScrapper()
-   extr = SnisExtractor()
-   list_ = extr.extract_processed_collection(obj)
-   for collect in list_:
-      collect.df.to_csv(f"{collect.data_name}.csv")
+   run_ANATEL()
