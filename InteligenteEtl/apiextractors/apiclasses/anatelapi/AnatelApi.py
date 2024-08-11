@@ -48,7 +48,6 @@ class AnatelApi(AbstractApiInterface):
       return data["recursos"][0]["link"]
 
    def __get_processed_collection(self,dataframe_parameters:dict[str,str],data_name:str)->ProcessedDataCollection:
-      print(dataframe_parameters)
       file_name:str = dataframe_parameters["file_name"]
       filter_col:str = dataframe_parameters["filter_column"]
       filter_vals:list = dataframe_parameters["filter_values"]
@@ -76,12 +75,16 @@ class AnatelApi(AbstractApiInterface):
          axis="columns"
       )
       df = df.drop(filter_col,axis="columns")
+      
+      if dtype == DataTypes.FLOAT.value: #se o valor for um float, tem que transformar o separador decimal de , para .
+         parse_float_str = lambda x: x.replace(",",".")
+         df[self.DB_DATA_VALUE_COLUMN] =  df[self.DB_DATA_VALUE_COLUMN].apply(parse_float_str)
 
+      df[self.DB_DATA_VALUE_COLUMN] =  df[self.DB_DATA_VALUE_COLUMN].astype(dtype)
       df[self.DB_DATA_IDENTIFIER_COLUMN] = data_name
       df[self.DB_DTYPE_COLUMN] = dtype
 
       time_series_years:list[int] = list(df[self.DB_YEAR_COLUMN].value_counts().index)
-      print(time_series_years)
 
       return ProcessedDataCollection(
          category=category,

@@ -114,11 +114,8 @@ class AbstractApiInterface(ABC):
       """
      
       #caso o diretório para guardar os arquivos extraidos não exista, vamos criar ele
-      print("criando o dir")
       if not os.path.exists(self.DOWNLOADED_FILES_PATH):
          os.makedirs(self.DOWNLOADED_FILES_PATH)
-      print("criou o dir")
-      print(file_url)
 
       #baixando o arquivo zip
       response = requests.get(file_url) #request get para o link do arquivo zip 
