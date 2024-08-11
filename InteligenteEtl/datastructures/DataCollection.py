@@ -33,6 +33,7 @@ class ProcessedDataCollection:
             get_config("DTYPE_COL"):pa.Column(str,pa.Check(lambda x: x in [y.value for y in DataTypes],element_wise=True)), #valor da coluna de tipos de dados deve pertencer aos valores do enum DataTypes
             get_config("DATA_VALUE_COL"): pa.Column() #tipo da coluna de dados não é padronizado
           },
+          strict=True,
           index=pa.Index(int) #index numérico
     )
 
