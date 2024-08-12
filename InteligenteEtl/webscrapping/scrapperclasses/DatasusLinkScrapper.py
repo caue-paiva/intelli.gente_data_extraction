@@ -83,6 +83,28 @@ class DatasusDataInfo(Enum):
       "monthly_data":True,
       "dtype":DataTypes.INT
    }
+   PRENATAL_BIRTHS = {
+      "url": "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sinasc/cnv/nvbr.def",
+      "data_abrev":"nvbr", 
+      "data_name":"nascidos vivos",
+      "data_topic": "saúde",
+      "content_to_select":[],
+      "columns_to_select":["Consult pré-natal"],
+      "lines_to_select":[],
+      "monthly_data":False,
+      "dtype":DataTypes.INT
+   }
+   LOW_WEIGHT_BIRTHS = {
+      "url": "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sinasc/cnv/nvbr.def",
+      "data_abrev":"nvbr", 
+      "data_name":"nascidos vivos",
+      "data_topic": "saúde",
+      "content_to_select":[],
+      "columns_to_select":["Peso ao nascer"],
+      "lines_to_select":[],
+      "monthly_data":False,
+      "dtype":DataTypes.INT
+   }
 
     
 

@@ -75,4 +75,5 @@ def ibge_cities_network():
       collection.df.to_csv(f"{collection.data_name}.csv")
 
 if __name__ == "__main__":
-   ibge_cities_network()
+   df = run_datasus(DatasusDataInfo.LOW_WEIGHT_BIRTHS)
+   df.to_csv("datasus.csv")
