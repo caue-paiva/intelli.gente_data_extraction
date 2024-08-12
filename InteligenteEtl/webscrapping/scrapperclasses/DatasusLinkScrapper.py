@@ -164,7 +164,13 @@ class DatasusLinkScrapper(AbstractScrapper):
          csv_link_list, year_options_list = self.__selenium_page_interaction()
          list_of_dfs:list[pd.DataFrame] = []
          for link  in csv_link_list:
-            list_of_dfs.append(self._dataframe_from_link(link))
+            df_from_link = self._dataframe_from_link(link)
+            
+            if not df_from_link.empty: #df n ta vazio
+               list_of_dfs.append(df_from_link)
+            else: #df vazio, algum problem na extração ,remove o ano da lista tbm
+               link_index:int = csv_link_list.index(link)
+               year_options_list.pop(link_index)
 
          return YearDataPoint.from_lists(list_of_dfs,year_options_list) #retorna lista de objetos YearDataPoint
 
@@ -192,6 +198,9 @@ class DatasusLinkScrapper(AbstractScrapper):
          """
          Agrega (soma) coluna de certos dados do datasus (nascidos vivos com baixo peso ou baixo prénatal)
          """
+         if len(df.columns) <= 3:
+            return pd.DataFrame() #caso especial onde os dados muito antigos tem so 3 ou menos colunas, nesse caso é retornado um DF vazio
+
          df = df.copy()
          df = df.dropna()
 
@@ -292,7 +301,6 @@ class DatasusLinkScrapper(AbstractScrapper):
       
       if df is None:
          raise RuntimeError("falha em gerar o df a partir do link")
-      
       
 
       return df
