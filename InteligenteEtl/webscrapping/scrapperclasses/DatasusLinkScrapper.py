@@ -252,7 +252,7 @@ class DatasusLinkScrapper(AbstractScrapper):
          year_options_list: list[str] = list(map(lambda x :x.text, select_button.options)) #pega a lista de anos 
       
       extracted_years:list[int] = [] #lista de anos dos dados que foram extraídos
-      for year_option in year_options_list[:1]: #loop por todos os anos de dados disponíveis
+      for year_option in year_options_list: #loop por todos os anos de dados disponíveis
          link  = self.__get_csv_link_by_year(driver, select_button,year_option)
          if not link: #não foi possívei extrair o link
             continue
