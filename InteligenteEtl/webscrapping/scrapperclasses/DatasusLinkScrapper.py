@@ -83,10 +83,10 @@ class DatasusDataInfo(Enum):
       "monthly_data":True,
       "dtype":DataTypes.INT
    }
-   PRENATAL_BIRTHS = {
+   LOW_PRENATAL_BIRTHS = {
       "url": "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sinasc/cnv/nvbr.def",
       "data_abrev":"nvbr", 
-      "data_name":"nascidos vivos",
+      "data_name":"NVPN: Nascidos Vivos com Baixo Pré-Natal",
       "data_topic": "saúde",
       "content_to_select":[],
       "columns_to_select":["Consult pré-natal"],
@@ -97,7 +97,7 @@ class DatasusDataInfo(Enum):
    LOW_WEIGHT_BIRTHS = {
       "url": "http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sinasc/cnv/nvbr.def",
       "data_abrev":"nvbr", 
-      "data_name":"nascidos vivos",
+      "data_name":"NVBP: Nascidos Vivos com Baixo Peso",
       "data_topic": "saúde",
       "content_to_select":[],
       "columns_to_select":["Peso ao nascer"],
@@ -188,8 +188,43 @@ class DatasusLinkScrapper(AbstractScrapper):
 
       return df_list
       
- 
+   def __agregate_cols(self,df:pd.DataFrame)->pd.DataFrame:
+         """
+         Agrega (soma) coluna de certos dados do datasus (nascidos vivos com baixo peso ou baixo prénatal)
+         """
+         df = df.copy()
+         df = df.dropna()
 
+         ceiling:int  #teto do valor
+         regex_pattern:str #padrão de regex para achar osnúmeros dentro das colunas
+         cols_to_sum:list[str] #lista de colunas para somar
+         if self.data_info == DatasusDataInfo.LOW_WEIGHT_BIRTHS:
+            ceiling = 2499
+            regex_pattern = r"\d{3,4}"
+            cols_to_sum = []
+         elif self.data_info == DatasusDataInfo.LOW_PRENATAL_BIRTHS:
+            ceiling = 6
+            regex_pattern = r"\d{1}"
+            cols_to_sum = ["Nenhuma"] #ja começa com essa coluna pq ela n tem número mas ainda sim vai ser somada
+
+         for col in df.columns:
+            numbers_in_col:list[str] = re.findall(regex_pattern,col) #acha todos os números dentro de cada coluna do df
+            if not numbers_in_col: #não achou número na lista 
+                  continue
+            numbers_in_col:list[int] = list(map(int,numbers_in_col)) #lista de valores como int
+            if any(map(lambda x: x > ceiling,numbers_in_col)): #algum dos valores na coluna é maior que o teto
+                  break
+            cols_to_sum.append(col)
+         
+         for col in cols_to_sum:
+            df[col] = df[col].replace({"-":"0"}) #esse traça representa o zero nesses dados
+            df[col] = df[col].astype("int") #transforma em inr
+
+         df["valor"] = sum((df[col] for col in cols_to_sum)) #cria uma coluna com o valor da soma
+         cols_to_drop:list[str] = [ col for col in df.columns if col not in ["valor",self.EXTRACTED_TABLE_CITY_COL] ] 
+         df = df.drop(cols_to_drop,axis="columns") #dropa as outras colunas
+
+         return df
 
    def __selenium_page_interaction(self)->tuple[list[str],list[int]]:
       """
@@ -217,7 +252,7 @@ class DatasusLinkScrapper(AbstractScrapper):
          year_options_list: list[str] = list(map(lambda x :x.text, select_button.options)) #pega a lista de anos 
       
       extracted_years:list[int] = [] #lista de anos dos dados que foram extraídos
-      for year_option in year_options_list: #loop por todos os anos de dados disponíveis
+      for year_option in year_options_list[:1]: #loop por todos os anos de dados disponíveis
          link  = self.__get_csv_link_by_year(driver, select_button,year_option)
          if not link: #não foi possívei extrair o link
             continue
@@ -247,11 +282,19 @@ class DatasusLinkScrapper(AbstractScrapper):
       if self.data_info == DatasusDataInfo.NUMBER_OF_MEDICS:
          all_medic_types_col:str = "Total" #coluna com o total de médicos por município
          df = pd.read_csv(file_link, encoding="latin-1", sep=";",header=header_row,usecols=[self.EXTRACTED_TABLE_CITY_COL,all_medic_types_col])
+      
+      elif self.data_info in [DatasusDataInfo.LOW_WEIGHT_BIRTHS, DatasusDataInfo.LOW_PRENATAL_BIRTHS]:
+         df = pd.read_csv(file_link, encoding="latin-1", sep=";",header=header_row)
+         df = self.__agregate_cols(df)
+      
       else:
          df = pd.read_csv(file_link, encoding="latin-1", sep=";",header=header_row)
       
       if df is None:
          raise RuntimeError("falha em gerar o df a partir do link")
+      
+      
+
       return df
 
    def __select_data_options(self,driver:webdriver.Chrome)->bool:

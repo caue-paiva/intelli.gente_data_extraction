@@ -93,7 +93,7 @@ class DatasusDataExtractor(AbstractDataExtractor):
       
       Caso a lista de anos que o df se refere seja maior que 1, que é o caso se o dado for o Coeficiente de Gini 
       (caso especial) então o DF será transformado por meio do método pd.melt() para transformar um DF wide (mtas colunas) 
-      em um tall (menos colunas e mais linhas) .
+      em um tall (menos colunas e mais linhas).
 
       Args:
          df (pd.Dataframe): df bruto que vai ser processado
