@@ -57,6 +57,34 @@ Module with a CSV obtained from IBGE with all municipalities in Brazil and a .py
 ### Config
 This module has a JSON with project settings and constants (e.g., Number of data dimensions, Number of municipalities in the country, column names for the data) and a .py file created to allow retrieval of these data.
 
+
+## How to Run the Project
+
+1) Clone the repository:
+```bash
+git clone https://github.com/caue-paiva/intelli.gente_data_extraction
+```
+
+2) Enter the cloned project repository:
+
+3) Create a virtual environment:
+```bash
+python3 -m venv intelienv
+```
+
+4) Activate the virtual environment:
+```bash
+source intelienv/bin/activate
+```
+
+5) Install the dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+6) Run tests in the /test folder
+
+
 ## Known Issues
 
 1) Auto-complete of python imports in VSCODE does not work with the local InteligenteEtl package
@@ -133,6 +161,34 @@ Módulo com um CSV obtido do IBGE com todos os municípios do Brasil e um arquiv
 
 ### Config
 Esse módulo tem um JSON com configurações e constantes do projetos (Ex: Número de dimensões dos dados, Num. de municípios no país, nomes de colunas para os dados) e um arquivo .py criado para permitir a recuperação desses dados.
+
+## Como rodar o projeto 
+
+1) Dar git clone no repositório:
+```bash
+git clone https://github.com/caue-paiva/intelli.gente_data_extraction
+```
+
+2) entrar no repo clonada do projeto:
+
+3) Criar um ambiente virtual
+```bash
+python3 -m venv intelienv
+```
+
+4) Ativar o ambiente virtual:
+```bash
+source intelienv/bin/activate
+```
+
+5) Baixar as dependências:
+```bash
+pip install -r requirements.txt
+```
+
+6) Realizar testes no folder /test
+
+
 
 ## Problemas conhecidos
 
