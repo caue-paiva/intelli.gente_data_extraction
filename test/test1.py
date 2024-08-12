@@ -1,7 +1,7 @@
 from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
 from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
-from webscrapping.scrapperclasses import FormalJobsScrapper, IdhScrapper, SnisScrapper
-from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor
+from webscrapping.scrapperclasses import FormalJobsScrapper, IdhScrapper, SnisScrapper, IbgeCitiesNetworkScrapper
+from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
 from datastructures import BaseFileType, YearDataPoint
 import pandas as pd
@@ -66,5 +66,13 @@ def run_ANATEL():
       print(collect.df.info())
       collect.df.to_csv(f"{collect.data_name}.csv")
 
+def ibge_cities_network():
+   obj = IbgeCitiesNetworkScrapper()
+   extractor = IbgeCitiesNetworkExtractor()
+   list_ = extractor.extract_processed_collection(obj)
+   for collection in list_:
+      print(collection.df.info())
+      collection.df.to_csv(f"{collection.data_name}.csv")
+
 if __name__ == "__main__":
-   run_ANATEL()
+   ibge_cities_network()
