@@ -1,6 +1,6 @@
 from abc import ABC,abstractmethod
 import pandas as pd
-import os , requests , zipfile
+import os , requests , zipfile , shutil
 from datastructures import BaseFileType, YearDataPoint
 
 
@@ -44,7 +44,11 @@ class AbstractScrapper(ABC):
      
       #caso o diretório para guardar os arquivos extraidos não exista, vamos criar ele
       print("criando o dir")
+      print(self.DOWNLOADED_FILES_PATH)
       if not os.path.exists(self.DOWNLOADED_FILES_PATH):
+         os.makedirs(self.DOWNLOADED_FILES_PATH)
+      else:
+         shutil.rmtree(self.DOWNLOADED_FILES_PATH)
          os.makedirs(self.DOWNLOADED_FILES_PATH)
       print("criou o dir")
 
