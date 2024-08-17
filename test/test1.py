@@ -1,6 +1,6 @@
 from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
 from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
-from webscrapping.scrapperclasses import FormalJobsScrapper, IdhScrapper, SnisScrapper, IbgeCitiesNetworkScrapper
+from webscrapping.scrapperclasses import FormalJobsScrapper, IbgeBasesMunicScrapper,IdhScrapper, SnisScrapper, IbgeCitiesNetworkScrapper
 from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
 from datastructures import BaseFileType, YearDataPoint
@@ -75,5 +75,6 @@ def ibge_cities_network():
       collection.df.to_csv(f"{collection.data_name}.csv")
 
 if __name__ == "__main__":
-   df = run_datasus(DatasusDataInfo.LOW_WEIGHT_BIRTHS)
-   df.to_csv("datasus.csv")
+   #df = run_datasus(DatasusDataInfo.LOW_WEIGHT_BIRTHS)
+   #df.to_csv("datasus.csv")
+   IbgeBasesMunicScrapper(BaseFileType.CSV)

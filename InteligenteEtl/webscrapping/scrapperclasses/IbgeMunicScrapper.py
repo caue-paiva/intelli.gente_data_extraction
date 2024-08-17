@@ -1,6 +1,4 @@
-
-import pandas as pd
-from .AbstractScrapper import  BaseFileType
+from datastructures import BaseFileType
 from .IbgePibCidadesScrapper import IbgePibCidadesScrapper
 from datastructures import YearDataPoint
 
