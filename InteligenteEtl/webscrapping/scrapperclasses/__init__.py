@@ -7,3 +7,4 @@ from .IdhScrapper import IdhScrapper
 from .SnisScrapper import SnisScrapper
 from .AnatelScrapper import AnatelFixedConnectionScrapper
 from .IbgeCitiesNetworkScrapper import IbgeCitiesNetworkScrapper
+from .HigherEducaPositionsScrapper import HigherEducaPositionsScrapper
