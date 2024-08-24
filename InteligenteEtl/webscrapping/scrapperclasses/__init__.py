@@ -8,3 +8,4 @@ from .SnisScrapper import SnisScrapper
 from .AnatelScrapper import AnatelFixedConnectionScrapper
 from .IbgeCitiesNetworkScrapper import IbgeCitiesNetworkScrapper
 from .HigherEducaPositionsScrapper import HigherEducaPositionsScrapper
+from .SchoolDistortionRatesScrapper import SchoolDistortionRatesScrapper

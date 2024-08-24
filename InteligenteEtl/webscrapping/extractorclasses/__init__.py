@@ -7,3 +7,4 @@ from .IdhExtractor import IdhExtractor
 from .SnisExtractor import SnisExtractor
 from .IbgeCitiesNetworkExtractor import IbgeCitiesNetworkExtractor
 from.HigherEducaPositionsExtractor import HigherEducaPositionsExtractor
+from .SchoolDistortionRatesExtractor import SchoolDistortionRatesExtractor

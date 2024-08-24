@@ -7,14 +7,21 @@ from selenium.webdriver.chrome.options import Options
 from functools import reduce
 
 class HigherEducaPositionsScrapper(AbstractScrapper):
-    
+    """
+    Classe que realiza o Webscrapping dos dados de vagas no ensino superior do INEP.
+
+    Os dados dessa fonte tem uma peculiaridade, tem cerca de 3300 municípios na base original e depois da filtragem
+    para registros que obedecem a especificação (ex: cursos não online) apenas cerca de 1100 municípios sobram. Porém os 
+    2200 municípios removidos não são "nulos" por si, os dados foram coletados pelo mas a qntd de vagas buscadas é 0, portanto esse código leva isso
+    em consideração
+    """
     URL =  "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
 
     def __init__(self):
         self._create_downloaded_files_dir()
 
     def extract_database(self)->list[YearDataPoint]:
-        links:list[str] = self.__get_file_links()[:1]
+        links:list[str] = self.__get_file_links()[:3]
         print(links)
         self.__download_zipfiles(links)
         print("baixou todos zipfiles")

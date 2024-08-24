@@ -23,11 +23,10 @@ class HigherEducaPositionsExtractor(AbstractDataExtractor):
       joined_df:pd.DataFrame = self._concat_data_points(data_points) #junta data points e add coluna de anos
       joined_df = self.__filter_and_drop_cols(joined_df) #dropa colunas desnecessárias e NaNs
       joined_df = self.__sum_city_values(joined_df)
-
-      return
-      #joined_df = self.__add_and_rename_columns(joined_df)
+      joined_df = self.__add_and_rename_columns(joined_df)
 
       print(joined_df.info())
+      print(joined_df.head())
       joined_df.to_csv("processado_final.csv",index=False)
 
       collection = ProcessedDataCollection(
@@ -67,10 +66,12 @@ class HigherEducaPositionsExtractor(AbstractDataExtractor):
 
       df = df.rename(
          {
-            EXTRACTED_CITY_CODE_COL: self.CITY_CODE_COL,
-            EXTRACTED_DATA_VALUES_COL: self.DATA_VALUE_COLUMN #renomeia colunas originais para o padrão
+            self.EXTRACTED_CITY_CODE_COL: self.CITY_CODE_COL,
+            self.EXTRACTED_DATA_VALUES_COL: self.DATA_VALUE_COLUMN #renomeia colunas originais para o padrão
          }
       ,axis="columns")
+
+      df[self.CITY_CODE_COL] = df[self.CITY_CODE_COL].astype("int")
 
       return df
 
