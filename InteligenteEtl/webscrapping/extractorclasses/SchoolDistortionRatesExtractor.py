@@ -9,13 +9,12 @@ class SchoolDistortionRatesExtractor(AbstractDataExtractor):
    DTYPE = DataTypes.FLOAT
    DATA_NAME = "Taxas de distorção idade-série"
 
-   def extract_processed_collection(self, scrapper: SchoolDistortionRatesScrapper) -> list[ProcessedDataCollection]:
+   def extract_processed_collection(self, scrapper: SchoolDistortionRatesScrapper)-> list[ProcessedDataCollection]:
       data_points:list[YearDataPoint] = scrapper.extract_database()
       time_series_years:list[int] = YearDataPoint.get_years_from_list(data_points)
 
       joined_df:pd.DataFrame = self._concat_data_points(data_points)
       joined_df = self.__process_df(joined_df)
-      print(joined_df.info())
 
       joined_df = self.__rename_and_add_cols(joined_df)
       joined_df = joined_df.dropna() #remove valores NaN

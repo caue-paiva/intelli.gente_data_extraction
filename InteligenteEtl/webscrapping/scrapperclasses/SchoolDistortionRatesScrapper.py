@@ -97,7 +97,6 @@ class SchoolDistortionRatesScrapper(AbstractScrapper):
                     if i > 0 and ano > anos[i - 1]:
                         self.__click_side_arrows(driver, "esquerda")
                     else:
-                        print("direita")
                         self.__click_side_arrows(driver, "direita")
 
     def extract_database(self)->list[YearDataPoint]:
@@ -106,23 +105,18 @@ class SchoolDistortionRatesScrapper(AbstractScrapper):
         # Extração dos links das páginas
         links = self.__extract_links()[:1]
         self.__download_and_extract_zipfiles(links)
-        print("extraiu todos os zipfiles")
      
         inner_folder = os.listdir(self.DOWNLOADED_FILES_PATH)
         for folder in inner_folder:
             folder_correct_path = os.path.join(self.DOWNLOADED_FILES_PATH, folder)
             if not os.path.isdir(folder_correct_path):
-                print(f"Não é um diretório: {folder_correct_path}")
                 continue
 
             year_data_point = self.__data_dir_process(folder_correct_path)
             if year_data_point:
                 year_data_points.append(year_data_point)
-                print(f"Processamento concluído na pasta {folder_correct_path} com sucesso.")
             else:
                 print(f"Processamento falhou na pasta {folder_correct_path}")
-
-        print(f"Total de YearDataPoints processados: {len(year_data_points)}")
 
         self._delete_download_files_dir()
         return year_data_points
@@ -158,7 +152,6 @@ class SchoolDistortionRatesScrapper(AbstractScrapper):
                 new_zipfiles_count:int = reduce(lambda count,filename: count+1 if ".zip" in filename else count,files_in_dir,0) #conta numero de zipfiles no folder
             
             extracted_zipfile_count = new_zipfiles_count #atualiza variável de arquivos zip extraidos
-            print(extracted_zipfile_count)
             time.sleep(5)  
         driver.quit()
     
@@ -177,7 +170,6 @@ class SchoolDistortionRatesScrapper(AbstractScrapper):
                 os.remove(os.path.join(self.DOWNLOADED_FILES_PATH,file)) #remove os arquivos zips ou arquivos temporários do chrome
 
     def __data_dir_process(self, folder_path: str)-> YearDataPoint|None:
-        print(f"Entrando na pasta: {folder_path}")
         files_list:list[str] = os.listdir(folder_path)
 
         for file in files_list:
@@ -188,9 +180,7 @@ class SchoolDistortionRatesScrapper(AbstractScrapper):
 
                     if df is not None:
                         year = self.__extract_year_from_path(folder_path)
-                        print(f"path: {file_correct_path}, ano: {year}")
                         if year:
-                            print(f"Criando YearDataPoint para o ano {year}")
                             return YearDataPoint(df=df, data_year=year)
                         else:
                             print(f"Falha ao extrair o ano do caminho: {folder_path}")
@@ -200,36 +190,7 @@ class SchoolDistortionRatesScrapper(AbstractScrapper):
         print(f"Não foram encontrados arquivos .xlsx relevantes em {folder_path}")
         return None
 
-    def __process_df(self, xlsx_file_path: str) -> pd.DataFrame:
-        try:
-            cols = ['Unnamed: 3','Unnamed: 5','Unnamed: 6','Total']
-            df = pd.read_excel(xlsx_file_path, header=6, skiprows=[7, 8],usecols=cols)
-            print(f"Colunas disponíveis no arquivo {xlsx_file_path}: {df.columns.tolist()}")
-
-            municipality_col = 'Unnamed: 3'
-            total_col = 'Total'
-            location_col = 'Unnamed: 5'
-            admin_dependency_col = 'Unnamed: 6'
-
-            if municipality_col not in df.columns or total_col not in df.columns or location_col not in df.columns or admin_dependency_col not in df.columns:
-                raise ValueError(f"Colunas necessárias ('{municipality_col}', '{total_col}', '{location_col}', '{admin_dependency_col}') não encontradas no arquivo {xlsx_file_path}")
-
-            df_filtered = df[(df[location_col] == 'Total') & (df[admin_dependency_col] == 'Total')]
-            filtered_df = df_filtered[[municipality_col, total_col]]
-            print(f"Dados filtrados:\n{filtered_df.head()}")  # Exibe uma amostra dos dados filtrados
-            filtered_df = filtered_df.rename({
-                "Unnamed: 3": "codigo_municipio",
-            },axis="columns")
-
-            filtered_df["codigo_municipio"] = filtered_df["codigo_municipio"].astype("int")
-
-            return filtered_df
-        except Exception as e:
-            print(f"Erro ao processar o DataFrame: {e}")
-            return None
-
     def __extract_year_from_path(self, path: str) -> int:
-        print(f"Extraindo ano do caminho: {path}")
         ano_match = re.search(r'\d{4}', path)
         if ano_match:
             year = int(ano_match.group(0))
@@ -239,11 +200,3 @@ class SchoolDistortionRatesScrapper(AbstractScrapper):
             print("Falha ao extrair o ano.")
             return None
 
-
-if __name__ == "__main__":
-    scrapper = SchoolDistortionRatesScrapper()
-    year_data_points:list[YearDataPoint] = scrapper.extract_database()
-
-    for data_point in year_data_points:
-        data_point.df.to_csv(f"{data_point.data_year}.csv")
-        print(f"Ano: {data_point.data_year}, DataFrame Shape: {data_point.df.info()}")
