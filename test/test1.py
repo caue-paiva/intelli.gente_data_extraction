@@ -5,7 +5,6 @@ from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, Sn
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
 from datastructures import BaseFileType, YearDataPoint
 import pandas as pd
-import resource,time
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
    scrapper = DatasusLinkScrapper(abreviation)
