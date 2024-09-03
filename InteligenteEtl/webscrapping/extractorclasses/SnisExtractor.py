@@ -7,16 +7,21 @@ import pandas as pd
 class SnisExtractor(AbstractDataExtractor):
 
    INDICATORS_INFO = { #dicionário com informações dos indicadores
-    'IN015_AE': {'name': 'IN015_AE - Índice de coleta de esgoto', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
-    'IN015_RS': {'name': 'IN015_RS - Taxa de cobertura do serviço de coleta de resíduo doméstico em relação à população total do município', 'dtype': DataTypes.FLOAT, 'category': 'Resíduos Sólidos'},
-    'IN022_AE': {'name': 'IN022_AE - Consumo médio percapita de água', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
-    'IN049_AE': {'name': 'IN049_AE - Índice de perdas na distribuição', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
-    'IN055_AE': {'name': 'IN055_AE - Índice de atendimento total de água', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
-    'CS001': {'name': 'CS001 - Existe coleta seletiva formalizada pela prefeitura no município?', 'dtype': DataTypes.STRING, 'category': 'Resíduos Sólidos'},
-    'IN056_AE': {'name': 'IN056_AE - Índice de atendimento total de esgoto referido aos municípios atendidos com água', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
-    'IN024_AE': {'name': 'IN024_AE - Índice de atendimento urbano de esgoto referido aos municípios atendidos com água', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
-    'IN053_RS': {'name': 'IN053_RS - Taxa de material recolhido pela coleta seletiva (exceto mat. orgânica) em relação à quantidade total coletada de resíduos sólidos domésticos', 'dtype': DataTypes.FLOAT, 'category': 'Resíduos Sólidos'},
-    'IN016_AE': {'name': 'IN016_AE - Índice de tratamento de esgoto', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'}
+      'IN015_AE': {'name': 'IN015_AE - Índice de coleta de esgoto', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
+      'IN015_RS': {'name': 'IN015_RS - Taxa de cobertura do serviço de coleta de resíduo doméstico em relação à população total do município', 'dtype': DataTypes.FLOAT, 'category': 'Resíduos Sólidos'},
+      'IN022_AE': {'name': 'IN022_AE - Consumo médio percapita de água', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
+      'IN049_AE': {'name': 'IN049_AE - Índice de perdas na distribuição', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
+      'IN055_AE': {'name': 'IN055_AE - Índice de atendimento total de água', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
+      'CS001': {'name': 'CS001 - Existe coleta seletiva formalizada pela prefeitura no município?', 'dtype': DataTypes.STRING, 'category': 'Resíduos Sólidos'},
+      'IN056_AE': {'name': 'IN056_AE - Índice de atendimento total de esgoto referido aos municípios atendidos com água', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
+      'IN024_AE': {'name': 'IN024_AE - Índice de atendimento urbano de esgoto referido aos municípios atendidos com água', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
+      'IN053_RS': {'name': 'IN053_RS - Taxa de material recolhido pela coleta seletiva (exceto mat. orgânica) em relação à quantidade total coletada de resíduos sólidos domésticos', 'dtype': DataTypes.FLOAT, 'category': 'Resíduos Sólidos'},
+      'IN016_AE': {'name': 'IN016_AE - Índice de tratamento de esgoto', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
+      'PO007': {'name': 'PO007 - Drenagem urbana e manejo de águas pluviais', 'dtype': DataTypes.BOOL, 'category': 'Gestão de Desastres'},
+      'PO028': {'name': 'PO028 - Existência do plano municipal de saneamento básico', 'dtype': DataTypes.BOOL, 'category': 'Água e Esgoto'},
+      'AG018': {'name': 'AG018 - Volume de água tratada importado', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
+      'AG006': {'name': 'AG006 -Volume de água produzido', 'dtype': DataTypes.FLOAT, 'category': 'Água e Esgoto'},
+      'PO048': {'name': 'PO048 -Existência do Plano Municipal de Gestão Integrada de Resíduos Sólidos (PMGIRS)', 'dtype': DataTypes.BOOL, 'category': 'Água e Esgoto'},
    }
 
    EXTRACTED_YEAR_COL = "Ano de Referência"

@@ -15,7 +15,7 @@ class SnisScrapper(AbstractScrapper):
    """
 
    URL = "http://app4.mdr.gov.br/serieHistorica/municipio/index/"
-   INDICATORS = [
+   INDICATORS = [ #lista de indicadores a serem extraidos
     "IN015_AE",  # Índice de coleta de esgoto
     "IN015_RS",  # Taxa de cobertura do serviço de coleta de resíduo doméstico em relação à população total do município
     "IN022_AE",  # Consumo médio percapita de água
@@ -25,7 +25,12 @@ class SnisScrapper(AbstractScrapper):
     "IN056_AE",  # Índice de atendimento total de esgoto referido aos municípios atendidos com água
     "IN024_AE",  # Índice de atendimento urbano de esgoto referido aos municípios atendidos com água
     "IN053_RS",  # Taxa de material recolhido pela coleta seletiva (exceto mat. orgânica) em relação à quantidade total coletada de resíduos sól. domésticos
-    "IN016_AE"   # Índice de tratamento de esgoto
+    "IN016_AE",   # Índice de tratamento de esgoto
+    "PO007", #existência de drenagem urbana e manejo de águas pluviais no município
+    "PO028", #Representa se o município possui plano municipal de saneamento básico, elaborado nos termos estabelecidos na Lei 11.445/2007
+    "AG018" , # Volume de água tratada importado
+    "AG006", #Volume de água produzido
+    "PO048" #Representa se o município possui  Plano Municipal de Gestão Integrada de Resíduos Sólidos (PMGIRS) conforme a Lei nº 12.305/2010 que trata da Política Nacional de Resíduos Sólidos
    ]
    EXTRACTED_YEAR_COL = 'Ano de Referência'
 
@@ -152,7 +157,7 @@ class SnisScrapper(AbstractScrapper):
          driver (webdriver.chrome): driver do selenium pro chrome
       Return:
          tuple[str,list[int]]: link para o arquivo CSV com os dados e os anos contidos nele
-      '  """
+         """
          csv_link:str = ""
          #clica na aba de dados dos munícipios agrupados
          link_element = driver.find_element(By.XPATH, "//a[@link='/serieHistorica/consolidadoMunicipio/index']")

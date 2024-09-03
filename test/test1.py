@@ -78,22 +78,11 @@ def ibge_cities_network():
 def run_snis():
    scrapper = SnisScrapper()
    extractor = SnisExtractor()
-   extractor.extract_processed_collection(scrapper)
+   list_ = extractor.extract_processed_collection(scrapper)
+
+   for ele in list_:
+      ele.df.to_csv(f"{ele.data_name}")
 
 if __name__ == "__main__":
-   time.sleep(5)
    run_snis()
-   df = run_datasus(DatasusDataInfo.LOW_WEIGHT_BIRTHS)
-   df = run_datasus(DatasusDataInfo.GINI_COEF)
-   run_ANATEL()
-   run_formal_jobs()
-   ibge_cities_network()
-   run_CAPAG()
-   #run_api_agregados()
-   run_api_ipea()
-   run_city_gdp(BaseFileType.EXCEL)
-   
-
-   memory_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024  # in MB
-   print(f"Maximum memory usage: {memory_usage:.2f} MB")
    
