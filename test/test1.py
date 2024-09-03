@@ -5,6 +5,7 @@ from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, Sn
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
 from datastructures import BaseFileType, YearDataPoint
 import pandas as pd
+import resource,time
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
    scrapper = DatasusLinkScrapper(abreviation)
@@ -74,7 +75,25 @@ def ibge_cities_network():
       print(collection.df.info())
       collection.df.to_csv(f"{collection.data_name}.csv")
 
+def run_snis():
+   scrapper = SnisScrapper()
+   extractor = SnisExtractor()
+   extractor.extract_processed_collection(scrapper)
+
 if __name__ == "__main__":
-   #df = run_datasus(DatasusDataInfo.LOW_WEIGHT_BIRTHS)
-   #df.to_csv("datasus.csv")
-   IbgeBasesMunicScrapper(BaseFileType.CSV)
+   time.sleep(5)
+   run_snis()
+   df = run_datasus(DatasusDataInfo.LOW_WEIGHT_BIRTHS)
+   df = run_datasus(DatasusDataInfo.GINI_COEF)
+   run_ANATEL()
+   run_formal_jobs()
+   ibge_cities_network()
+   run_CAPAG()
+   #run_api_agregados()
+   run_api_ipea()
+   run_city_gdp(BaseFileType.EXCEL)
+   
+
+   memory_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024  # in MB
+   print(f"Maximum memory usage: {memory_usage:.2f} MB")
+   
