@@ -129,6 +129,20 @@ load_queries_button.click()
 
 #fechar janela de queries
 
-time.sleep(20)
+time.sleep(30)
+
+with open("teste.html","w") as f:
+   f.write(driver.page_source)
+
+driver.switch_to.frame(driver.find_element(By.NAME, "botoes")) #vai pro prox frame
+time.sleep(5)
+
+img_element = driver.find_element(By.XPATH, "//img[@name='EXCEL']")
+img_element.click()
+
+time.sleep(10)
+
+
+
 # Close the browser
 driver.quit()
