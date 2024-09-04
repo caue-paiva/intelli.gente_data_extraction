@@ -14,18 +14,21 @@ class RaisDataInfo(Enum):
       "saved_query":"Empregos em TIC 2",
       "topic":"Inovação",
       "dtype": DataTypes.INT,
+      "companies_section": False #se o dado está na seção Rais estabelecimento?
    }
    TECH_COMPANIES = {
       "data_identifier":"Empresas de TICs no municipio",
-      "saved_query":"Empresas de TIC",
+      "saved_query":"Empresas de TICs no municipio",
       "topic":"Inovação",
       "dtype":DataTypes.INT,
+      "companies_section": True
    }
    TOURISM_JOBS = {
       "data_identifier":"Empregos em Turismo",
       "saved_query":"Empregos em Turismo",
       "topic":"Território",
       "dtype":DataTypes.INT,
+      "companies_section": False
    }
 
 
@@ -69,13 +72,14 @@ class RaisScrapper(AbstractScrapper):
       time.sleep(5)
 
       window_handlers:list[str] = driver.window_handles
-      driver.switch_to.window(window_handlers[1]) #muda pra nova janela
+      if len(window_handlers) > 1: #caso uma nova janela tenha aberto com a query
+         driver.switch_to.window(window_handlers[1]) #muda pra nova janela
+         driver.maximize_window()
+      else:
+         driver.switch_to.window(window_handlers[0]) #apenas da refresh na janela nova
 
       time.sleep(5)
-      driver.maximize_window()
-
-      time.sleep(4)
-
+   
       driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@id='iFrm']"))
       time.sleep(3)
 
@@ -150,7 +154,7 @@ class RaisScrapper(AbstractScrapper):
       submit_element.click() #logar no portal
       time.sleep(1.5)
  
-   def __run_saved_query(self,saved_query_name:str):
+   def __run_saved_query(self,saved_query_name:str,companies_section:bool=False):
       #baixar arquivos zips
       downloaded_files_dir: str = self.DOWNLOADED_FILES_PATH 
       chrome_options = Options()
@@ -173,10 +177,16 @@ class RaisScrapper(AbstractScrapper):
       a_element.click()
       time.sleep(2)
 
-      #clica em RAIS VINCULOS
-      show_job_affiliations = driver.find_element(By.XPATH, "//div[@class='area closedarea' and @headerindex='1h']")
-      show_job_affiliations.click()
-      time.sleep(5)
+      if not companies_section:
+         #clica em RAIS VINCULOS
+         show_job_affiliations = driver.find_element(By.XPATH, "//div[@class='area closedarea' and @headerindex='1h']")
+         show_job_affiliations.click()
+         time.sleep(5)
+      else:
+         #clica em RAIS ESTABELECIMENTOS
+         show_job_affiliations = driver.find_element(By.XPATH, "//div[@class='area closedarea' and @headerindex='0h']")
+         show_job_affiliations.click()
+         time.sleep(5)
 
       #seleciona a série histórica correta 
       recent_time_series_tag  = driver.find_element(By.XPATH, "//a[contains(text(), 'Ano corrente a 2002')]")
@@ -229,7 +239,11 @@ class RaisScrapper(AbstractScrapper):
 
    def extract_database(self) -> list[YearDataPoint]:
       self._create_downloaded_files_dir() #criar folder pros arquivos baixados
-      self.__run_saved_query(self.data_point_to_extract.value["saved_query"]) #faz webscrapping do site com uma query especifica 
+      self.__run_saved_query(
+         self.data_point_to_extract.value["saved_query"],
+         self.data_point_to_extract.value["companies_section"]
+      ) #faz webscrapping do site com uma query especifica 
+      
       time.sleep(5)
       df:pd.DataFrame = self.__get_df() #pega o df do csv
       self._delete_download_files_dir() #deleta folder dos arquivos baixados

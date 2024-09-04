@@ -84,7 +84,7 @@ def run_snis():
       ele.df.to_csv(f"{ele.data_name}")
 
 def run_rais():
-   scrapper = RaisScrapper(RaisDataInfo.TECH_JOBS)
+   scrapper = RaisScrapper(RaisDataInfo.TECH_COMPANIES)
    #scrapper.extract_database()
    extractor = RaisExtractor()
    extractor.extract_processed_collection(scrapper)
