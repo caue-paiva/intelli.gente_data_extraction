@@ -111,19 +111,15 @@ class TechEquipamentScrapper(AbstractScrapper):
 
         for root, dirs, files in os.walk(folder_path):
             #caminho pelos subdiretórios até achar no dir que tem os arquivos CSV
-            for file in files:
-                print(file)
+            for file in files:       
                 if file.endswith(".csv") and not file.lower().startswith("~$"):
                     file_correct_path = os.path.join(root, file)
-                    if   self.SCHOOL_TO_CITY_TABLE_FILE.lower() in file.lower(): #arquivo é o mapping de nome de escola para o código do município
-                        print("achou a ref")
+                    if  self.SCHOOL_TO_CITY_TABLE_FILE.lower() in file.lower(): #arquivo é o mapping de nome de escola para o código do município                
                         self.__school_to_city_df = self.__get_school_to_city_code_table(file_correct_path)
-                        continue
-                    
+                        continue                    
                     year_data_point = self.__data_file_process(file_correct_path)
                     if year_data_point:
                         year_data_points.append(year_data_point)
-                        print(f"Processamento bem-sucedido para o arquivo: {file_correct_path}")
                     else:
                         print(f"Processamento falhou em um dos arquivos: {file_correct_path}")
 
@@ -147,8 +143,6 @@ class TechEquipamentScrapper(AbstractScrapper):
             "IN_DESKTOP_ALUNO", "IN_COMP_PORTATIL_ALUNO", "IN_TABLET_ALUNO", 
             "IN_INTERNET_APRENDIZAGEM", "NO_ENTIDADE"
         ]
-        print(f"path para extrair DF: {csv_file_path}")
-
         # Leitura do arquivo CSV, utilizando as colunas relevantes
         df = pd.read_csv(csv_file_path, sep=";", encoding="latin-1", usecols=RELEVANT_COLS)
 
@@ -180,8 +174,8 @@ class TechEquipamentScrapper(AbstractScrapper):
         else:
             return None
 
-    def extract_database(self) -> list[YearDataPoint]:
-      links = self.__extract_links()[:2]
+    def extract_database(self,years_to_extract:int=15) -> list[YearDataPoint]:
+      links = self.__extract_links()[:years_to_extract]
       self.__download_zipfiles(links)
       self.__extract_zipfiles()
       data_points:list[YearDataPoint] = self.__process_all_files_in_directory(self.files_folder_path)

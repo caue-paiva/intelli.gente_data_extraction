@@ -1,7 +1,4 @@
-import os
-import re
-import time
-import zipfile
+import zipfile,time,os,re
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -34,21 +31,21 @@ class IdebFinalYearsScrapper(AbstractScrapper):
                                    driver.execute_script("return window.innerHeight / 2;")).click().perform()
             time.sleep(2)
         except Exception as e:
-            print(f"Erro ao clicar no centro da tela: {e}")
+           pass
 
         try:
             botao_2021 = driver.find_element(By.LINK_TEXT, '2021')
             botao_2021.click()
             time.sleep(2)
         except Exception as e:
-            print(f"Erro ao clicar no botão de 2021: {e}")
+            pass
         
         try:
             botao_anos_anteriores = driver.find_element(By.LINK_TEXT, 'Anos anteriores')
             botao_anos_anteriores.click()
             time.sleep(2)
         except Exception as e:
-            print(f"Erro ao clicar no botão de anos anteriores: {e}")
+            pass
 
         html_content = driver.page_source
         driver.quit()
@@ -66,14 +63,10 @@ class IdebFinalYearsScrapper(AbstractScrapper):
         # Juntando o caminho atual com o subdiretório
         download_directory = os.path.join(current_directory, self.DOWNLOADED_FILES_PATH)
 
-        # Verificando o caminho completo
-        print(f"Caminho completo para o diretório de download: {download_directory}")
-
         # Criando o diretório se ele não existir
         if not os.path.exists(download_directory):
             os.makedirs(download_directory)
 
-        print("Entrou em __download_and_extract_zipfiles")
         chrome_options = Options()
         chrome_options.add_experimental_option("prefs", {
             "download.default_directory": download_directory,
@@ -83,10 +76,8 @@ class IdebFinalYearsScrapper(AbstractScrapper):
         })
 
         driver = webdriver.Chrome(options=chrome_options)
-
         for url in urls:
             driver.get(url)
-            print(f"Acessando URL: {url}")
             time.sleep(15)  # Tempo para garantir que o download comece
 
             # Verifique o diretório até encontrar o arquivo ZIP
@@ -101,12 +92,10 @@ class IdebFinalYearsScrapper(AbstractScrapper):
                         downloaded_file = file
                         break
                 if downloaded_file:
-                    print(f"Arquivo ZIP detectado: {downloaded_file}")
                     break
 
                 time.sleep(10)
                 wait_time += 10
-                print(f"Aguardando... {wait_time} segundos passados.")
 
             if not downloaded_file:
                 print(f"Tempo de espera excedido para o download de: {url}")
@@ -116,7 +105,6 @@ class IdebFinalYearsScrapper(AbstractScrapper):
                 with zipfile.ZipFile(file_path, "r") as zip_ref:
                     zip_ref.extractall(self.DOWNLOADED_FILES_PATH)
                 os.remove(file_path)
-                print(f"Arquivo ZIP {downloaded_file} extraído e removido.")
 
         driver.quit()
 
@@ -131,7 +119,6 @@ class IdebFinalYearsScrapper(AbstractScrapper):
                     year_data_point = self.__data_file_process(file_correct_path)
                     if year_data_point:
                         data_point = year_data_point
-                        print(f"Processamento bem-sucedido para o arquivo: {file_correct_path}")
                     else:
                         print(f"Processamento falhou em um dos arquivos: {file_correct_path}")
 
@@ -169,7 +156,6 @@ class IdebFinalYearsScrapper(AbstractScrapper):
             raise ValueError(f"Coluna do município '{municipality_col}' não encontrada no arquivo {xlsx_file_path}")
 
         relevant_cols.append(municipality_col)  # Inclui a coluna de município
-
         filtered_df = df[relevant_cols]
         # Itera sobre as linhas e imprime os municípios e seus valores de IDEB
         for index, row in filtered_df.iterrows():
@@ -196,7 +182,6 @@ class IdebFinalYearsScrapper(AbstractScrapper):
         if ano_match:
             return int(ano_match.group(0))
         else:
-            print("Falha ao extrair o ano.")
             return None
 
     def __separate_data_by_year(self,data_point:YearDataPoint)->list[YearDataPoint]:
@@ -209,17 +194,14 @@ class IdebFinalYearsScrapper(AbstractScrapper):
             new_df = pd.DataFrame()
             new_df[self.EXTRACTED_CITY_COL] = df[self.EXTRACTED_CITY_COL] #copia coluna de nome dos municípios
             new_df[self.FINAL_DATA_VAL_COL] = df[year] #coluna do valor dos dados é a coluna com o ano 
-
             data_points.append(
                 YearDataPoint(df=new_df,data_year=year)
             )
          
          return data_points
 
-
-
     def extract_database(self) -> list[YearDataPoint]:
-        links = self.__extract_links()[:1]
+        links = self.__extract_links()
         self.__download_and_extract_zipfiles(links)
         data_point:YearDataPoint = self.__process_all_files_in_directory(self.DOWNLOADED_FILES_PATH)
         

@@ -89,7 +89,7 @@ def run_rais():
 def run_tech_equipament():
     scrapper = TechEquipamentScrapper()
     extractor = TechEquipamentExtractor()
-    collection = extractor.extract_processed_collection(scrapper)
+    collection = extractor.extract_processed_collection(scrapper,20)
     for colec in collection:
       colec.df.to_csv(f"{colec.data_name}.csv")
 
@@ -103,5 +103,5 @@ def run_Idbe():
 
 
 if __name__ == "__main__":
-   run_tech_equipament()
+   run_Idbe()
    
