@@ -8,6 +8,7 @@ h11==0.14.0
 idna==3.7
 -e InteligenteEtl
 multimethod==1.10
+python-dotenv==1.0.1
 mypy-extensions==1.0.0
 numpy==1.26.4
 openpyxl==3.1.2
@@ -19,6 +20,7 @@ pydantic==2.8.2
 pydantic_core==2.20.1
 PySocks==1.7.1
 python-dateutil==2.9.0.post0
+python-dotenv==1.0.1
 pytz==2024.1
 requests==2.31.0
 selenium==4.20.0

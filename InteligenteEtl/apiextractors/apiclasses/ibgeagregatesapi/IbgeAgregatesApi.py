@@ -235,7 +235,7 @@ class IbgeAgregatesApi(AbstractApiInterface):
             
             call_result:RawDataCollection = self.__make_api_call(time_series_len,aggregate,cities,var,classification)
             print("chamada da API, extraiu um dado")
-            time.sleep(3) #sleep por 3 segundos para não sobrecarregar a api
+            time.sleep(16) #sleep por 8 segundos para não sobrecarregar a api
             api_data_points.append(call_result)
 
       return api_data_points

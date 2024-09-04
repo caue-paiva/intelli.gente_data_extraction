@@ -15,7 +15,7 @@ class SnisScrapper(AbstractScrapper):
    """
 
    URL = "http://app4.mdr.gov.br/serieHistorica/municipio/index/"
-   INDICATORS = [
+   INDICATORS = [ #lista de indicadores a serem extraidos
     "IN015_AE",  # Índice de coleta de esgoto
     "IN015_RS",  # Taxa de cobertura do serviço de coleta de resíduo doméstico em relação à população total do município
     "IN022_AE",  # Consumo médio percapita de água
@@ -25,7 +25,12 @@ class SnisScrapper(AbstractScrapper):
     "IN056_AE",  # Índice de atendimento total de esgoto referido aos municípios atendidos com água
     "IN024_AE",  # Índice de atendimento urbano de esgoto referido aos municípios atendidos com água
     "IN053_RS",  # Taxa de material recolhido pela coleta seletiva (exceto mat. orgânica) em relação à quantidade total coletada de resíduos sól. domésticos
-    "IN016_AE"   # Índice de tratamento de esgoto
+    "IN016_AE",   # Índice de tratamento de esgoto
+    "PO007", #existência de drenagem urbana e manejo de águas pluviais no município
+    "PO028", #Representa se o município possui plano municipal de saneamento básico, elaborado nos termos estabelecidos na Lei 11.445/2007
+    "AG018" , # Volume de água tratada importado
+    "AG006", #Volume de água produzido
+    "PO048" #Representa se o município possui  Plano Municipal de Gestão Integrada de Resíduos Sólidos (PMGIRS) conforme a Lei nº 12.305/2010 que trata da Política Nacional de Resíduos Sólidos
    ]
    EXTRACTED_YEAR_COL = 'Ano de Referência'
 
@@ -50,20 +55,17 @@ class SnisScrapper(AbstractScrapper):
    def __wait_for_progress_bar(self,driver:webdriver.Chrome, loading_data_table:bool = False)->bool:
       
       if not loading_data_table:
-         WebDriverWait(driver, 10).until(
+         WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CLASS_NAME, "progress-striped"))
          )
-         WebDriverWait(driver, 20).until(
+         WebDriverWait(driver, 30).until(
             EC.invisibility_of_element_located((By.CLASS_NAME, "progress-striped"))
          )
-         WebDriverWait(driver, 20).until(
+         WebDriverWait(driver, 30).until(
             EC.invisibility_of_element_located((By.CLASS_NAME, "blockTitle"))
          )
       else:
-         WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "blockTitle"))
-         )
-         WebDriverWait(driver, 80).until(
+         WebDriverWait(driver, 80).until( #espera ate o botão de carregar desaparecer
             EC.invisibility_of_element_located((By.CLASS_NAME, "blockTitle"))
          )
 
@@ -147,7 +149,7 @@ class SnisScrapper(AbstractScrapper):
       self.__close_select_window(menu_div)
 
    def __extraction_run(self,driver:webdriver.Chrome)->str:   
-      """
+         """
       Realiza uma rodada da extração (carregar a página, selecionar os todos e uma lista de X anos) e extrair esses dados
       Múltiplas rodadas são necessárias pois o sistema da problema quando muitos anos são selecionados de uma vez
 
@@ -155,10 +157,8 @@ class SnisScrapper(AbstractScrapper):
          driver (webdriver.chrome): driver do selenium pro chrome
       Return:
          tuple[str,list[int]]: link para o arquivo CSV com os dados e os anos contidos nele
-      """
-      
-      csv_link:str = ""
-      try:   
+         """
+         csv_link:str = ""
          #clica na aba de dados dos munícipios agrupados
          link_element = driver.find_element(By.XPATH, "//a[@link='/serieHistorica/consolidadoMunicipio/index']")
          time.sleep(2)
@@ -237,18 +237,15 @@ class SnisScrapper(AbstractScrapper):
 
          time.sleep(5)
          print("query")
-         self.__click_query_button(driver)
+         self.__click_query_button(driver) #clica botão para gerar a busca com todos os parâmetros colocados
+         time.sleep(3)
          print("começouu de esperar")
-         self.__wait_for_progress_bar(driver,True)
+         self.__wait_for_progress_bar(driver,True) #espera barra de progresso para gerar busca
          print("terminou de esperar")
          time.sleep(2)
-         csv_link = self.__get_csv_link(driver)
+         csv_link = self.__get_csv_link(driver) #clica botão de gerar csv e espera ele ser gerado, retornando o link
          return csv_link #retorna o link do CSV 
       
-      except Exception as e:
-         print(f"Falha ao tentar extrair os dados do Snis: {e}")
-         return ""
-
    def __char_is_printable(self,char: str) -> bool:
     category = unicodedata.category(char)
     return category.startswith(('L', 'M', 'N', 'P', 'Z', 'S'))
@@ -297,6 +294,7 @@ class SnisScrapper(AbstractScrapper):
       driver.get(self.URL)
       driver.maximize_window()
       csv_link:str =  self.__extraction_run(driver) #primeira rodada do algoritmo, pega a lista de todos os anos
+      print(f"csv link {csv_link}")
       df = pd.read_csv(csv_link,
                 encoding="latin",
                 sep=";",

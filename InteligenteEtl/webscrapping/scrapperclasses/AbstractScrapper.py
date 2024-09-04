@@ -2,7 +2,7 @@ from abc import ABC,abstractmethod
 import pandas as pd
 import os , requests , zipfile
 from datastructures import BaseFileType, YearDataPoint
-
+import shutil
 
 
 
@@ -124,10 +124,14 @@ class AbstractScrapper(ABC):
         files:list[str] = os.listdir(self.DOWNLOADED_FILES_PATH)
 
         for file in files:
+            current_path: str = os.path.join(self.DOWNLOADED_FILES_PATH,file)
             try:
-               os.remove(os.path.join(self.DOWNLOADED_FILES_PATH,file))
+               if os.path.isdir(current_path):
+                  shutil.rmtree(current_path)
+               else:
+                  os.remove(current_path)
             except Exception as e:
-               print(f"falha ao deletar um arquivo extraído. Erro: {e}")
+               print(f"falha ao deletar um arquivo ou diretório extraído. Erro: {e}")
         
         try:
             os.rmdir(self.DOWNLOADED_FILES_PATH)

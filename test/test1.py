@@ -1,7 +1,5 @@
-from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
-from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
-from webscrapping.scrapperclasses import FormalJobsScrapper, IbgeBasesMunicScrapper,IdhScrapper, SnisScrapper, IbgeCitiesNetworkScrapper
-from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor
+from webscrapping.extractorclasses import *
+from webscrapping.scrapperclasses import * #um dos poucos casos que fazer isso é uma boa ideia!
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
 from datastructures import BaseFileType, YearDataPoint
 import pandas as pd
@@ -74,7 +72,36 @@ def ibge_cities_network():
       print(collection.df.info())
       collection.df.to_csv(f"{collection.data_name}.csv")
 
+def run_snis():
+   scrapper = SnisScrapper()
+   extractor = SnisExtractor()
+   list_ = extractor.extract_processed_collection(scrapper)
+
+   for ele in list_:
+      ele.df.to_csv(f"{ele.data_name}")
+
+def run_rais():
+   scrapper = RaisScrapper(RaisDataInfo.TECH_COMPANIES)
+   #scrapper.extract_database()
+   extractor = RaisExtractor()
+   extractor.extract_processed_collection(scrapper)
+
+def run_tech_equipament():
+    scrapper = TechEquipamentScrapper()
+    extractor = TechEquipamentExtractor()
+    collection = extractor.extract_processed_collection(scrapper,20)
+    for colec in collection:
+      colec.df.to_csv(f"{colec.data_name}.csv")
+
+def run_Idbe():
+   scrapper = IdebFinalYearsScrapper()
+   extractor = idebFinalYearsExtractor()
+   collection = extractor.extract_processed_collection(scrapper)
+
+   for colec in collection:
+      colec.df.to_csv(f"{colec.data_name}.csv")
+
+
 if __name__ == "__main__":
-   #df = run_datasus(DatasusDataInfo.LOW_WEIGHT_BIRTHS)
-   #df.to_csv("datasus.csv")
-   IbgeBasesMunicScrapper(BaseFileType.CSV)
+   run_Idbe()
+   
