@@ -1,8 +1,5 @@
-from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
-from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
-from webscrapping.scrapperclasses import FormalJobsScrapper, IbgeBasesMunicScrapper,IdhScrapper, SnisScrapper, IbgeCitiesNetworkScrapper,RaisScrapper
-from webscrapping.scrapperclasses import RaisDataInfo
-from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor,RaisExtractor
+from webscrapping.extractorclasses import *
+from webscrapping.scrapperclasses import * #um dos poucos casos que fazer isso é uma boa ideia!
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
 from datastructures import BaseFileType, YearDataPoint
 import pandas as pd
@@ -89,7 +86,22 @@ def run_rais():
    extractor = RaisExtractor()
    extractor.extract_processed_collection(scrapper)
 
+def run_tech_equipament():
+    scrapper = TechEquipamentScrapper()
+    extractor = TechEquipamentExtractor()
+    collection = extractor.extract_processed_collection(scrapper)
+    for colec in collection:
+      colec.df.to_csv(f"{colec.data_name}.csv")
+
+def run_Idbe():
+   scrapper = IdebFinalYearsScrapper()
+   extractor = idebFinalYearsExtractor()
+   collection = extractor.extract_processed_collection(scrapper)
+
+   for colec in collection:
+      colec.df.to_csv(f"{colec.data_name}.csv")
+
 
 if __name__ == "__main__":
-   run_rais()
+   run_tech_equipament()
    

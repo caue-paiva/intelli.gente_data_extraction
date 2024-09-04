@@ -1,4 +1,3 @@
-from typing import Type
 from datastructures import ProcessedDataCollection,YearDataPoint, DataTypes
 from webscrapping.scrapperclasses.AbstractScrapper import AbstractScrapper
 from webscrapping.scrapperclasses import HigherEducaPositionsScrapper
@@ -24,11 +23,7 @@ class HigherEducaPositionsExtractor(AbstractDataExtractor):
       joined_df = self.__filter_and_drop_cols(joined_df) #dropa colunas desnecessárias e NaNs
       joined_df = self.__sum_city_values(joined_df)
       joined_df = self.__add_and_rename_columns(joined_df)
-
-      print(joined_df.info())
-      print(joined_df.head())
-      joined_df.to_csv("processado_final.csv",index=False)
-
+      
       collection = ProcessedDataCollection(
          category=self.DATA_TOPIC,
          data_name=self.DATA_NAME,

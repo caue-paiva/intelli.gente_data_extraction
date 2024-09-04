@@ -10,3 +10,5 @@ from .IbgeCitiesNetworkScrapper import IbgeCitiesNetworkScrapper
 from .HigherEducaPositionsScrapper import HigherEducaPositionsScrapper
 from .SchoolDistortionRatesScrapper import SchoolDistortionRatesScrapper
 from .RaisScrapper import RaisScrapper, RaisDataInfo
+from .TechEquipamentScrapper import TechEquipamentScrapper
+from .IdebFinalYearsScrapper import IdebFinalYearsScrapper
