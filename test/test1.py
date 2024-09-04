@@ -1,7 +1,8 @@
 from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
 from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
-from webscrapping.scrapperclasses import FormalJobsScrapper, IbgeBasesMunicScrapper,IdhScrapper, SnisScrapper, IbgeCitiesNetworkScrapper
-from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor
+from webscrapping.scrapperclasses import FormalJobsScrapper, IbgeBasesMunicScrapper,IdhScrapper, SnisScrapper, IbgeCitiesNetworkScrapper,RaisScrapper
+from webscrapping.scrapperclasses import RaisDataInfo
+from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor,RaisExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
 from datastructures import BaseFileType, YearDataPoint
 import pandas as pd
@@ -82,6 +83,13 @@ def run_snis():
    for ele in list_:
       ele.df.to_csv(f"{ele.data_name}")
 
+def run_rais():
+   scrapper = RaisScrapper(RaisDataInfo.TECH_JOBS)
+   #scrapper.extract_database()
+   extractor = RaisExtractor()
+   extractor.extract_processed_collection(scrapper)
+
+
 if __name__ == "__main__":
-   run_snis()
+   run_rais()
    

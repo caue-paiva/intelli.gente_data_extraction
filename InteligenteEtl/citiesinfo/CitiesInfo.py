@@ -51,6 +51,8 @@ def get_number_of_cities()->int:
 
 def get_city_code_from_string(city_name:str,city_state:str)->int:
    """
+   Warning: Essa função não deve ser usada para transformar dataframes completos, pois ele é ineficiente
+
    Dado o nome de um município e a sigla do Estado dele, retorna o código do IBGE que representa esse município.
 
    Args:
@@ -93,7 +95,7 @@ def match_city_names_with_codes(df_with_city_names:pd.DataFrame,city_names_col:s
 
    df:pd.DataFrame = pd.read_csv(__CSV_FILE_PATH)
    df["nome_municipio"] = df["nome_municipio"].apply(parse_string) #parsing na coluna de nome de municípios
-   df_filtered = df.loc[:,["nome_municipio","sigla_uf","codigo_municipio"]]
+   df_filtered = df.loc[:,["nome_municipio","sigla_uf","codigo_municipio"]] #pega apenas as colunas necessárias
 
    df_with_city_names[city_names_col] = df_with_city_names[city_names_col].apply(parse_string)
    merged = df_with_city_names.merge(df_filtered,how="inner",left_on=[city_names_col,states_col],right_on=["nome_municipio","sigla_uf"])
