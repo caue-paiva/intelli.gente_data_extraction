@@ -1,0 +1,62 @@
+{
+    "2019" : 
+    {
+        "Serviços informativos" : "MTIC121", 
+        "Acesso a documentos" : "MTIC122",
+        "Informações gerais sobre licitações" : "MTIC123",
+        "Ouvidoria e serviços de atendimento ao cidadão" : "MTIC124",
+        "Fazer download de documentos ou formulários" : "MTIC125",
+        "Consulta a processos/acompanhamento de protocolos" : "MTIC126",
+        "Consulta prévia" : "MTIC127",
+        "Cadastramento de fornecedores" : "MTIC1210",
+        "Concurso público" : "MTIC129",
+        "Diário oficial, legislação municipal e finanças públicas" : "MTIC128",
+        "Emissão certidão negativa de débito" : "MTIC1211",
+        "Emissão alvará" : "MTIC1212",
+        "Emissão nota fiscal eletrônica" : "MTIC1213",
+        "Matrícula escolar na rede pública online" : "MTIC1214",
+        "Agendamento de consulta na rede pública de saúde" : "MTIC1215",
+        "Emitir guia de pagamento de tributos" : "MTIC1216",
+        "Emissão de documentos como licenças, certidões, permissões e outros documentos" : "MTIC1217",
+        "Pesquisa de satisfação relacionada aos serviços prestados pela prefeitura" : "MTIC1218",
+
+        "Existe disponibilidade de dados ou sistemas do município de forma georreferenciada" : "MREG012",
+        "Existe disponibilidade de dados ou sistemas do município de forma informatizada" : "MREG011",
+        "Existem dados de bases cartográficas do cadastro imobiliário urbano" : "MREG01",
+        "Existem dados de planta genérica de valores" : "MREG031",
+        "Existe sistema de informações do cadastro imobiliário urbano na web ou em rede" : "MREG013",
+        "Existe cobrança de IPTU no município" : "MREG02",
+        "Existe cadastro ISSQN" : "MREG05",
+        "Existe ISSQN informatizado" : "MREG051",
+
+        "Existe Portal de dados abertos" : "MTIC272",
+        "Existe Legislação municipal para garantir direito de acesso à informação pública em conformidade com a Lei de Acesso à Informação" : "MGOV01",
+        "Dados de orçamentos são publicados" : "MGOV0715",
+        "Dados de receitas são publicados" : "MGOV0725",
+        "Dados de despesas são publicados" : "MGOV0735",
+        "Dados de balanços são publicados" : "MGOV0745",
+        "Dados de prestação de contas da Lei de Responsabilidade Fiscal são publicados" : "MGOV0755",
+        "Dados de compras e licitações são publicados" : "MGOV0765",
+        "Dados individualizados das remunerações de servidores são publicados" : "MGOV0775",
+        "Existe disponibilização de portal da transparencia" : "MTIC271",
+
+        "Desenvolve programa ou ação de inclusão digital" : "MTIC19",
+        "Cursos de capacitação" : "MTIC214",
+        "Ponte entre parceiros para ações menos favorecidos" : "MTIC213",
+        "Instalação de computadores rede pública de ensino" : "MTIC215",
+        "Instalação de rede wi-fi rede pública de ensino" : "MTIC216",
+
+        "Conselho Municipal de Direitos Humanos - existência" : "MDHU12",
+        "Conselho Municipal de Direitos da Criança e do Adolescente - existência" : "MDHU18",
+        "Conselho Municipal de Direitos da Pessoa Idosa - existência" : "MDHU24",
+        "Conselho Municipal de Direitos da Pessoa com Deficiência - existência" : "MDHU30",
+        "Conselho Municipal de Direitos de Lésbicas, Gays, Bissexuais, Travestis e Transexuais - existência" : "MDHU36",
+        "Conselho Municipal de Igualdade Racial - existência" : "MDHU42",
+        "Conselho Municipal dos Povos e Comunidades Tradicionais" : "MDHU48",
+        "Utiliza grupos de discussões, foruns ou comunidades" : "MTIC252"
+    }
+}
+
+
+
+

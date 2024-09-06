@@ -1,0 +1,272 @@
+{
+    "Serviços informativos" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Acesso a documentos" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Informações gerais sobre licitações" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Ouvidoria e serviços de atendimento ao cidadão" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Fazer download de documentos ou formulários" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Consulta a processos/acompanhamento de protocolos" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Consulta prévia" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Cadastramento de fornecedores" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Concurso público" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Diário oficial, legislação municipal e finanças públicas" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Emissão certidão negativa de débito" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Emissão alvará" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Emissão nota fiscal eletrônica" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Matrícula escolar na rede pública online" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Agendamento de consulta na rede pública de saúde" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Emitir guia de pagamento de tributos" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Emissão de documentos como licenças, certidões, permissões e outros documentos" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Pesquisa de satisfação relacionada aos serviços prestados pela prefeitura" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Existe disponibilidade de dados ou sistemas do município de forma georreferenciada" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existe disponibilidade de dados ou sistemas do município de forma informatizada" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existem dados de bases cartográficas do cadastro imobiliário urbano" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existem dados de planta genérica de valores" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existe sistema de informações do cadastro imobiliário urbano na web ou em rede" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existe cobrança de IPTU no município" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existe cadastro ISSQN" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existe ISSQN informatizado" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+    "Existe Portal de dados abertos" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Existe Legislação municipal para garantir direito de acesso à informação pública em conformidade com a Lei de Acesso à Informação" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados de orçamentos são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados de receitas são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados de despesas são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados de balanços são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados de prestação de contas da Lei de Responsabilidade Fiscal são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados de compras e licitações são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados individualizados das remunerações de servidores são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Existe disponibilização de portal da transparencia" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+    "Desenvolve programa ou ação de inclusão digital" :
+    {
+        "categoria" : "Inclusão Digital",
+        "tipo" : "bool"
+    },
+    "Cursos de capacitação" :
+    {
+        "categoria" : "Inclusão Digital",
+        "tipo" : "bool"
+    },
+    "Ponte entre parceiros para ações menos favorecidos" :
+    {
+        "categoria" : "Inclusão Digital",
+        "tipo" : "bool"
+    },
+    "Instalação de computadores rede pública de ensino" :
+    {
+        "categoria" : "Inclusão Digital",
+        "tipo" : "bool"
+    },
+    "Instalação de rede wi-fi rede pública de ensino" :
+    {
+        "categoria" : "Inclusão Digital",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Conselho Municipal de Direitos Humanos - existência" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Conselho Municipal de Direitos da Criança e do Adolescente - existência" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Conselho Municipal de Direitos da Pessoa Idosa - existência" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Conselho Municipal de Direitos da Pessoa com Deficiência - existência" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Conselho Municipal de Direitos de Lésbicas, Gays, Bissexuais, Travestis e Transexuais - existência" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Conselho Municipal de Igualdade Racial - existência" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Conselho Municipal dos Povos e Comunidades Tradicionais" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Utiliza grupos de discussões, foruns ou comunidades" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    }
+}
+
+
+

@@ -4,13 +4,13 @@ from .AbstractScrapper import  BaseFileType
 from .IbgePibCidadesScrapper import IbgePibCidadesScrapper
 from datastructures import YearDataPoint
 
-class IbgeBasesMunicScrapper(IbgePibCidadesScrapper):
+class IbgeMunicScrapper(IbgePibCidadesScrapper):
    
    #a base MUNI de municípios do IBGE  tem um link diferente para os dados de cada ano, pelo menos isso é oq da pra ver no HTML da página
    URL_FOR_EACH_YEAR:dict[int,str] = {
       # 2021 : "https://ftp.ibge.gov.br/Perfil_Municipios/2021/Base_de_Dados/Base_MUNIC_2021_20240425.xlsx",
       # 2020 : "https://ftp.ibge.gov.br/Perfil_Municipios/2020/Base_de_Dados/Base_MUNIC_2020.xlsx",
-      # 2019 : "https://ftp.ibge.gov.br/Perfil_Municipios/2019/Base_de_Dados/Base_MUNIC_2019_20210817.xlsx",
+      2019 : "https://ftp.ibge.gov.br/Perfil_Municipios/2019/Base_de_Dados/Base_MUNIC_2019_20210817.xlsx",
       # 2018: "https://ftp.ibge.gov.br/Perfil_Municipios/2018/Base_de_Dados/Base_MUNIC_2018_xlsx_20201103.zip", 
       # 2017 : "https://ftp.ibge.gov.br/Perfil_Municipios/2017/Base_de_Dados/Base_MUNIC_2017_xls.zip",
       # 2015 : "https://ftp.ibge.gov.br/Perfil_Municipios/2015/Base_de_Dados/Base_MUNIC_2015_xls.zip",
@@ -22,7 +22,7 @@ class IbgeBasesMunicScrapper(IbgePibCidadesScrapper):
       # 2008 : "https://ftp.ibge.gov.br/Perfil_Municipios/2008/Base2008.zip",
       # 2006 : "https://ftp.ibge.gov.br/Perfil_Municipios/2006/base_MUNIC_2006.zip",
       # 2005 : "https://ftp.ibge.gov.br/Perfil_Municipios/2005/base_MUNIC_2005.zip",
-      2004: "https://ftp.ibge.gov.br/Perfil_Municipios/2004/base_MUNIC_2004.zip"
+      # 2004: "https://ftp.ibge.gov.br/Perfil_Municipios/2004/base_MUNIC_2004.zip"
    }
 
    REDUNDANT_COLUMNS:dict[int,list[str]] = {

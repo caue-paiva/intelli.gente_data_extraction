@@ -1,7 +1,7 @@
 from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
-from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeBasesMunicScrapper, CityPaymentsScrapper
+from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeMunicScrapper, CityPaymentsScrapper
 from webscrapping.scrapperclasses import FormalJobsScrapper, IdhScrapper, SnisScrapper, IbgeCitiesNetworkScrapper
-from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor
+from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor, IbgeMunicExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
 from datastructures import BaseFileType, YearDataPoint
 import pandas as pd
@@ -24,8 +24,11 @@ def run_city_gdp(file_type:BaseFileType)->None:
       collec.df.to_csv(f"{collec.data_name}.csv")
 
 def run_MUNIC_base(file_type:BaseFileType)->list[YearDataPoint]:
-   scrapper = IbgeBasesMunicScrapper(file_type,False)
-   return scrapper.extract_database()
+   scrapper = IbgeMunicScrapper(file_type,False)
+   extractor = IbgeMunicExtractor()
+   collections = extractor.extract_processed_collection(scrapper)
+   for collect in collections:
+      print(collect.df.info())
 
 def run_api_agregados():
    api = IbgeAgregatesApi("agregados", "ibge")
