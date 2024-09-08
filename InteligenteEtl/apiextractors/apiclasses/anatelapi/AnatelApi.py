@@ -5,9 +5,54 @@ from datastructures import DataTypes
 
 from datastructures import ProcessedDataCollection
 
+def calcular_cobertura_3G_4G(df):
+      def calcular_valor(tecnologias):
+         valor = 0
+         # Verifica se há cobertura 3g
+         if '3G' in tecnologias.upper():
+            valor += 1
+         # Verifica se há cobertura 4g
+         if '4G' in tecnologias.upper():
+            valor += 2
+         return valor
+      
+      # Consolidar as tecnologias por cidade (codigo_municipio) e ano
+      df_consolidado = df.groupby(['Código IBGE', 'Ano'])['Tecnologia'].apply(lambda x: ''.join(x)).reset_index()
+
+      # Aplicar a função calcular_valor para cada cidade/ano
+      df_consolidado['value'] = df_consolidado['Tecnologia'].apply(calcular_valor)
+
+      # Selecionar as colunas desejadas
+      df_final = df_consolidado[['Código IBGE', 'Ano', 'value']]
+
+      return df_final
+   
+def calcular_cobertura_5G(df):
+   def calcular_valor(tecnologias):
+      valor = 0
+      # Verifica se há cobertura 5g
+      if '5G' in tecnologias.upper():
+         valor = 3
+      return valor
+
+   # Consolidar as tecnologias por cidade (codigo_municipio) e ano
+   df_consolidado = df.groupby(['Código IBGE', 'Ano'])['Tecnologia'].apply(lambda x: ''.join(x)).reset_index()
+
+   # Aplicar a função calcular_valor para cada cidade/ano
+   df_consolidado['value'] = df_consolidado['Tecnologia'].apply(calcular_valor)
+
+   # Selecionar as colunas desejadas
+   df_final = df_consolidado[['Código IBGE', 'Ano', 'value']]
+
+   return df_final
+
 class AnatelApi(AbstractApiInterface):
 
    _data_map: dict[str, dict[str,dict]] #json que indica os parâmetros e outras informações sobre cada dado da api
+   _data_process_functions = {
+      "Cobertura de 3G e 4G na cidade": calcular_cobertura_3G_4G,
+      "Cobertura de 5G na cidade": calcular_cobertura_5G
+      }
 
    def __init__(self,path_to_datamap:str="")->None:
       if not path_to_datamap:
@@ -47,24 +92,37 @@ class AnatelApi(AbstractApiInterface):
 
       return data["recursos"][0]["link"]
 
-   def __get_processed_collection(self,dataframe_parameters:dict[str,str],data_name:str)->ProcessedDataCollection:
+   def __get_processed_collection(self,dataframe_parameters:dict[str,str],data_name:str):
       file_name:str = dataframe_parameters["file_name"]
-      filter_col:str = dataframe_parameters["filter_column"]
-      filter_vals:list = dataframe_parameters["filter_values"]
       val_col:str = dataframe_parameters["values_column"]
       city_code_col:str = dataframe_parameters["city_code_column"]
       year_col:str = dataframe_parameters["year_col"]
       dtype:str = dataframe_parameters["dtype"]
       category:str = dataframe_parameters["category"]
-      
+
+
       extracted_files:list[str] = os.listdir(self.DOWNLOADED_FILES_PATH)
+      file_path:str = os.path.join(self.DOWNLOADED_FILES_PATH,file_name)
+
       if file_name not in extracted_files:
          raise RuntimeError("Falha ao achar o arquivo extraido da API")
       
-      file_path:str = os.path.join(self.DOWNLOADED_FILES_PATH,file_name)
-      df = pd.read_csv(file_path,usecols=[filter_col,val_col,city_code_col,year_col],sep=";") #le o arquivo csv apenas com as colunas necessárias
-      filter_function = lambda x: x in filter_vals
-      df = df[df[filter_col].apply(filter_function)]#filtra df baseado na coluna de filtragrem e nos valores permitidos
+
+      # Caso seja necessário um processamento mais complexo para extrair indicador
+      if dataframe_parameters['requires_aditional_processing']:
+         source_columns = dataframe_parameters["source_columns"]
+         process_data_function = self._data_process_functions[data_name]
+         df = pd.read_csv(file_path,usecols=source_columns + [city_code_col,year_col],sep=";") #le o arquivo csv apenas com as colunas necessárias
+         df = process_data_function(df)
+         
+      else:
+         filter_col:str = dataframe_parameters["filter_column"]
+         filter_vals:list = dataframe_parameters["filter_values"]
+         df = pd.read_csv(file_path,usecols=[filter_col,val_col,city_code_col,year_col],sep=";") #le o arquivo csv apenas com as colunas necessárias
+         filter_function = lambda x: x in filter_vals
+         df = df[df[filter_col].apply(filter_function)]#filtra df baseado na coluna de filtragrem e nos valores permitidos
+         if filter_col != val_col:
+            df = df.drop(filter_col,axis="columns")
 
       df = df.rename(
          {
@@ -74,12 +132,14 @@ class AnatelApi(AbstractApiInterface):
          },
          axis="columns"
       )
-      df = df.drop(filter_col,axis="columns")
       
       if dtype == DataTypes.FLOAT.value: #se o valor for um float, tem que transformar o separador decimal de , para .
          parse_float_str = lambda x: x.replace(",",".")
          df[self.DB_DATA_VALUE_COLUMN] =  df[self.DB_DATA_VALUE_COLUMN].apply(parse_float_str)
 
+      df[self.DB_YEAR_COLUMN] = df[self.DB_YEAR_COLUMN].astype(int)
+      df[self.DB_CITY_ID_COLUMN] = df[self.DB_CITY_ID_COLUMN].astype(int)
+      df[self.DB_DATA_IDENTIFIER_COLUMN] = data_name
       df[self.DB_DATA_VALUE_COLUMN] =  df[self.DB_DATA_VALUE_COLUMN].astype(dtype)
       df[self.DB_DATA_IDENTIFIER_COLUMN] = data_name
       df[self.DB_DTYPE_COLUMN] = dtype

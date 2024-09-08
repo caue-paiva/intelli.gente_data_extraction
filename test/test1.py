@@ -103,5 +103,5 @@ def run_Idbe():
 
 
 if __name__ == "__main__":
-   run_Idbe()
+   run_ANATEL()
    
