@@ -6,43 +6,45 @@ from datastructures import DataTypes
 from datastructures import ProcessedDataCollection
 
 def calcular_cobertura_3G_4G(df):
-      def calcular_valor(tecnologias):
-         valor = 0
-         # Verifica se há cobertura 3g
-         if '3G' in tecnologias.upper():
-            valor += 1
-         # Verifica se há cobertura 4g
-         if '4G' in tecnologias.upper():
-            valor += 2
-         return valor
-      
-      # Consolidar as tecnologias por cidade (codigo_municipio) e ano
-      df_consolidado = df.groupby(['Código IBGE', 'Ano'])['Tecnologia'].apply(lambda x: ''.join(x)).reset_index()
+   # Função para calcular o valor com base na cobertura
+   def calcular_valor(grupo):
+      # Converte a coluna '% moradores cobertos' para float, trocando ',' por '.'
+      grupo['% moradores cobertos'] = grupo['% moradores cobertos'].str.replace(',', '.').astype(float)
 
-      # Aplicar a função calcular_valor para cada cidade/ano
-      df_consolidado['value'] = df_consolidado['Tecnologia'].apply(calcular_valor)
-
-      # Selecionar as colunas desejadas
-      df_final = df_consolidado[['Código IBGE', 'Ano', 'value']]
-
-      return df_final
-   
-def calcular_cobertura_5G(df):
-   def calcular_valor(tecnologias):
       valor = 0
-      # Verifica se há cobertura 5g
-      if '5G' in tecnologias.upper():
-         valor = 3
+      # Verifica se há cobertura 3G
+      if any(grupo[grupo['Tecnologia'] == '3G']['% moradores cobertos'] > 1):
+         valor += 1
+      # Verifica se há cobertura 4G
+      if any(grupo[grupo['Tecnologia'] == '4G']['% moradores cobertos'] > 1):
+         valor += 2
       return valor
 
-   # Consolidar as tecnologias por cidade (codigo_municipio) e ano
-   df_consolidado = df.groupby(['Código IBGE', 'Ano'])['Tecnologia'].apply(lambda x: ''.join(x)).reset_index()
+   df_final = df[(df['Operadora'] == 'Todas') & (df['Tecnologia'].isin(['3G', '4G']))]
 
-   # Aplicar a função calcular_valor para cada cidade/ano
-   df_consolidado['value'] = df_consolidado['Tecnologia'].apply(calcular_valor)
+   # Agrupar por codigo_municipio e ano
+   df_final = df.groupby(['Código IBGE', 'Ano']).apply(calcular_valor).reset_index()
 
-   # Selecionar as colunas desejadas
-   df_final = df_consolidado[['Código IBGE', 'Ano', 'value']]
+   df_final.columns = ['Código IBGE', 'Ano', 'value']
+   return df_final
+   
+def calcular_cobertura_5G(df):
+   # Função para calcular o valor com base na cobertura
+   def calcular_valor(grupo):
+      # Converte a coluna '% moradores cobertos' para float, trocando ',' por '.'
+      grupo['% moradores cobertos'] = grupo['% moradores cobertos'].str.replace(',', '.').astype(float)
+      valor = 0
+      # Verifica se há cobertura 3G
+      if any(grupo[grupo['Tecnologia'] == '5G']['% moradores cobertos'] > 1):
+         valor += 3
+
+      return valor
+
+   df_final = df[(df['Operadora'] == 'Todas') & (df['Tecnologia'].isin(['5G']))]
+
+   # Agrupar por codigo_municipio e ano
+   df_final = df.groupby(['Código IBGE', 'Ano']).apply(calcular_valor).reset_index()
+   df_final.columns = ['Código IBGE', 'Ano', 'value']
 
    return df_final
 

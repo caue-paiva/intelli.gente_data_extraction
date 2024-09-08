@@ -26,7 +26,7 @@
          "Cobertura de 3G e 4G na cidade": {
             "file_name":"Meu_Municipio_Cobertura.csv",
             "requires_aditional_processing": true,
-            "source_columns": ["Tecnologia"],
+            "source_columns": ["Operadora","Tecnologia","% moradores cobertos"],
             "values_column":"value",
             "city_code_column":"Código IBGE",
             "year_col":"Ano",
@@ -36,7 +36,7 @@
          "Cobertura de 5G na cidade": {
             "file_name":"Meu_Municipio_Cobertura.csv",
             "requires_aditional_processing": true,
-            "source_columns": ["Tecnologia"],
+            "source_columns": ["Operadora","Tecnologia","% moradores cobertos"],
             "values_column":"value",
             "city_code_column":"Código IBGE",
             "year_col":"Ano",
