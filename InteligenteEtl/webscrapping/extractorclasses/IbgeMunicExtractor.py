@@ -47,7 +47,7 @@ class IbgeMunicExtractor(AbstractDataExtractor):
 
                 data_collections.append(ProcessedDataCollection(
                     category=data_infomations[data_name]['categoria'],
-                    dtype=data_infomations[data_name]['tipo'],
+                    dtype=DataTypes.from_string(data_infomations[data_name]['tipo']),
                     data_name=data_name,
                     time_series_years=[year],
                     df = df

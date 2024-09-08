@@ -53,10 +53,52 @@
         "Conselho Municipal de Direitos de Lésbicas, Gays, Bissexuais, Travestis e Transexuais - existência" : "MDHU36",
         "Conselho Municipal de Igualdade Racial - existência" : "MDHU42",
         "Conselho Municipal dos Povos e Comunidades Tradicionais" : "MDHU48",
-        "Utiliza grupos de discussões, foruns ou comunidades" : "MTIC252"
+        "Utiliza grupos de discussões, foruns ou comunidades" : "MTIC252",
+
+        "Qual o tipo de conexão que interliga os equipamentos e edifícios públicos da prefeitura?" : "MTIC04",
+
+        "Consulta pública on-line para que cidadãos possam enviar contribuições para leis, orçamentos e planos" : "MTIC251",
+        "Grupo de discussão foruns ou comunidades" : "MTIC252",
+        "Enquetes on-line" : "MTIC253",
+        "Votação on-line" : "MTIC254",
+        "Não disponibiliza formas de participação pública on-line" : "MTIC255",
+
+        "Centro de processamento de dados (CPD) - existência" : "MTIC08",
+        "Centro de controle e operações" : "MTIC263",
+        "Sistema de iluminação inteligente" : "MTIC264",
+        "Sensores para monitoramento de área de risco" : "MTIC266",
+
+        "Bilhete eletrônico transporte público" : "MTIC261",
+        "Ônibus municipal com GPS" : "MTIC262",
+        "Semáforos inteligentes" : "MTIC265",
+
+        "Disponibiliza para acesso público" : "MTIC211",
+
+        "Existência de estrutura organizacional para TIC no municipio" : "MTIC06",
+        "Funcionários efetivos" : "MTIC071",
+        "Servidores Cedidos" : "MTIC072",
+        "Comissionados" : "MTIC074",
+        "Terceirizados" : "MTIC075",
+        "Consultores" : "MTIC076",
+
+        "Disponibilização de informações, execução orçamentaria e financeira Lei Complementar 131/2009" : "MGOV06",
+        "Disponibilização em tempo real" : "MGOV061",
+        "Orçamento publicado" : "MGOV0715",
+        "Receitas publicadas" : "MGOV0725",
+        "Despesas publicadas" : "MGOV0735",
+
+        "Correio" : "MTIC011",
+        "Fax" : "MTIC012",
+        "Jornais" : "MTIC013",
+        "Internet" : "MTIC014",
+        "Telefone" : "MTIC015",
+        "Facebook" : "MTIC131",
+        "Instagran" : "MTIC132",
+        "Youtube" : "MTIC133",
+        "Whathsaap" : "MTIC136",
+        "Twiter" : "MTIC139", 
+
+        "Pesquisa satisfação serviço público" : "MTIC1218"
     }
 }
-
-
-
 

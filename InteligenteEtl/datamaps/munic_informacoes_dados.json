@@ -265,8 +265,241 @@
     {
         "categoria" : "Participação Pública",
         "tipo" : "bool"
+    },
+
+
+
+
+
+    "Qual o tipo de conexão que interliga os equipamentos e edifícios públicos da prefeitura?" :
+    {
+        "categoria" : "Infraestrutura de Conectividade",
+        "tipo" : "str"
+    },
+
+
+
+
+    "Consulta pública on-line para que cidadãos possam enviar contribuições para leis, orçamentos e planos" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Grupo de discussão foruns ou comunidades" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Enquetes on-line" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Votação on-line" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Não disponibiliza formas de participação pública on-line" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Centro de processamento de dados (CPD) - existência" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Centro de controle e operações" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Sistema de iluminação inteligente" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Sensores para monitoramento de área de risco" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Bilhete eletrônico transporte público" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+    "Ônibus municipal com GPS" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+    "Semáforos inteligentes" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Disponibiliza para acesso público" :
+    {
+        "categoria" : "Inclusão Digital",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Existência de estrutura organizacional para TIC no municipio" :
+    {
+        "categoria" : "Institucional",
+        "tipo" : "bool"
+    },
+    "Funcionários efetivos" :
+    {
+        "categoria" : "Institucional",
+        "tipo" : "bool"
+    },
+    "Servidores Cedidos" :
+    {
+        "categoria" : "Institucional",
+        "tipo" : "bool"
+    },
+    "Comissionados" :
+    {
+        "categoria" : "Institucional",
+        "tipo" : "bool"
+    },
+    "Terceirizados" :
+    {
+        "categoria" : "Institucional",
+        "tipo" : "bool"
+    },
+    "Consultores" :
+    {
+        "categoria" : "Institucional",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Disponibilização de informações, execução orçamentaria e financeira Lei Complementar 131/2009" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Disponibilização em tempo real" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Orçamento publicado" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Receitas publicadas" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Despesas publicadas" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+    "Correio" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Fax" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Jornais" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Internet" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Telefone" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Facebook" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Instagran" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Youtube" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Whathsaap" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Twiter" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Pesquisa satisfação serviço público" :
+    {
+        "categoria" : "Monitoramento",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
     }
 }
-
-
 
