@@ -6,6 +6,8 @@ from typing import Type
 from webscrapping.scrapperclasses.IbgeMunicScrapper import IbgeMunicScrapper
 import json
 import os
+import datamaps
+
 
 class IbgeMunicExtractor(AbstractDataExtractor):
    
@@ -13,13 +15,9 @@ class IbgeMunicExtractor(AbstractDataExtractor):
        df['valor'] = df['valor'].map({'Sim' : 1, 'Não' : 0, '-' : 0, 'Recusa' : 0, 'Não informou' : 0})
 
    def extract_processed_collection(self,scrapper:Type[IbgeMunicScrapper])->list[ProcessedDataCollection]:
+        data_infomations = datamaps.munic_get_data_information()
+        data_codes_per_year = datamaps.munic_get_data_codes_per_year()
 
-        with open('./InteligenteEtl/datamaps/munic_informacoes_dados.json', 'r') as file:
-            data_infomations = json.load(file)
-
-        with open('./InteligenteEtl/datamaps/munic_codigos_dados_por_ano.json', 'r') as file:
-            data_codes_per_year = json.load(file)
-        
         data_points:list[YearDataPoint] = scrapper.extract_database()
         
         data_collections:list[ProcessedDataCollection] = []
@@ -44,11 +42,11 @@ class IbgeMunicExtractor(AbstractDataExtractor):
                     self.__map_binary_to_bool(df)
 
                 print(df)
-
+                
                 data_collections.append(ProcessedDataCollection(
                     category=data_infomations[data_name]['categoria'],
                     dtype=DataTypes.from_string(data_infomations[data_name]['tipo']),
-                    data_name=data_name,
+                    data_name=data_name + " - " + data_codes_per_year[str(year)][data_name],
                     time_series_years=[year],
                     df = df
                 ))
