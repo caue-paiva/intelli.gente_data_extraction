@@ -99,6 +99,43 @@
         "Twiter" : "MTIC139", 
 
         "Pesquisa satisfação serviço público" : "MTIC1218"
+    },
+
+    "2021" : 
+    {
+        "Bibliotecas públicas" : "MCUL3901",
+        "Museus" : "MCUL3902",
+        "Teatros ou salas de espetáculos" : "MCUL3903",
+        "Centro cultural" : "MCUL3904",
+        "Arquivo público e/ou centro de documentação" : "MCUL3905", 
+        "Estádios ou ginásios poliesportivos" : "MCUL3906",
+        "Centro de artesanato" : "MCUL3907",
+        "Banca de jornal - existência" : "MCUL3908",
+        "Cinema - existência" : "MCUL3909",
+        "Videolocadora - existência" : "MCUL3910",
+        "Shopping center - existência 1" : "MCUL3911",
+        "Lojas de discos, CDs, fitas e DVDs - existência 1" : "MCUL3912",
+        "Livrarias - existência 1" : "MCUL3913",
+        "Galerias de arte 1" : "MCUL3914",
+        "Clube e associação recreativa - existência" : "MCUL3916",
+        "Lan house - existência 1" : "MCUL3917",
+        "Circo fixo - existência" : "MCUL3918",
+        "Concha acústica - existência" : "MCUL3919",
+        "Ponto de cultura" : "MCUL40",
+
+        "Legislação municipal de proteção ao patrimônio cultural - existência" : "MCUL15",
+        "Patrimônio material" : "MCUL161",
+        "Patrimônio imaterial" : "MCUL162",
+        "Conselho municipal de cultura - existência" : "MCUL19",
+
+        "Projetos voltados para a educação do campo" : "MEDU131",
+        "Projetos voltados para educação de povos indígenas" : "MEDU132",
+        "Projetos voltados para educação quilombolas" : "MEDU133",
+        "Projetos voltados para a educação de outros povos e comunidades tradicionais" : "MEDU134",
+
+        "Combate à violência nas escolas" : "MEDU114"
     }
 }
+
+
 

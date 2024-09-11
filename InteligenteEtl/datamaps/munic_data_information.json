@@ -493,13 +493,182 @@
     },
 
 
+    
 
 
 
-    "" :
+    "Bibliotecas públicas" :
     {
-        "categoria" : "Dados Abertos",
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Museus" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Teatros ou salas de espetáculos" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Centro cultural" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Arquivo público e/ou centro de documentação" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Estádios ou ginásios poliesportivos" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Banca de jornal - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Cinema - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Videolocadora - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Shopping center - existência 1" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Lojas de discos, CDs, fitas e DVDs - existência 1" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Livrarias - existência 1" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Galerias de arte 1" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Clube e associação recreativa - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Lan house - existência 1" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Circo fixo - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Concha acústica - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Ponto de cultura" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+    "Legislação municipal de proteção ao patrimônio cultural - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Patrimônio material" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Patrimônio imaterial" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Conselho municipal de cultura - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+
+    "Projetos voltados para a educação do campo" :
+    {
+        "categoria" : "Educação",
+        "tipo" : "bool"
+    },
+
+    "Projetos voltados para educação de povos indígenas" :
+    {
+        "categoria" : "Educação",
+        "tipo" : "bool"
+    },
+
+    "Projetos voltados para educação quilombolas" :
+    {
+        "categoria" : "Educação",
+        "tipo" : "bool"
+    },
+
+    "Projetos voltados para a educação de outros povos e comunidades tradicionais" :
+    {
+        "categoria" : "Educação",
+        "tipo" : "bool"
+    },
+
+    "Combate à violência nas escolas" :
+    {
+        "categoria" : "Segurança Pública",
         "tipo" : "bool"
     }
+
 }
 
