@@ -533,6 +533,12 @@
         "tipo" : "bool"
     },
 
+    "Centro de artesanato" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
     "Banca de jornal - existência" :
     {
         "categoria" : "Cultura",

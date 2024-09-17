@@ -12,7 +12,7 @@ import datamaps
 class IbgeMunicExtractor(AbstractDataExtractor):
    
    def __map_binary_to_bool(self, df:pd.DataFrame)->None:
-       df['valor'] = df['valor'].map({'Sim' : 1, 'Não' : 0, '-' : 0, 'Recusa' : 0, 'Não informou' : 0})
+       df['valor'] = df['valor'].map({'Sim' : 1, 'Não' : 0, '-' : 0, 'Recusa' : 0, 'Não informou' : 0, 'Legislação não faz referencia ao tipo de bem tombado' : 0})
 
    def extract_processed_collection(self,scrapper:Type[IbgeMunicScrapper])->list[ProcessedDataCollection]:
         data_infomations = datamaps.munic_get_data_information()
@@ -26,7 +26,7 @@ class IbgeMunicExtractor(AbstractDataExtractor):
             year = data_point.data_year
             number_of_cities = len(data_point.df.index)
             year_column = number_of_cities*[year]
-            city_code_column = data_point.df['CodMun']
+            city_code_column = data_point.df['CODMUN']
 
             for data_name in data_codes_per_year[str(year)]:
                 data_id_column = number_of_cities*[data_codes_per_year[str(year)][data_name]]
