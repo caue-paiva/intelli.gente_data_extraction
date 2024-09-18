@@ -1,4 +1,51 @@
 {
+    "2018" :
+    {
+        "O município desenvolve ações, programas ou projetos de qualificação profissional e intermediação de mão de obra" : "MTIP07",
+        "Ações de qualificação profissional" : "MTIP081",
+        "Ações de intermediação de mão de obra" : "MTIP082",
+        "Ações de mobilização e sensibilização para cursos de qualificação profissional" : "MTIP083",
+
+        "O município desenvolve ações, programas ou projetos de inclusão produtiva urbana" : "MTIP09",
+        "Ações de fomento a empreendimentos individuais urbanos" : "MTIP101",
+        "Ações fomento a empreendimentos coletivos urbanos (Associativismo, Cooperativismo e Economia Solidária urbana e outros grupos não formalizados" : "MTIP102",
+        "Ações de assistência técnico-gerencial a empreendimentos individuais urbanos (para formalização, melhora da produção, aspectos jurídicos e comerciais)" : "MTIP103",
+        "Ações de incubação de empreendimentos" : "MTIP104",
+        "Ações de fomento ao artesanato" : "MTIP105",
+        "Ações de doação de equipamentos ou kit básico para desempenho do trabalho" : "MTIP106",
+
+        "O município desenvolve ações, programas ou projetos de crédito, microcrédito e seguro" : "MTIP11",
+        "Ações para promover o acesso a microcrédito produtivo orientado" : "MTIP121",
+        "Ações de acesso a crédito por meio do Banco do Povo ou outras organizações congêneres" : "MTIP122",
+        "Ações de acesso a crédito do Proger urbano" : "MTIP123",
+
+        "O município desenvolve ações, programas ou projetos de geração de trabalho e renda" : "MTIP13",
+        "Projeto(s) de apoio à comercialização de negócios, cooperativas e empreendimento solidários" : "MTIP141",
+        "Projeto(s) de apoio ao associativismo, cooperativismo e economia solidária" : "MTIP142",
+
+        "Se no município existe algum organismo executivo  de políticas para as mulheres" : "MPPM01",
+        "Promove capacitação em gênero para outras áreas do governo" : "MPPM101",
+        "Articula com outros órgãos municipais a incorporação da questão de gênero na formulação e/ou implementação de políticas" : "MPPM102",
+        "Executa diretamente políticas para a promoção e igualdade de gênero" : "MPPM103",
+        "Executa diretamente políticas para o enfrentamento da violência" : "MPPM104",
+        "Executa diretamente políticas para a promoção da autonomia das mulheres (geração de renda e fomento ao empreendedorismo)" : "MPPM105",
+        
+        "Povos indígenas" : "MASS261",
+        "Povos ciganos" : "MASS262",
+        "Comunidades quilombolas" : "MASS263",
+        "Ribeirinhos" : "MASS264",
+        "Povos de matriz africana" : "MASS265",
+        "Outros povos ou comunidades tradicionais" : "MASS266",
+        "População em situação de rua" : "MASS267",
+        "Agricultores familiares" : "MASS268",
+        "Assentados da reforma agrária" : "MASS269",
+        "Pescadores artesanais" : "MASS2610",
+        "Catadores de materiais recicláveis" : "MASS2611",
+        "Migrantes/Imigrantes/Refugiados" : "MASS2612",
+        "Atingidas por empreendimentos de infraestrutura" : "MASS2613",
+        "Encarcerado/egressos do sistema carcerário" : "MASS2614"
+    },
+
     "2019" : 
     {
         "Serviços informativos" : "MTIC121", 

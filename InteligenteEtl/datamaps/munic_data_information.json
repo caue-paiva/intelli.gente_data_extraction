@@ -1,4 +1,232 @@
 {
+    "O município desenvolve ações, programas ou projetos de qualificação profissional e intermediação de mão de obra" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de qualificação profissional" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de intermediação de mão de obra" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de mobilização e sensibilização para cursos de qualificação profissional" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+
+    "O município desenvolve ações, programas ou projetos de inclusão produtiva urbana" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de fomento a empreendimentos individuais urbanos" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações fomento a empreendimentos coletivos urbanos (Associativismo, Cooperativismo e Economia Solidária urbana e outros grupos não formalizados" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de assistência técnico-gerencial a empreendimentos individuais urbanos (para formalização, melhora da produção, aspectos jurídicos e comerciais)" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de incubação de empreendimentos" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de fomento ao artesanato" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de doação de equipamentos ou kit básico para desempenho do trabalho" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "O município desenvolve ações, programas ou projetos de crédito, microcrédito e seguro" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações para promover o acesso a microcrédito produtivo orientado" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de acesso a crédito por meio do Banco do Povo ou outras organizações congêneres" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de acesso a crédito do Proger urbano" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "O município desenvolve ações, programas ou projetos de geração de trabalho e renda" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Projeto(s) de apoio à comercialização de negócios, cooperativas e empreendimento solidários" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Projeto(s) de apoio ao associativismo, cooperativismo e economia solidária" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+
+
+
+    
+
+    "Se no município existe algum organismo executivo  de políticas para as mulheres" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Promove capacitação em gênero para outras áreas do governo" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Articula com outros órgãos municipais a incorporação da questão de gênero na formulação e/ou implementação de políticas" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Executa diretamente políticas para a promoção e igualdade de gênero" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Executa diretamente políticas para o enfrentamento da violência" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Executa diretamente políticas para a promoção da autonomia das mulheres (geração de renda e fomento ao empreendedorismo)" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Povos indígenas" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Povos ciganos" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Comunidades quilombolas" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Ribeirinhos" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Povos de matriz africana" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Outros povos ou comunidades tradicionais" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "População em situação de rua" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Agricultores familiares" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Assentados da reforma agrária" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Pescadores artesanais" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Catadores de materiais recicláveis" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Migrantes/Imigrantes/Refugiados" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Atingidas por empreendimentos de infraestrutura" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Encarcerado/egressos do sistema carcerário" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+
+
+
+
+
     "Serviços informativos" :
     {
         "categoria" : "Serviços On-line da Prefeitura",
@@ -677,4 +905,3 @@
     }
 
 }
-
