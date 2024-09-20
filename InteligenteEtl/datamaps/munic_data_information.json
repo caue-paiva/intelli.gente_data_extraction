@@ -902,6 +902,330 @@
     {
         "categoria" : "Segurança Pública",
         "tipo" : "bool"
+    },
+
+
+
+
+
+
+
+    "Mecanismos de controle e fiscalização para evitar ocupação em áreas suscetíveis aos desastres" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Sistema de alerta antecipado de desastres decorrente de enchentes, inundações ou enxurradas" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Cadastro de risco" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Mapeamentos de áreas de risco de enchentes ou inundações" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Sistema de alerta antecipado de desastre decorrente de escorregamento ou deslizamento de encosta" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Coordenação municipal de proteção e defesa civil" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Sistema de alerta antecipado de desastres de defesa civil" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Barco" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Metrô" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Mototáxi" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Táxi" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Trem" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Van" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Avião" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Transporte coletivo por ônibus intramunicipal" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Transporte coletivo por ônibus intermunicipal" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Conselho Municipal de Meio Ambiente ou similar" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Existe área responsável pelo tema meio ambiente dispõe de recursos financeiros específicos para serem utilizados no desenvolvimento de suas ações" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Legislação ou instrumento de gestão ambiental sobre gestão de bacias hidrográficas" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Legislação ou instrumento de gestão ambiental sobre área e/ou zona de proteção ou controle ambiental" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Legislação ou instrumento de gestão ambiental sobre permissão de atividades extrativas minerais" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Legislação ou instrumento de gestão ambiental sobre fauna silvestre" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Legislação ou instrumento de gestão ambiental sobre florestas" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Legislação ou instrumento de gestão ambiental sobre proteção à biodiversidade" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Plano Municipal de Transporte contempla a inclusão de pessoas com deficiência na rede viária e no sistema de transporte" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Frota de ônibus municipais adaptada para pessoas com deficiência ou mobilidade reduzida" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Piso baixo" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Piso alto com acesso realizado por plataforma de embarque/desembarque" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Piso alto equipado com plataforma elevatória veicular" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Cadastro ou levantamento de famílias interessadas em programas habitacionais" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "O cadastro é informatizado" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "O cadastro inclui a natureza do benefício habitacional pretendido pelas famílias" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Construção de unidades habitacionais" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Aquisição de unidades habitacionais" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Melhoria de unidades habitacionais" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Oferta de material de construção" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Oferta de lotes" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Regularização fundiária" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Urbanização de assentamentos" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "A prefeitura tem algum programa que conceda o benefício do aluguel social" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "O município foi atingido pela seca nos últimos 4 anos" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "O município foi atingido por alagamentos nos últimos 4 anos" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "O município foi atingido por processo erosivo acelerado nos últimos 4 anos" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "O município foi atingido por enchentes ou inundações graduais nos últimos 4 anos" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "O município foi atingido por enxurradas ou inundações bruscas nos últimos 4 anos" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "O município foi atingido por escorregamentos ou deslizamentos de encostas nos últimos 4 anos" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Favelas, mocambos, palafitas ou assemelhados" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Cortiços, casas de cômodos ou cabeças-de-porco" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Loteamentos irregulares e/ou clandestinos" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Ocupações de terrenos ou prédios por movimentos de moradia" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Plano Municipal de Transporte contempla o uso pelo pedestre e pelo ciclista do espaço viário de uso público" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Ciclovia no município - existência" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Bicicletário no município - existência" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
     }
 
 }

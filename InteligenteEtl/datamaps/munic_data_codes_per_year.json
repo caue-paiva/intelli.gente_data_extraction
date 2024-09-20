@@ -148,6 +148,70 @@
         "Pesquisa satisfação serviço público" : "MTIC1218"
     },
 
+    "2020" :
+    {
+        "Mecanismos de controle e fiscalização para evitar ocupação em áreas suscetíveis aos desastres" : "MGRD183",
+        "Sistema de alerta antecipado de desastres decorrente de enchentes, inundações ou enxurradas" : "MGRD186",
+        "Cadastro de risco" : "MGRD187",
+        "Mapeamentos de áreas de risco de enchentes ou inundações" : "MGRD201",
+        "Sistema de alerta antecipado de desastre decorrente de escorregamento ou deslizamento de encosta" : "MGRD206",
+        "Coordenação municipal de proteção e defesa civil" : "MGRD212",
+        "Sistema de alerta antecipado de desastres de defesa civil" : "MGRD2213",
+
+        "Barco" : "MTRA181",
+        "Metrô" : "MTRA182",
+        "Mototáxi" : "MTRA183",
+        "Táxi" : "MTRA184",
+        "Trem" : "MTRA185",
+        "Van" : "MTRA186",
+        "Avião" : "MTRA187",
+        "Transporte coletivo por ônibus intramunicipal" : "MTRA19",
+        "Transporte coletivo por ônibus intermunicipal" : "MTRA23",
+
+        "Conselho Municipal de Meio Ambiente ou similar" : "MMAM10",
+        "Existe área responsável pelo tema meio ambiente dispõe de recursos financeiros específicos para serem utilizados no desenvolvimento de suas ações" : "MMAM16",
+        "Legislação ou instrumento de gestão ambiental sobre gestão de bacias hidrográficas" : "MMAM203",
+        "Legislação ou instrumento de gestão ambiental sobre área e/ou zona de proteção ou controle ambiental" : "MMAM204",
+        "Legislação ou instrumento de gestão ambiental sobre permissão de atividades extrativas minerais" : "MMAM207",
+        "Legislação ou instrumento de gestão ambiental sobre fauna silvestre" : "MMAM208",
+        "Legislação ou instrumento de gestão ambiental sobre florestas" : "MMAM209",
+        "Legislação ou instrumento de gestão ambiental sobre proteção à biodiversidade" : "MMAM2012",
+
+        "Plano Municipal de Transporte contempla a inclusão de pessoas com deficiência na rede viária e no sistema de transporte" : "MTRA086",
+        "Frota de ônibus municipais adaptada para pessoas com deficiência ou mobilidade reduzida" : "MTRA21",
+        "Piso baixo" : "MTRA221",
+        "Piso alto com acesso realizado por plataforma de embarque/desembarque" : "MTRA222",
+        "Piso alto equipado com plataforma elevatória veicular" : "MTRA223",
+
+        "Cadastro ou levantamento de famílias interessadas em programas habitacionais" : "MHAB18",
+        "O cadastro é informatizado" : "MHAB182",
+        "O cadastro inclui a natureza do benefício habitacional pretendido pelas famílias" : "MHAB183",
+        "Construção de unidades habitacionais" : "MHAB201",
+        "Aquisição de unidades habitacionais" : "MHAB202",
+        "Melhoria de unidades habitacionais" : "MHAB203",
+        "Oferta de material de construção" : "MHAB204",
+        "Oferta de lotes" : "MHAB205",
+        "Regularização fundiária" : "MHAB206",
+        "Urbanização de assentamentos" : "MHAB207",
+        "A prefeitura tem algum programa que conceda o benefício do aluguel social" : "MHAB21",
+
+        "O município foi atingido pela seca nos últimos 4 anos" : "MGRD01",
+        "O município foi atingido por alagamentos nos últimos 4 anos" : "MGRD06",
+        "O município foi atingido por processo erosivo acelerado nos últimos 4 anos" : "MGRD07",
+        "O município foi atingido por enchentes ou inundações graduais nos últimos 4 anos" : "MGDR08",
+        "O município foi atingido por enxurradas ou inundações bruscas nos últimos 4 anos" : "MGDR11",
+        "O município foi atingido por escorregamentos ou deslizamentos de encostas nos últimos 4 anos" : "MGDR14",
+
+        "Favelas, mocambos, palafitas ou assemelhados" : "MHAB191",
+        "Cortiços, casas de cômodos ou cabeças-de-porco" : "MHAB192",
+        "Loteamentos irregulares e/ou clandestinos" : "MHAB193",
+        "Ocupações de terrenos ou prédios por movimentos de moradia" : "MHAB194",
+
+        "Plano Municipal de Transporte contempla o uso pelo pedestre e pelo ciclista do espaço viário de uso público" : "MTRA085",
+        "Ciclovia no município - existência" : "MTRA24", 
+        "Bicicletário no município - existência" : "MTRA25"        
+    },
+
     "2021" : 
     {
         "Bibliotecas públicas" : "MCUL3901",
