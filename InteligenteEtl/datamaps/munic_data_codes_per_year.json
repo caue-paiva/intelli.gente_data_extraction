@@ -198,9 +198,9 @@
         "O município foi atingido pela seca nos últimos 4 anos" : "MGRD01",
         "O município foi atingido por alagamentos nos últimos 4 anos" : "MGRD06",
         "O município foi atingido por processo erosivo acelerado nos últimos 4 anos" : "MGRD07",
-        "O município foi atingido por enchentes ou inundações graduais nos últimos 4 anos" : "MGDR08",
-        "O município foi atingido por enxurradas ou inundações bruscas nos últimos 4 anos" : "MGDR11",
-        "O município foi atingido por escorregamentos ou deslizamentos de encostas nos últimos 4 anos" : "MGDR14",
+        "O município foi atingido por enchentes ou inundações graduais nos últimos 4 anos" : "MGRD08",
+        "O município foi atingido por enxurradas ou inundações bruscas nos últimos 4 anos" : "MGRD11",
+        "O município foi atingido por escorregamentos ou deslizamentos de encostas nos últimos 4 anos" : "MGRD14",
 
         "Favelas, mocambos, palafitas ou assemelhados" : "MHAB191",
         "Cortiços, casas de cômodos ou cabeças-de-porco" : "MHAB192",
