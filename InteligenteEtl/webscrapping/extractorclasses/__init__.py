@@ -11,3 +11,4 @@ from .SchoolDistortionRatesExtractor import SchoolDistortionRatesExtractor
 from .RaisExtractor import RaisExtractor
 from .IdebFinalYearsExtractor import idebFinalYearsExtractor
 from .TechEquipamentExtractor import TechEquipamentExtractor
+from .IbgeMunicExtractor import IbgeMunicExtractor

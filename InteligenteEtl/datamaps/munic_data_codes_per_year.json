@@ -1,0 +1,252 @@
+{
+    "2018" :
+    {
+        "O município desenvolve ações, programas ou projetos de qualificação profissional e intermediação de mão de obra" : "MTIP07",
+        "Ações de qualificação profissional" : "MTIP081",
+        "Ações de intermediação de mão de obra" : "MTIP082",
+        "Ações de mobilização e sensibilização para cursos de qualificação profissional" : "MTIP083",
+
+        "O município desenvolve ações, programas ou projetos de inclusão produtiva urbana" : "MTIP09",
+        "Ações de fomento a empreendimentos individuais urbanos" : "MTIP101",
+        "Ações fomento a empreendimentos coletivos urbanos (Associativismo, Cooperativismo e Economia Solidária urbana e outros grupos não formalizados" : "MTIP102",
+        "Ações de assistência técnico-gerencial a empreendimentos individuais urbanos (para formalização, melhora da produção, aspectos jurídicos e comerciais)" : "MTIP103",
+        "Ações de incubação de empreendimentos" : "MTIP104",
+        "Ações de fomento ao artesanato" : "MTIP105",
+        "Ações de doação de equipamentos ou kit básico para desempenho do trabalho" : "MTIP106",
+
+        "O município desenvolve ações, programas ou projetos de crédito, microcrédito e seguro" : "MTIP11",
+        "Ações para promover o acesso a microcrédito produtivo orientado" : "MTIP121",
+        "Ações de acesso a crédito por meio do Banco do Povo ou outras organizações congêneres" : "MTIP122",
+        "Ações de acesso a crédito do Proger urbano" : "MTIP123",
+
+        "O município desenvolve ações, programas ou projetos de geração de trabalho e renda" : "MTIP13",
+        "Projeto(s) de apoio à comercialização de negócios, cooperativas e empreendimento solidários" : "MTIP141",
+        "Projeto(s) de apoio ao associativismo, cooperativismo e economia solidária" : "MTIP142",
+
+        "Se no município existe algum organismo executivo  de políticas para as mulheres" : "MPPM01",
+        "Promove capacitação em gênero para outras áreas do governo" : "MPPM101",
+        "Articula com outros órgãos municipais a incorporação da questão de gênero na formulação e/ou implementação de políticas" : "MPPM102",
+        "Executa diretamente políticas para a promoção e igualdade de gênero" : "MPPM103",
+        "Executa diretamente políticas para o enfrentamento da violência" : "MPPM104",
+        "Executa diretamente políticas para a promoção da autonomia das mulheres (geração de renda e fomento ao empreendedorismo)" : "MPPM105",
+        
+        "Povos indígenas" : "MASS261",
+        "Povos ciganos" : "MASS262",
+        "Comunidades quilombolas" : "MASS263",
+        "Ribeirinhos" : "MASS264",
+        "Povos de matriz africana" : "MASS265",
+        "Outros povos ou comunidades tradicionais" : "MASS266",
+        "População em situação de rua" : "MASS267",
+        "Agricultores familiares" : "MASS268",
+        "Assentados da reforma agrária" : "MASS269",
+        "Pescadores artesanais" : "MASS2610",
+        "Catadores de materiais recicláveis" : "MASS2611",
+        "Migrantes/Imigrantes/Refugiados" : "MASS2612",
+        "Atingidas por empreendimentos de infraestrutura" : "MASS2613",
+        "Encarcerado/egressos do sistema carcerário" : "MASS2614"
+    },
+
+    "2019" : 
+    {
+        "Serviços informativos" : "MTIC121", 
+        "Acesso a documentos" : "MTIC122",
+        "Informações gerais sobre licitações" : "MTIC123",
+        "Ouvidoria e serviços de atendimento ao cidadão" : "MTIC124",
+        "Fazer download de documentos ou formulários" : "MTIC125",
+        "Consulta a processos/acompanhamento de protocolos" : "MTIC126",
+        "Consulta prévia" : "MTIC127",
+        "Cadastramento de fornecedores" : "MTIC1210",
+        "Concurso público" : "MTIC129",
+        "Diário oficial, legislação municipal e finanças públicas" : "MTIC128",
+        "Emissão certidão negativa de débito" : "MTIC1211",
+        "Emissão alvará" : "MTIC1212",
+        "Emissão nota fiscal eletrônica" : "MTIC1213",
+        "Matrícula escolar na rede pública online" : "MTIC1214",
+        "Agendamento de consulta na rede pública de saúde" : "MTIC1215",
+        "Emitir guia de pagamento de tributos" : "MTIC1216",
+        "Emissão de documentos como licenças, certidões, permissões e outros documentos" : "MTIC1217",
+        "Pesquisa de satisfação relacionada aos serviços prestados pela prefeitura" : "MTIC1218",
+
+        "Existe disponibilidade de dados ou sistemas do município de forma georreferenciada" : "MREG012",
+        "Existe disponibilidade de dados ou sistemas do município de forma informatizada" : "MREG011",
+        "Existem dados de bases cartográficas do cadastro imobiliário urbano" : "MREG01",
+        "Existem dados de planta genérica de valores" : "MREG031",
+        "Existe sistema de informações do cadastro imobiliário urbano na web ou em rede" : "MREG013",
+        "Existe cobrança de IPTU no município" : "MREG02",
+        "Existe cadastro ISSQN" : "MREG05",
+        "Existe ISSQN informatizado" : "MREG051",
+
+        "Existe Portal de dados abertos" : "MTIC272",
+        "Existe Legislação municipal para garantir direito de acesso à informação pública em conformidade com a Lei de Acesso à Informação" : "MGOV01",
+        "Dados de orçamentos são publicados" : "MGOV0715",
+        "Dados de receitas são publicados" : "MGOV0725",
+        "Dados de despesas são publicados" : "MGOV0735",
+        "Dados de balanços são publicados" : "MGOV0745",
+        "Dados de prestação de contas da Lei de Responsabilidade Fiscal são publicados" : "MGOV0755",
+        "Dados de compras e licitações são publicados" : "MGOV0765",
+        "Dados individualizados das remunerações de servidores são publicados" : "MGOV0775",
+        "Existe disponibilização de portal da transparencia" : "MTIC271",
+
+        "Desenvolve programa ou ação de inclusão digital" : "MTIC19",
+        "Cursos de capacitação" : "MTIC214",
+        "Ponte entre parceiros para ações menos favorecidos" : "MTIC213",
+        "Instalação de computadores rede pública de ensino" : "MTIC215",
+        "Instalação de rede wi-fi rede pública de ensino" : "MTIC216",
+
+        "Conselho Municipal de Direitos Humanos - existência" : "MDHU12",
+        "Conselho Municipal de Direitos da Criança e do Adolescente - existência" : "MDHU18",
+        "Conselho Municipal de Direitos da Pessoa Idosa - existência" : "MDHU24",
+        "Conselho Municipal de Direitos da Pessoa com Deficiência - existência" : "MDHU30",
+        "Conselho Municipal de Direitos de Lésbicas, Gays, Bissexuais, Travestis e Transexuais - existência" : "MDHU36",
+        "Conselho Municipal de Igualdade Racial - existência" : "MDHU42",
+        "Conselho Municipal dos Povos e Comunidades Tradicionais" : "MDHU48",
+        "Utiliza grupos de discussões, foruns ou comunidades" : "MTIC252",
+
+        "Qual o tipo de conexão que interliga os equipamentos e edifícios públicos da prefeitura?" : "MTIC04",
+
+        "Consulta pública on-line para que cidadãos possam enviar contribuições para leis, orçamentos e planos" : "MTIC251",
+        "Grupo de discussão foruns ou comunidades" : "MTIC252",
+        "Enquetes on-line" : "MTIC253",
+        "Votação on-line" : "MTIC254",
+        "Não disponibiliza formas de participação pública on-line" : "MTIC255",
+
+        "Centro de processamento de dados (CPD) - existência" : "MTIC08",
+        "Centro de controle e operações" : "MTIC263",
+        "Sistema de iluminação inteligente" : "MTIC264",
+        "Sensores para monitoramento de área de risco" : "MTIC266",
+
+        "Bilhete eletrônico transporte público" : "MTIC261",
+        "Ônibus municipal com GPS" : "MTIC262",
+        "Semáforos inteligentes" : "MTIC265",
+
+        "Disponibiliza para acesso público" : "MTIC211",
+
+        "Existência de estrutura organizacional para TIC no municipio" : "MTIC06",
+        "Funcionários efetivos" : "MTIC071",
+        "Servidores Cedidos" : "MTIC072",
+        "Comissionados" : "MTIC074",
+        "Terceirizados" : "MTIC075",
+        "Consultores" : "MTIC076",
+
+        "Disponibilização de informações, execução orçamentaria e financeira Lei Complementar 131/2009" : "MGOV06",
+        "Disponibilização em tempo real" : "MGOV061",
+        "Orçamento publicado" : "MGOV0715",
+        "Receitas publicadas" : "MGOV0725",
+        "Despesas publicadas" : "MGOV0735",
+
+        "Correio" : "MTIC011",
+        "Fax" : "MTIC012",
+        "Jornais" : "MTIC013",
+        "Internet" : "MTIC014",
+        "Telefone" : "MTIC015",
+        "Facebook" : "MTIC131",
+        "Instagran" : "MTIC132",
+        "Youtube" : "MTIC133",
+        "Whathsaap" : "MTIC136",
+        "Twiter" : "MTIC139", 
+
+        "Pesquisa satisfação serviço público" : "MTIC1218"
+    },
+
+    "2020" :
+    {
+        "Mecanismos de controle e fiscalização para evitar ocupação em áreas suscetíveis aos desastres" : "MGRD183",
+        "Sistema de alerta antecipado de desastres decorrente de enchentes, inundações ou enxurradas" : "MGRD186",
+        "Cadastro de risco" : "MGRD187",
+        "Mapeamentos de áreas de risco de enchentes ou inundações" : "MGRD201",
+        "Sistema de alerta antecipado de desastre decorrente de escorregamento ou deslizamento de encosta" : "MGRD206",
+        "Coordenação municipal de proteção e defesa civil" : "MGRD212",
+        "Sistema de alerta antecipado de desastres de defesa civil" : "MGRD2213",
+
+        "Barco" : "MTRA181",
+        "Metrô" : "MTRA182",
+        "Mototáxi" : "MTRA183",
+        "Táxi" : "MTRA184",
+        "Trem" : "MTRA185",
+        "Van" : "MTRA186",
+        "Avião" : "MTRA187",
+        "Transporte coletivo por ônibus intramunicipal" : "MTRA19",
+        "Transporte coletivo por ônibus intermunicipal" : "MTRA23",
+
+        "Conselho Municipal de Meio Ambiente ou similar" : "MMAM10",
+        "Existe área responsável pelo tema meio ambiente dispõe de recursos financeiros específicos para serem utilizados no desenvolvimento de suas ações" : "MMAM16",
+        "Legislação ou instrumento de gestão ambiental sobre gestão de bacias hidrográficas" : "MMAM203",
+        "Legislação ou instrumento de gestão ambiental sobre área e/ou zona de proteção ou controle ambiental" : "MMAM204",
+        "Legislação ou instrumento de gestão ambiental sobre permissão de atividades extrativas minerais" : "MMAM207",
+        "Legislação ou instrumento de gestão ambiental sobre fauna silvestre" : "MMAM208",
+        "Legislação ou instrumento de gestão ambiental sobre florestas" : "MMAM209",
+        "Legislação ou instrumento de gestão ambiental sobre proteção à biodiversidade" : "MMAM2012",
+
+        "Plano Municipal de Transporte contempla a inclusão de pessoas com deficiência na rede viária e no sistema de transporte" : "MTRA086",
+        "Frota de ônibus municipais adaptada para pessoas com deficiência ou mobilidade reduzida" : "MTRA21",
+        "Piso baixo" : "MTRA221",
+        "Piso alto com acesso realizado por plataforma de embarque/desembarque" : "MTRA222",
+        "Piso alto equipado com plataforma elevatória veicular" : "MTRA223",
+
+        "Cadastro ou levantamento de famílias interessadas em programas habitacionais" : "MHAB18",
+        "O cadastro é informatizado" : "MHAB182",
+        "O cadastro inclui a natureza do benefício habitacional pretendido pelas famílias" : "MHAB183",
+        "Construção de unidades habitacionais" : "MHAB201",
+        "Aquisição de unidades habitacionais" : "MHAB202",
+        "Melhoria de unidades habitacionais" : "MHAB203",
+        "Oferta de material de construção" : "MHAB204",
+        "Oferta de lotes" : "MHAB205",
+        "Regularização fundiária" : "MHAB206",
+        "Urbanização de assentamentos" : "MHAB207",
+        "A prefeitura tem algum programa que conceda o benefício do aluguel social" : "MHAB21",
+
+        "O município foi atingido pela seca nos últimos 4 anos" : "MGRD01",
+        "O município foi atingido por alagamentos nos últimos 4 anos" : "MGRD06",
+        "O município foi atingido por processo erosivo acelerado nos últimos 4 anos" : "MGRD07",
+        "O município foi atingido por enchentes ou inundações graduais nos últimos 4 anos" : "MGRD08",
+        "O município foi atingido por enxurradas ou inundações bruscas nos últimos 4 anos" : "MGRD11",
+        "O município foi atingido por escorregamentos ou deslizamentos de encostas nos últimos 4 anos" : "MGRD14",
+
+        "Favelas, mocambos, palafitas ou assemelhados" : "MHAB191",
+        "Cortiços, casas de cômodos ou cabeças-de-porco" : "MHAB192",
+        "Loteamentos irregulares e/ou clandestinos" : "MHAB193",
+        "Ocupações de terrenos ou prédios por movimentos de moradia" : "MHAB194",
+
+        "Plano Municipal de Transporte contempla o uso pelo pedestre e pelo ciclista do espaço viário de uso público" : "MTRA085",
+        "Ciclovia no município - existência" : "MTRA24", 
+        "Bicicletário no município - existência" : "MTRA25"        
+    },
+
+    "2021" : 
+    {
+        "Bibliotecas públicas" : "MCUL3901",
+        "Museus" : "MCUL3902",
+        "Teatros ou salas de espetáculos" : "MCUL3903",
+        "Centro cultural" : "MCUL3904",
+        "Arquivo público e/ou centro de documentação" : "MCUL3905", 
+        "Estádios ou ginásios poliesportivos" : "MCUL3906",
+        "Centro de artesanato" : "MCUL3907",
+        "Banca de jornal - existência" : "MCUL3908",
+        "Cinema - existência" : "MCUL3909",
+        "Videolocadora - existência" : "MCUL3910",
+        "Shopping center - existência 1" : "MCUL3911",
+        "Lojas de discos, CDs, fitas e DVDs - existência 1" : "MCUL3912",
+        "Livrarias - existência 1" : "MCUL3913",
+        "Galerias de arte 1" : "MCUL3914",
+        "Clube e associação recreativa - existência" : "MCUL3916",
+        "Lan house - existência 1" : "MCUL3917",
+        "Circo fixo - existência" : "MCUL3918",
+        "Concha acústica - existência" : "MCUL3919",
+        "Ponto de cultura" : "MCUL40",
+
+        "Legislação municipal de proteção ao patrimônio cultural - existência" : "MCUL15",
+        "Patrimônio material" : "MCUL161",
+        "Patrimônio imaterial" : "MCUL162",
+        "Conselho municipal de cultura - existência" : "MCUL19",
+
+        "Projetos voltados para a educação do campo" : "MEDU131",
+        "Projetos voltados para educação de povos indígenas" : "MEDU132",
+        "Projetos voltados para educação quilombolas" : "MEDU133",
+        "Projetos voltados para a educação de outros povos e comunidades tradicionais" : "MEDU134",
+
+        "Combate à violência nas escolas" : "MEDU114"
+    }
+}
+
+
+

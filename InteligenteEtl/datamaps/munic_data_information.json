@@ -1,0 +1,1231 @@
+{
+    "O município desenvolve ações, programas ou projetos de qualificação profissional e intermediação de mão de obra" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de qualificação profissional" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de intermediação de mão de obra" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de mobilização e sensibilização para cursos de qualificação profissional" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+
+    "O município desenvolve ações, programas ou projetos de inclusão produtiva urbana" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de fomento a empreendimentos individuais urbanos" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações fomento a empreendimentos coletivos urbanos (Associativismo, Cooperativismo e Economia Solidária urbana e outros grupos não formalizados" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de assistência técnico-gerencial a empreendimentos individuais urbanos (para formalização, melhora da produção, aspectos jurídicos e comerciais)" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de incubação de empreendimentos" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de fomento ao artesanato" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de doação de equipamentos ou kit básico para desempenho do trabalho" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "O município desenvolve ações, programas ou projetos de crédito, microcrédito e seguro" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações para promover o acesso a microcrédito produtivo orientado" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de acesso a crédito por meio do Banco do Povo ou outras organizações congêneres" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Ações de acesso a crédito do Proger urbano" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "O município desenvolve ações, programas ou projetos de geração de trabalho e renda" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Projeto(s) de apoio à comercialização de negócios, cooperativas e empreendimento solidários" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+    "Projeto(s) de apoio ao associativismo, cooperativismo e economia solidária" :
+    {
+        "categoria" : "Inovação",
+        "tipo" : "bool"
+    },
+
+
+
+    
+
+    "Se no município existe algum organismo executivo  de políticas para as mulheres" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Promove capacitação em gênero para outras áreas do governo" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Articula com outros órgãos municipais a incorporação da questão de gênero na formulação e/ou implementação de políticas" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Executa diretamente políticas para a promoção e igualdade de gênero" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Executa diretamente políticas para o enfrentamento da violência" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Executa diretamente políticas para a promoção da autonomia das mulheres (geração de renda e fomento ao empreendedorismo)" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Povos indígenas" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Povos ciganos" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Comunidades quilombolas" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Ribeirinhos" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Povos de matriz africana" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Outros povos ou comunidades tradicionais" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "População em situação de rua" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Agricultores familiares" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Assentados da reforma agrária" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Pescadores artesanais" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Catadores de materiais recicláveis" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Migrantes/Imigrantes/Refugiados" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Atingidas por empreendimentos de infraestrutura" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+    "Encarcerado/egressos do sistema carcerário" :
+    {
+        "categoria" : "Inclusão Social",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+
+
+
+
+
+    "Serviços informativos" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Acesso a documentos" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Informações gerais sobre licitações" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Ouvidoria e serviços de atendimento ao cidadão" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Fazer download de documentos ou formulários" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Consulta a processos/acompanhamento de protocolos" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Consulta prévia" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Cadastramento de fornecedores" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Concurso público" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Diário oficial, legislação municipal e finanças públicas" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Emissão certidão negativa de débito" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Emissão alvará" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Emissão nota fiscal eletrônica" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Matrícula escolar na rede pública online" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Agendamento de consulta na rede pública de saúde" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Emitir guia de pagamento de tributos" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Emissão de documentos como licenças, certidões, permissões e outros documentos" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+    "Pesquisa de satisfação relacionada aos serviços prestados pela prefeitura" :
+    {
+        "categoria" : "Serviços On-line da Prefeitura",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Existe disponibilidade de dados ou sistemas do município de forma georreferenciada" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existe disponibilidade de dados ou sistemas do município de forma informatizada" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existem dados de bases cartográficas do cadastro imobiliário urbano" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existem dados de planta genérica de valores" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existe sistema de informações do cadastro imobiliário urbano na web ou em rede" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existe cobrança de IPTU no município" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existe cadastro ISSQN" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Existe ISSQN informatizado" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+    "Existe Portal de dados abertos" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Existe Legislação municipal para garantir direito de acesso à informação pública em conformidade com a Lei de Acesso à Informação" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados de orçamentos são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados de receitas são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados de despesas são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados de balanços são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados de prestação de contas da Lei de Responsabilidade Fiscal são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados de compras e licitações são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Dados individualizados das remunerações de servidores são publicados" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Existe disponibilização de portal da transparencia" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+    "Desenvolve programa ou ação de inclusão digital" :
+    {
+        "categoria" : "Inclusão Digital",
+        "tipo" : "bool"
+    },
+    "Cursos de capacitação" :
+    {
+        "categoria" : "Inclusão Digital",
+        "tipo" : "bool"
+    },
+    "Ponte entre parceiros para ações menos favorecidos" :
+    {
+        "categoria" : "Inclusão Digital",
+        "tipo" : "bool"
+    },
+    "Instalação de computadores rede pública de ensino" :
+    {
+        "categoria" : "Inclusão Digital",
+        "tipo" : "bool"
+    },
+    "Instalação de rede wi-fi rede pública de ensino" :
+    {
+        "categoria" : "Inclusão Digital",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Conselho Municipal de Direitos Humanos - existência" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Conselho Municipal de Direitos da Criança e do Adolescente - existência" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Conselho Municipal de Direitos da Pessoa Idosa - existência" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Conselho Municipal de Direitos da Pessoa com Deficiência - existência" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Conselho Municipal de Direitos de Lésbicas, Gays, Bissexuais, Travestis e Transexuais - existência" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Conselho Municipal de Igualdade Racial - existência" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Conselho Municipal dos Povos e Comunidades Tradicionais" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Utiliza grupos de discussões, foruns ou comunidades" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Qual o tipo de conexão que interliga os equipamentos e edifícios públicos da prefeitura?" :
+    {
+        "categoria" : "Infraestrutura de Conectividade",
+        "tipo" : "str"
+    },
+
+
+
+
+    "Consulta pública on-line para que cidadãos possam enviar contribuições para leis, orçamentos e planos" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Grupo de discussão foruns ou comunidades" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Enquetes on-line" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Votação on-line" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+    "Não disponibiliza formas de participação pública on-line" :
+    {
+        "categoria" : "Participação Pública",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Centro de processamento de dados (CPD) - existência" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Centro de controle e operações" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Sistema de iluminação inteligente" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+    "Sensores para monitoramento de área de risco" :
+    {
+        "categoria" : "Sistemas e Tecnologia para Gestão Urbana",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Bilhete eletrônico transporte público" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+    "Ônibus municipal com GPS" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+    "Semáforos inteligentes" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Disponibiliza para acesso público" :
+    {
+        "categoria" : "Inclusão Digital",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Existência de estrutura organizacional para TIC no municipio" :
+    {
+        "categoria" : "Institucional",
+        "tipo" : "bool"
+    },
+    "Funcionários efetivos" :
+    {
+        "categoria" : "Institucional",
+        "tipo" : "bool"
+    },
+    "Servidores Cedidos" :
+    {
+        "categoria" : "Institucional",
+        "tipo" : "bool"
+    },
+    "Comissionados" :
+    {
+        "categoria" : "Institucional",
+        "tipo" : "bool"
+    },
+    "Terceirizados" :
+    {
+        "categoria" : "Institucional",
+        "tipo" : "bool"
+    },
+    "Consultores" :
+    {
+        "categoria" : "Institucional",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Disponibilização de informações, execução orçamentaria e financeira Lei Complementar 131/2009" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Disponibilização em tempo real" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Orçamento publicado" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Receitas publicadas" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+    "Despesas publicadas" :
+    {
+        "categoria" : "Dados Abertos",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+    "Correio" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Fax" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Jornais" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Internet" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Telefone" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Facebook" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Instagran" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Youtube" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Whathsaap" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+    "Twiter" :
+    {
+        "categoria" : "Serviços e Aplicaçoes",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+    "Pesquisa satisfação serviço público" :
+    {
+        "categoria" : "Monitoramento",
+        "tipo" : "bool"
+    },
+
+
+    
+
+
+
+    "Bibliotecas públicas" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Museus" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Teatros ou salas de espetáculos" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Centro cultural" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Arquivo público e/ou centro de documentação" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Estádios ou ginásios poliesportivos" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Centro de artesanato" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Banca de jornal - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Cinema - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Videolocadora - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Shopping center - existência 1" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Lojas de discos, CDs, fitas e DVDs - existência 1" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Livrarias - existência 1" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Galerias de arte 1" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Clube e associação recreativa - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Lan house - existência 1" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Circo fixo - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Concha acústica - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Ponto de cultura" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+    "Legislação municipal de proteção ao patrimônio cultural - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Patrimônio material" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Patrimônio imaterial" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+    "Conselho municipal de cultura - existência" :
+    {
+        "categoria" : "Cultura",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+
+    "Projetos voltados para a educação do campo" :
+    {
+        "categoria" : "Educação",
+        "tipo" : "bool"
+    },
+
+    "Projetos voltados para educação de povos indígenas" :
+    {
+        "categoria" : "Educação",
+        "tipo" : "bool"
+    },
+
+    "Projetos voltados para educação quilombolas" :
+    {
+        "categoria" : "Educação",
+        "tipo" : "bool"
+    },
+
+    "Projetos voltados para a educação de outros povos e comunidades tradicionais" :
+    {
+        "categoria" : "Educação",
+        "tipo" : "bool"
+    },
+
+    "Combate à violência nas escolas" :
+    {
+        "categoria" : "Segurança Pública",
+        "tipo" : "bool"
+    },
+
+
+
+
+
+
+
+    "Mecanismos de controle e fiscalização para evitar ocupação em áreas suscetíveis aos desastres" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Sistema de alerta antecipado de desastres decorrente de enchentes, inundações ou enxurradas" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Cadastro de risco" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Mapeamentos de áreas de risco de enchentes ou inundações" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Sistema de alerta antecipado de desastre decorrente de escorregamento ou deslizamento de encosta" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Coordenação municipal de proteção e defesa civil" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Sistema de alerta antecipado de desastres de defesa civil" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Barco" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Metrô" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Mototáxi" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Táxi" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Trem" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Van" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Avião" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Transporte coletivo por ônibus intramunicipal" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Transporte coletivo por ônibus intermunicipal" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Conselho Municipal de Meio Ambiente ou similar" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Existe área responsável pelo tema meio ambiente dispõe de recursos financeiros específicos para serem utilizados no desenvolvimento de suas ações" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Legislação ou instrumento de gestão ambiental sobre gestão de bacias hidrográficas" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Legislação ou instrumento de gestão ambiental sobre área e/ou zona de proteção ou controle ambiental" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Legislação ou instrumento de gestão ambiental sobre permissão de atividades extrativas minerais" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Legislação ou instrumento de gestão ambiental sobre fauna silvestre" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Legislação ou instrumento de gestão ambiental sobre florestas" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Legislação ou instrumento de gestão ambiental sobre proteção à biodiversidade" :
+    {
+        "categoria" : "Áreas Verdes",
+        "tipo" : "bool"
+    },
+
+    "Plano Municipal de Transporte contempla a inclusão de pessoas com deficiência na rede viária e no sistema de transporte" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Frota de ônibus municipais adaptada para pessoas com deficiência ou mobilidade reduzida" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Piso baixo" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Piso alto com acesso realizado por plataforma de embarque/desembarque" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Piso alto equipado com plataforma elevatória veicular" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Cadastro ou levantamento de famílias interessadas em programas habitacionais" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "O cadastro é informatizado" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "O cadastro inclui a natureza do benefício habitacional pretendido pelas famílias" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Construção de unidades habitacionais" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Aquisição de unidades habitacionais" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Melhoria de unidades habitacionais" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Oferta de material de construção" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Oferta de lotes" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Regularização fundiária" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Urbanização de assentamentos" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "A prefeitura tem algum programa que conceda o benefício do aluguel social" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "O município foi atingido pela seca nos últimos 4 anos" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "O município foi atingido por alagamentos nos últimos 4 anos" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "O município foi atingido por processo erosivo acelerado nos últimos 4 anos" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "O município foi atingido por enchentes ou inundações graduais nos últimos 4 anos" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "O município foi atingido por enxurradas ou inundações bruscas nos últimos 4 anos" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "O município foi atingido por escorregamentos ou deslizamentos de encostas nos últimos 4 anos" :
+    {
+        "categoria" : "Gestão de Desastres",
+        "tipo" : "bool"
+    },
+
+    "Favelas, mocambos, palafitas ou assemelhados" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Cortiços, casas de cômodos ou cabeças-de-porco" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Loteamentos irregulares e/ou clandestinos" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Ocupações de terrenos ou prédios por movimentos de moradia" :
+    {
+        "categoria" : "Habitação",
+        "tipo" : "bool"
+    },
+
+    "Plano Municipal de Transporte contempla o uso pelo pedestre e pelo ciclista do espaço viário de uso público" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Ciclovia no município - existência" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    },
+
+    "Bicicletário no município - existência" :
+    {
+        "categoria" : "Transporte",
+        "tipo" : "bool"
+    }
+
+}
