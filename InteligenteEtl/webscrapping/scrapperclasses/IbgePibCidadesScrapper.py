@@ -20,7 +20,7 @@ class IbgePibCidadesScrapper(AbstractScrapper):
    EXTRACTED_DATA_YEAR_COL = "Ano"
    file_type:BaseFileType
 
-   def __init__(self, file_type:BaseFileType,) -> None:
+   def __init__(self, file_type:BaseFileType = BaseFileType.EXCEL) -> None:
       self.file_type = file_type
 
    def extract_database(self)->list[YearDataPoint]:

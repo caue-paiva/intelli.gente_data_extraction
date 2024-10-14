@@ -1,6 +1,7 @@
 from datastructures import BaseFileType
 from .IbgePibCidadesScrapper import IbgePibCidadesScrapper
 from datastructures import YearDataPoint
+import pandas as pd
 
 class IbgeMunicScrapper(IbgePibCidadesScrapper):
    
@@ -85,7 +86,7 @@ class IbgeMunicScrapper(IbgePibCidadesScrapper):
    priority_to_series_len: bool
    url: str #url colocado aqui para compatibilidade com a classe pai
 
-   def __init__(self,file_type: BaseFileType,priority_to_series_len: bool = False) -> None:
+   def __init__(self,file_type: BaseFileType = BaseFileType.EXCEL ,priority_to_series_len: bool = False) -> None:
       self.file_type = file_type
       self.priority_to_series_len = priority_to_series_len
 

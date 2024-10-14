@@ -16,21 +16,21 @@ def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
 
    return processed_data[0].df
 
-def run_city_gdp(file_type:BaseFileType)->None:
-   scrapper = IbgePibCidadesScrapper(file_type)
+def run_city_gdp()->None:
+   scrapper = IbgePibCidadesScrapper()
    extractor = CategoryDataExtractor()
    list_ = extractor.extract_processed_collection(scrapper)
 
    for collec in list_:
-      #print(collec)
       collec.df.to_csv(f"{collec.data_name}.csv")
 
-def run_MUNIC_base(file_type:BaseFileType)->list[YearDataPoint]:
-   scrapper = IbgeMunicScrapper(file_type,False)
+def run_MUNIC_base()->list[YearDataPoint]:
+   scrapper = IbgeMunicScrapper()
    extractor = IbgeMunicExtractor()
    collections = extractor.extract_processed_collection(scrapper)
    for collect in collections:
       print(collect.df.info())
+      collect.df.to_csv(f"{collect.data_name}.csv")
 
 def run_api_agregados():
    api = IbgeAgregatesApi("agregados", "ibge")
@@ -106,10 +106,20 @@ def run_Idbe():
    collection = extractor.extract_processed_collection(scrapper)
 
    for colec in collection:
-      colec.df.to_csv(f"{colec.data_name}.csv")
+      print(colec.data_name)
 
+def parse_csv():
+   import os
+   files:list[str] = os.listdir(os.getcwd())
 
+   for file in files:
+      print(file)
+      if ".csv" in file:
+         df = pd.read_csv(file,index_col=[0])
+         df.to_csv(os.path.join(os.getcwd(),file),index=False)
+ 
 if __name__ == "__main__":
-   run_Idbe()
+   #run_Idbe()
+   parse_csv()
    
-   run_MUNIC_base(BaseFileType.EXCEL)
+   #run_MUNIC_base()
