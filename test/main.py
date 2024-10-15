@@ -1,7 +1,6 @@
 from webscrapping.extractorclasses import *
 from apiextractors import *
-import pandas as pd
-import inspect
+import inspect,json,os
 
 ALL_IMPORTED_CLASSES = [object_name for object_name in dir() if inspect.isclass(globals()[object_name])] #lista todas as classes importadas no escopo global do Python
 
@@ -11,7 +10,7 @@ def get_all_extractor_classes()->list[str]:
 def get_all_api_classes()->list[str]:
    return list(filter(lambda x: "api" in x.lower() and "abstract" not in x.lower(),ALL_IMPORTED_CLASSES))
 
-def run_requested_extractions(sources_to_extract:list[str]):
+def run_requested_extractions(sources_to_extract:dict[str,list[str]]):
    """
    dado uma lista de fontes para extrair, com essa lista vindo de acordo com a tabela de controle de dados extraídos 
    (ver a coluna ' Extraído Pela Classe:' dessa tabela), realiza a extração dos dados requisitados
@@ -23,19 +22,20 @@ def run_requested_extractions(sources_to_extract:list[str]):
    all_classes.extend(get_all_api_classes())
 
    etl_classes_map:dict[str,object] = { #dict com o nome da classe (em lowercase) como string key e a classe em si como valor
-      class_name.lower(): globals()[class_name] for class_name in all_classes
+      class_name.lower().replace(" ",""): globals()[class_name] for class_name in all_classes
    }
 
-   print("\n\n\n")
    for source in sources_to_extract:
-      source = source.lower()
-      if etl_classes_map.get(source) is not None:
-         etl_classes_map[source]
+      source_parsed:str = source.lower().replace(" ","")#variável para guardar o nome da classe em lowercase e sem espaço
+      if etl_classes_map.get(source_parsed) is not None:
+         indicators:list[str] = sources_to_extract[source]
+         print(indicators)
       else:
          pass
 
+sources: dict 
+with open(os.path.join(os.getcwd(),"sources_to_extract.json"),"rb") as f:
+   sources:dict =  json.load(f)
+   print(sources)
 
-
-
-
-run_requested_extractions({})
+run_requested_extractions(sources)

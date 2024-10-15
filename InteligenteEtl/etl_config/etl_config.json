@@ -10,5 +10,6 @@
    "DTYPE_COL": "tipo_dado",
    "OLDEST_YEAR": 1980,
    "SMALLEST_CITY_CODE": 1000000,
-   "HIGHEST_CITY_CODE": 9999999
+   "HIGHEST_CITY_CODE": 9999999,
+   "CLASSES_WITH_SEVERAL_INDICATORS": ["DatasusDataExtractor","RaisExtractor"]
 }
