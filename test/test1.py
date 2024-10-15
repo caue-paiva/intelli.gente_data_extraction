@@ -2,10 +2,10 @@ from webscrapping.extractorclasses import *
 from webscrapping.scrapperclasses import * #um dos poucos casos que fazer isso é uma boa ideia!
 from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
 from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeMunicScrapper, CityPaymentsScrapper
-from webscrapping.scrapperclasses import FormalJobsScrapper, IdhScrapper, SnisScrapper, IbgeCitiesNetworkScrapper
+from webscrapping.scrapperclasses import FormalJobsScrapper, SnisScrapper, IbgeCitiesNetworkScrapper
 from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor, IbgeMunicExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
-from datastructures import BaseFileType, YearDataPoint
+from datastructures import  YearDataPoint
 import pandas as pd
 
 def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
@@ -57,9 +57,8 @@ def run_formal_jobs():
    return collection_list[0].df
 
 def run_IDH():
-   scrapper = IdhScrapper()
    extractor = IdhExtractor()
-   collections = extractor.extract_processed_collection(scrapper)
+   collections = extractor.extract_processed_collection()
    for collect in collections:
       print(collect.df.info())
       collect.df.to_csv("idh-m.csv",index=False)
@@ -80,33 +79,31 @@ def ibge_cities_network():
       collection.df.to_csv(f"{collection.data_name}.csv")
 
 def run_snis():
-   scrapper = SnisScrapper()
    extractor = SnisExtractor()
-   list_ = extractor.extract_processed_collection(scrapper)
+   list_ = extractor.extract_processed_collection()
 
    for ele in list_:
-      ele.df.to_csv(f"{ele.data_name}")
+      ele.df.to_csv(f"{ele.data_name}.csv")
 
 def run_rais():
    scrapper = RaisScrapper(RaisDataInfo.TECH_COMPANIES)
-   #scrapper.extract_database()
    extractor = RaisExtractor()
    extractor.extract_processed_collection(scrapper)
 
 def run_tech_equipament():
-    scrapper = TechEquipamentScrapper()
     extractor = TechEquipamentExtractor()
-    collection = extractor.extract_processed_collection(scrapper,20)
+    collection = extractor.extract_processed_collection()
     for colec in collection:
       colec.df.to_csv(f"{colec.data_name}.csv")
 
 def run_Idbe():
-   scrapper = IdebFinalYearsScrapper()
    extractor = idebFinalYearsExtractor()
-   collection = extractor.extract_processed_collection(scrapper)
+   collection = extractor.extract_processed_collection()
+   print(len(collection))
 
    for colec in collection:
       print(colec.data_name)
+      colec.df.to_csv(f"{colec.data_name}.csv")
 
 def parse_csv():
    import os
@@ -121,5 +118,4 @@ def parse_csv():
 if __name__ == "__main__":
    #run_Idbe()
    parse_csv()
-   
    #run_MUNIC_base()
