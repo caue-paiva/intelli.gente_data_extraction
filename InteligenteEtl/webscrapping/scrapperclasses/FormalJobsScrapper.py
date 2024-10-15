@@ -5,7 +5,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time , os
 import pandas as pd
-#from .AbstractScrapper import AbstractScrapper, BaseFileType
 from .AbstractScrapper import AbstractScrapper ,BaseFileType
 from  datastructures import YearDataPoint
 
@@ -26,10 +25,7 @@ class FormalJobsScrapper(AbstractScrapper):
     EXTRACTED_TABLE_CITY_COL = "Cod. Loc." #nome da coluna dos códigos do municípios na tabela extraida
     EXTRACTED_DATA_NAME = "População ocupada com vínculo formal"
 
-
-
     def __click_return_button(self,driver:Chrome):
-        
         try:
             voltar_icon = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, 'div#lista-base-busca .voltar.icon-left-big'))
@@ -77,7 +73,7 @@ class FormalJobsScrapper(AbstractScrapper):
                     #clica na div com o nome do estado, va aparecer todos os municípios de lá
                     local_tag = state_to_be_clicked.find_element(By.CLASS_NAME, 'local')
                     local_tag.click()
-                    time.sleep(0.7)
+                    time.sleep(1.5)
 
                     #acha denovo o elemento ul, dessa vez pra  lista de opções de municipios dentro de um estado
                     city_selection_box = WebDriverWait(driver, 10).until(
@@ -88,7 +84,7 @@ class FormalJobsScrapper(AbstractScrapper):
                     select_all_cities_button = city_selection_box.find_element(By.CSS_SELECTOR, 'li.option')
                     input_tag = select_all_cities_button.find_element(By.CSS_SELECTOR, 'div.input > input')
                     input_tag.click()
-                    time.sleep(0.7)
+                    time.sleep(1.5)
 
                     #clica o botão de voltar para voltar pro menu com todos os estados e clicar num novo
                     self.__click_return_button(driver)
@@ -139,7 +135,7 @@ class FormalJobsScrapper(AbstractScrapper):
             # abre a página web maximizada
             driver.maximize_window()
             driver.get(self.BASE_URL)
-            time.sleep(7)
+            time.sleep(8)
 
             #div para as filtragens por atributos da tabela
             dimensoes_div = WebDriverWait(driver, 10).until(
@@ -164,7 +160,7 @@ class FormalJobsScrapper(AbstractScrapper):
             local_selector_div = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.ID, 'local-selector'))
             )
-            time.sleep(3)
+            time.sleep(5)
             #clica no botão de selecionar o local
             step_div = local_selector_div.find_element(By.CLASS_NAME, 'step')
             step_div.click()
@@ -194,7 +190,7 @@ class FormalJobsScrapper(AbstractScrapper):
             span_inside_li.click()
 
             self.__click_on_all_states(driver) #clica na opção "todos os municípios" de cada estado na página
-            time.sleep(3)
+            time.sleep(12)
             download_div = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CLASS_NAME, 'downloadDiv'))
             ) #espera achar o botão de baixar os arquivos
@@ -215,14 +211,7 @@ class FormalJobsScrapper(AbstractScrapper):
     def extract_database(self, website_url: str = "", delete_extracted_files:bool = True)->list[YearDataPoint]:
         path_to_csv:str = self.download_database_locally(website_url)
         df: pd.DataFrame = pd.read_csv(path_to_csv,sep=";")
-        #df = pd.read_csv("teste2.csv",sep=",")
-        print(df.info())
 
         if delete_extracted_files:
             self.__delete_download_files_dir()
         return self.__separate_df_by_year(df)
-    
-if __name__ == "__main__":
-    obj = FormalJobsScrapper()
-    df = obj.extract_database()
-    print(df.head())

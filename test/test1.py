@@ -44,16 +44,13 @@ def run_api_ipea():
    api_extractor.save_processed_data_in_csv(list_data_collect,0)
 
 def run_CAPAG():
-   scrapper = CityPaymentsScrapper()
    obj = CityPaymentsExtractor()
-   list_ = obj.extract_processed_collection(scrapper)
-   list_[0].df.to_csv(f"CAPAG_PROCESSADO{1}.csv")
+   list_ = obj.extract_processed_collection()
+   list_[0].df.to_csv(f"CAPAG_PROCESSADO{1}.csv",index=False)
 
 def run_formal_jobs():
-   scrapper = FormalJobsScrapper()
    obj = FormalJobsExtractor()
-
-   collection_list = obj.extract_processed_collection(scrapper)
+   collection_list = obj.extract_processed_collection()
    return collection_list[0].df
 
 def run_IDH():
@@ -71,12 +68,11 @@ def run_ANATEL():
       collect.df.to_csv(f"{collect.data_name}.csv")
 
 def ibge_cities_network():
-   obj = IbgeCitiesNetworkScrapper()
    extractor = IbgeCitiesNetworkExtractor()
-   list_ = extractor.extract_processed_collection(obj)
+   list_ = extractor.extract_processed_collection()
    for collection in list_:
       print(collection.df.info())
-      collection.df.to_csv(f"{collection.data_name}.csv")
+      collection.df.to_csv(f"{collection.data_name}.csv",index=False)
 
 def run_snis():
    extractor = SnisExtractor()
@@ -117,5 +113,5 @@ def parse_csv():
  
 if __name__ == "__main__":
    #run_Idbe()
-   parse_csv()
+   run_CAPAG()
    #run_MUNIC_base()

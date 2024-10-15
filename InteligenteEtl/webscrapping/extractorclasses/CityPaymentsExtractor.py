@@ -12,8 +12,13 @@ class CityPaymentsExtractor(AbstractDataExtractor):
    DATA_CATEGORY = "Finanças Públicas"
    DTYPE = DataTypes.STRING
 
-   def extract_processed_collection(self, scrapper_class_obj: CityPaymentsScrapper)->list[ProcessedDataCollection]:
-      list_of_datapoints:list[YearDataPoint] = scrapper_class_obj.extract_database()
+   __scrapper_class: CityPaymentsScrapper
+
+   def __init__(self, webscrapping_delay_multiplier:int = 1):
+      self.__scrapper_class = CityPaymentsScrapper(webscrapping_delay_multiplier)
+
+   def extract_processed_collection(self)->list[ProcessedDataCollection]:
+      list_of_datapoints:list[YearDataPoint] = self.__scrapper_class.extract_database()
       
       acess_and_parse_dfs = lambda x: YearDataPoint(self.__parse_columns(x.df),x.data_year) #aplica a função de parsing das colunas no df de cada objeto
       parsed_datapoints:list[YearDataPoint] = list(map(acess_and_parse_dfs,list_of_datapoints)) #da parsing na coluna de todos os dataframes

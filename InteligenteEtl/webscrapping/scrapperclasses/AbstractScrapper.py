@@ -18,7 +18,12 @@ class AbstractScrapper(ABC):
 
    DOWNLOADED_FILES_DIR:str = "tempfiles" #diretório temporário para guardar os arquivos .zip e de dados extraidos
    DOWNLOADED_FILES_PATH = os.path.join(os.getcwd(),DOWNLOADED_FILES_DIR)
+   
+   webscrapping_delay_multiplier:int #multiplicador do delay do webscrapping
+   #caso a primeira execução falhe, permite aumentar o tempo de sleep entre as operações de webscrapping
 
+   def __init__(self,webscrapping_delay_multiplier:int = 1):
+      self.webscrapping_delay_multiplier = webscrapping_delay_multiplier
 
    @abstractmethod
    def extract_database()->list[YearDataPoint]:
