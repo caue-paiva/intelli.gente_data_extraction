@@ -1,6 +1,5 @@
 from abc import ABC,abstractmethod
 from datastructures import ProcessedDataCollection, YearDataPoint
-from webscrapping.scrapperclasses.AbstractScrapper import AbstractScrapper
 import pandas as pd
 from typing import Type
 from citiesinfo import get_city_codes
@@ -24,13 +23,11 @@ class AbstractDataExtractor(ABC):
       pass
 
    @abstractmethod
-   def extract_processed_collection(self,scrapper:Type[AbstractScrapper])->list[ProcessedDataCollection]:
+   def extract_processed_collection(self)->list[ProcessedDataCollection]:
       """
-      Dado um objeto que pertence a uma classe scrapper concreta (Herda de AbstractScrapper), chama função de extrair dados 
-      desse objeto, processa os dados e retorna um objeto ProcessedDataCollection
+      Utilizando a classe de scrapping que é atributo de toda classe extratora (composição), extrai os dados e depois 
+      processa os dados e retornando um objeto ProcessedDataCollection
 
-      Args:
-         scrapper:Type[AbstractScrapper]: Objeto da família de classes Scrapper
       Return:
          list[ProcessedDataCollection]: lista de objetos que representam os dados tratados e com os metadados presentes
       """

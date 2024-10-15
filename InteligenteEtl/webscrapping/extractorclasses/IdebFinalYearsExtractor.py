@@ -1,6 +1,4 @@
-from typing import Type
 from datastructures import ProcessedDataCollection,YearDataPoint, DataTypes
-from webscrapping.scrapperclasses.AbstractScrapper import AbstractScrapper
 from webscrapping.scrapperclasses import IdebFinalYearsScrapper
 from .AbstractDataExtractor import AbstractDataExtractor
 import pandas as pd
@@ -12,6 +10,8 @@ class idebFinalYearsExtractor(AbstractDataExtractor):
    DATA_NAME = "Índice de desenvolvimento da educação básica (IDEB) - anos finais "
    DATA_TOPIC = "Educação"
    EXTRACTED_CITY_COL = "Código do Município"
+
+   __SCRAPPER_CLASS = IdebFinalYearsScrapper()
 
    def __treat_vals_and_add_cols(self,df:pd.DataFrame)->pd.DataFrame:
       new_df = df.copy()
@@ -32,8 +32,8 @@ class idebFinalYearsExtractor(AbstractDataExtractor):
 
       return new_df
    
-   def extract_processed_collection(self, scrapper: IdebFinalYearsScrapper) -> list[ProcessedDataCollection]:
-      data_points:list[YearDataPoint] = scrapper.extract_database()
+   def extract_processed_collection(self)-> list[ProcessedDataCollection]:
+      data_points:list[YearDataPoint] = self.__SCRAPPER_CLASS.extract_database()
       time_series_years:list[int]= YearDataPoint.get_years_from_list(data_points)
       joined_df:pd.DataFrame = self._concat_data_points(data_points)
       joined_df = self.__treat_vals_and_add_cols(joined_df)

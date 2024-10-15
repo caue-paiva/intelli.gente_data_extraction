@@ -27,6 +27,8 @@ class SnisExtractor(AbstractDataExtractor):
    EXTRACTED_YEAR_COL = "Ano de Referência"
    EXTRACTED_CITY_CODE_COL = "Código do Município"
 
+   __SCRAPER_CLASS = SnisScrapper()
+
    def __parse_col_dtypes(self,df:pd.DataFrame,column:str)->pd.DataFrame:
       df = df[ df[column] != ''] #remove linhas com valores vazios
       df = df.dropna(axis="index",ignore_index=True,subset=[column]) #remove valores NaN
@@ -80,8 +82,8 @@ class SnisExtractor(AbstractDataExtractor):
             df=df
       )
 
-   def extract_processed_collection(self, scrapper: SnisScrapper)-> list[ProcessedDataCollection]:
-      data_collection = scrapper.extract_database()
+   def extract_processed_collection(self) -> list[ProcessedDataCollection]:
+      data_collection = self.__SCRAPER_CLASS.extract_database()
       time_series_years:list[int] = YearDataPoint.get_years_from_list(data_collection)
       df = self._concat_data_points(data_collection,add_year_col=False)
       df = self.__drop_unecessary_cols(df) #remove as colunas desnecessárias

@@ -21,6 +21,8 @@ class TechEquipamentExtractor(AbstractDataExtractor):
       "IN_TABLET_ALUNO",
    ]
 
+   __SCRAPPER_CLASS = TechEquipamentScrapper()
+
    def __agregate_dfs(self,df:pd.DataFrame)->pd.DataFrame:
       grouped_obj = df.groupby([self.EXTRACTED_CITY_COL,self.YEAR_COLUMN])
       columns_to_sum = df.columns.difference([self.YEAR_COLUMN, self.EXTRACTED_CITY_COL])
@@ -51,8 +53,8 @@ class TechEquipamentExtractor(AbstractDataExtractor):
          df=new_df
       )
 
-   def extract_processed_collection(self, scrapper: TechEquipamentScrapper,years_to_extract:int=20)-> list[ProcessedDataCollection]:
-      data_points:list[YearDataPoint] = scrapper.extract_database(years_to_extract)
+   def extract_processed_collection(self, years_to_extract:int=15)-> list[ProcessedDataCollection]:
+      data_points:list[YearDataPoint] = self.__SCRAPPER_CLASS.extract_database(years_to_extract)
       time_series_years:list[int] = YearDataPoint.get_years_from_list(data_points)
 
       joined_df:pd.DataFrame = self._concat_data_points(data_points)
