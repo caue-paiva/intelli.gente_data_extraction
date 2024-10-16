@@ -42,11 +42,15 @@ class RaisScrapper(AbstractScrapper):
    #iria demorar mto tempo)
 
    data_point_to_extract:RaisDataInfo
+   webscrapping_delay_multiplier:int #multiplicador do delay do webscrapping
+   #caso a primeira execução falhe, permite aumentar o tempo de sleep entre as operações de webscrapping
 
-   def __init__(self,data_point_to_extract:RaisDataInfo) -> None:
+   def __init__(self,data_point_to_extract:RaisDataInfo,webscrapping_delay_multiplier=1) -> None:
       if self.USERNAME is None or self.PSSWD is None:
          raise RuntimeError("Username e/ou senha do RAIS não estão no arquivo keys.env no folder etl_config")
       self.data_point_to_extract = data_point_to_extract
+      self.webscrapping_delay_multiplier = webscrapping_delay_multiplier
+
 
    def __click_right_query(self,query_tr_tag,correct_query:str)->bool:
       query_params:list = query_tr_tag.find_elements(By.TAG_NAME,"td") #elementos td com o o input e nome da query

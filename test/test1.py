@@ -1,20 +1,18 @@
 from webscrapping.extractorclasses import *
 from webscrapping.scrapperclasses import * #um dos poucos casos que fazer isso é uma boa ideia!
 from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
-from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeMunicScrapper, CityPaymentsScrapper
-from webscrapping.scrapperclasses import FormalJobsScrapper, SnisScrapper, IbgeCitiesNetworkScrapper
+from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper
 from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor, IbgeMunicExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
 from datastructures import  YearDataPoint
 import pandas as pd
 
-def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
-   scrapper = DatasusLinkScrapper(abreviation)
-  
+def run_datasus()->pd.DataFrame:
    extractor = DatasusDataExtractor()
-   processed_data = extractor.extract_processed_collection(scrapper)
-
-   return processed_data[0].df
+   processed_data = extractor.extract_processed_collection()
+   for collect in processed_data:
+      print(collect.df.info())
+      collect.df.to_csv(f"{collect.data_name}.csv")
 
 def run_city_gdp()->None:
    scrapper = IbgePibCidadesScrapper()
@@ -80,11 +78,6 @@ def run_snis():
    for ele in list_:
       ele.df.to_csv(f"{ele.data_name}.csv")
 
-def run_rais():
-   scrapper = RaisScrapper(RaisDataInfo.TECH_COMPANIES)
-   extractor = RaisExtractor()
-   extractor.extract_processed_collection(scrapper)
-
 def run_tech_equipament():
     extractor = TechEquipamentExtractor()
     collection = extractor.extract_processed_collection()
@@ -112,5 +105,5 @@ def parse_csv():
  
 if __name__ == "__main__":
    #run_Idbe()
-   run_ANATEL()
+   run_datasus()
    #run_MUNIC_base()

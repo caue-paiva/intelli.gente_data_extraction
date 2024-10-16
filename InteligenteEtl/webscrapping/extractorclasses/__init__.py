@@ -8,7 +8,6 @@ from .SnisExtractor import SnisExtractor
 from .IbgeCitiesNetworkExtractor import IbgeCitiesNetworkExtractor
 from.HigherEducaPositionsExtractor import HigherEducaPositionsExtractor
 from .SchoolDistortionRatesExtractor import SchoolDistortionRatesExtractor
-from .RaisExtractor import RaisExtractor
 from .IdebFinalYearsExtractor import idebFinalYearsExtractor
 from .TechEquipamentExtractor import TechEquipamentExtractor
 from .IbgeMunicExtractor import IbgeMunicExtractor

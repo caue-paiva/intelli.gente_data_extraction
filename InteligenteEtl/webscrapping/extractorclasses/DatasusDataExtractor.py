@@ -126,43 +126,46 @@ class DatasusDataExtractor(AbstractDataExtractor):
       df[self.DTYPE_COLUMN] = data_info.value["dtype"].value #coloca coluna do tipo de dado
 
       return df
+   
+   def extract_processed_collection(self)->list[ProcessedDataCollection]:
+      """
+      """
+      collections = []
+      for data_point in DatasusDataInfo:
+         collection = self.__get_data_collection(data_point)
+         if collection is None: #não conseguiu extrair nenhum dado
+            continue
+         collections.append(collection)
+
+      return collections
+
  
-   def extract_processed_collection(self, scrapper: Type[DatasusLinkScrapper])->list[ProcessedDataCollection]:
+   def __get_data_collection(self,data_info:DatasusDataInfo)->ProcessedDataCollection|None:
       """
-      Função da interface que recebe um objeto scrapper, chama a função dele que retorna o df extraido do site do datasus.
-      Esse DF retornado é processado, valores nulos são removidos, e o df é colocado no formato certo para ser inserido no BD.
-
-      Args:
-         scrapper( classe ou subclasse (Type) de DatasusLinkScrapper): objeto da classe mencionada que faz scrapping dos dados do site do datasus
-      
-         data_category (str): categoria (tabela do BD) que o dado pertence à
-
-         data_identifier (str): nome do dado
-      
-      Return:
-         (list[ProcessedDataCollection]): Lista contendo objetos dessa Classe com os dados já processados e prontos para serem mandados pro BD
-         
+      Dado um data_point do datasus, roda um scrapper instanciado para esse ponto e retorna um
+      objeto dos dados processados
       """
-      data_list:list[YearDataPoint] = scrapper.extract_database()
+      scrapper_object = DatasusLinkScrapper(data_info)
+      data_list:list[YearDataPoint] = scrapper_object.extract_database()
       time_series_years:list[str] = [x.data_year for x in data_list]
 
       if len(data_list) < 1:
-         raise IOError("Lista de dataframes deve ter tamanho de pelo menos 1")
+         return None
       
-      data_info: DatasusDataInfo = scrapper.data_info
+      data_info: DatasusDataInfo = scrapper_object.data_info
       processed_df:pd.DataFrame = self.__join_df_parts(data_list,data_info)
 
-      processed_df = self.__convert_column_values(processed_df,scrapper.data_info.value["dtype"])
+      processed_df = self.__convert_column_values(processed_df,scrapper_object.data_info.value["dtype"])
       processed_df = self.update_city_code(processed_df, self.CITY_CODE_COL)
      
       collection =  ProcessedDataCollection(
          category= data_info.value["data_topic"],
-         dtype= scrapper.data_info.value["dtype"],
+         dtype= scrapper_object.data_info.value["dtype"],
          data_name= data_info.value["data_name"],
          time_series_years= time_series_years,
          df = processed_df
       )
-      return [collection]
+      return collection
 
 if __name__ == "__main__":
 
