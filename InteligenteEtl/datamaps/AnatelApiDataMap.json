@@ -1,0 +1,26 @@
+{
+
+      "8db598a8-6a3f-4b80-b9e6-0e31fb9087ea": {
+         "Escala de acesso a banda larga fixa" : {
+            "file_name":"Meu_Municipio_Acessos.csv",
+            "filter_column":"Serviço",
+            "filter_values":["Banda Larga Fixa"],
+            "values_column":"Densidade",
+            "city_code_column":"Código IBGE",
+            "year_col":"Ano",
+            "dtype": "float",
+            "category":"Infraestrutura de Conectividade"
+         },
+         "Escala de acesso a banda larga móvel": {
+            "file_name":"Meu_Municipio_Acessos.csv",
+            "filter_column":"Serviço",
+            "filter_values":["Telefonia Móvel"],
+            "values_column":"Densidade",
+            "city_code_column":"Código IBGE",
+            "year_col":"Ano",
+            "dtype":"float",
+            "category":"Infraestrutura de Conectividade "
+         }
+      }
+   
+}

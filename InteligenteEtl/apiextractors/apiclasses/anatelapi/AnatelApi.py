@@ -1,7 +1,8 @@
 from apiextractors.apiclasses.AbstractApiInterface import AbstractApiInterface
-import requests,os,json
+import requests,os
 import pandas as pd
 from datastructures import DataTypes
+from datamaps import get_anatel_api_datamap
 
 from datastructures import ProcessedDataCollection
 
@@ -9,26 +10,11 @@ class AnatelApi(AbstractApiInterface):
 
    _data_map: dict[str, dict[str,dict]] #json que indica os parâmetros e outras informações sobre cada dado da api
 
-   def __init__(self,path_to_datamap:str="")->None:
-      if not path_to_datamap:
-         __CURRENT_DIR = os.path.dirname(os.path.abspath(__file__)) #path para o json que mapea os dados extraidos com parâmetros de chamada da API
-         api_referen_json_path: str = os.path.join(__CURRENT_DIR,"AnatelApiDataMap.json")
-         self._db_to_api_data_map(api_referen_json_path)
-      else:
-         self._db_to_api_data_map(path_to_datamap)
+   def __init__(self)->None:
+      self._db_to_api_data_map() 
 
-   def _db_to_api_data_map(self, api_reference_json_path:str)->None:
-      """
-      Carrega o JSON que mapea cada ponto de dado do BD em argumentos para a chamada da API do IBGE em um dicionário que será usado por essa classe
-      """
-      try:
-         with open(os.path.join(api_reference_json_path), "r") as f:
-            loaded_data = json.load(f)
-            if not isinstance(loaded_data,dict):
-               raise IOError("objeto json não está na forma de um dicionário do python")
-            self._data_map: dict[str, dict[str,dict]] = loaded_data
-      except Exception as e:
-           raise RuntimeError("Não foi possível carregar o JSON que mapea os dados do DB para a API")
+   def _db_to_api_data_map(self)->None:
+      self._data_map: dict[str, dict[str,dict]]  = get_anatel_api_datamap() #carrega o datamap a partir da função importada
 
    def __get_zipfile_link(self)->str:
       url = "https://dados.gov.br/dados/api/publico/conjuntos-dados/8db598a8-6a3f-4b80-b9e6-0e31fb9087ea"

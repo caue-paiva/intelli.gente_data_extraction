@@ -25,15 +25,14 @@ def run_city_gdp()->None:
       collec.df.to_csv(f"{collec.data_name}.csv")
 
 def run_MUNIC_base()->list[YearDataPoint]:
-   scrapper = IbgeMunicScrapper()
    extractor = IbgeMunicExtractor()
-   collections = extractor.extract_processed_collection(scrapper)
+   collections = extractor.extract_processed_collection()
    for collect in collections:
       print(collect.df.info())
       collect.df.to_csv(f"{collect.data_name}.csv")
 
 def run_api_agregados():
-   api = IbgeAgregatesApi("agregados", "ibge")
+   api = IbgeAgregatesApi()
    data_points = api.extract_data_points()
    api.print_processed_data(data_points)
    api.save_processed_data_in_csv(data_points,1)
@@ -113,5 +112,5 @@ def parse_csv():
  
 if __name__ == "__main__":
    #run_Idbe()
-   run_CAPAG()
+   run_api_agregados()
    #run_MUNIC_base()

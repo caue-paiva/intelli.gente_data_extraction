@@ -2,6 +2,7 @@ from apiextractors.apiclasses.AbstractApiInterface import AbstractApiInterface
 from apiextractors.apidataclasses import DataLine, RawDataCollection
 from datastructures.DataCollection import ProcessedDataCollection
 from datastructures import DataTypes
+from datamaps import get_ibge_api_datamap
 import requests,json , os, urllib3, time
 
 #ao chamar a API do IBGE a lib de requests fica reclamando que a conexão é insegura, essa linha desabilita isso
@@ -33,31 +34,16 @@ class IbgeAgregatesApi(AbstractApiInterface):
       "X":   {"val": None,"type":DataTypes.NULL} #Dado numérico omitido a fim de evitar a individualização da informação
    }
 
-
-   api_name:str
-   goverment_agency:str
    _data_map: dict[str, dict[str,dict]]
 
-   def __init__(self, api_name:str, goverment_agency: str) -> None:
-      self.api_name = api_name
-      self.goverment_agency = goverment_agency
-
-      __CURRENT_DIR = os.path.dirname(os.path.abspath(__file__)) #path para o json que mapea os dados extraidos com parâmetros de chamada da API
-      api_referen_json_path: str = os.path.join(__CURRENT_DIR,"IbgeAgregatesApiDataMap.json")
-      self._db_to_api_data_map(api_referen_json_path) #mapea o JSON de referencia da API num dict que vai ser usado pela classe
+   def __init__(self) -> None:
+      self._db_to_api_data_map()
+      #__CURRENT_DIR = os.path.dirname(os.path.abspath(__file__)) #path para o json que mapea os dados extraidos com parâmetros de chamada da API
+      #api_referen_json_path: str = os.path.join(__CURRENT_DIR,"IbgeAgregatesApiDataMap.json")
+      #self._db_to_api_data_map(api_referen_json_path) #mapea o JSON de referencia da API num dict que vai ser usado pela classe
       
-   def _db_to_api_data_map(self, api_reference_json_path:str)->None:
-      """
-      Carrega o JSON que mapea cada ponto de dado do BD em argumentos para a chamada da API do IBGE em um dicionário que será usado por essa classe
-      """
-      try:
-         with open(os.path.join(api_reference_json_path), "r") as f:
-            loaded_data = json.load(f)
-            if not isinstance(loaded_data,dict):
-               raise IOError("objeto json não está na forma de um dicionário do python")
-            self._data_map: dict[str, dict[str,dict]] = loaded_data
-      except Exception as e:
-           raise RuntimeError("Não foi possível carregar o JSON que mapea os dados do DB para a API")
+   def _db_to_api_data_map(self)->None:
+      self._data_map: dict[str, dict[str,dict]] =  get_ibge_api_datamap() #carrega o datamap a partir da função importada
 
    def __find_data_name_category_by_id(self,variable_id:int ,classification:str = "")-> tuple[str] | None:
       """
@@ -194,7 +180,9 @@ class IbgeAgregatesApi(AbstractApiInterface):
       base_url:str = "https://servicodados.ibge.gov.br/api/v3/agregados/{agregado}/periodos/{periodos}/variaveis/{variaveis}"
 
       url:str = base_url.format(agregado=aggregate , periodos= (-time_series_len), variaveis=variable)
+      print("vai fazer request")
       response = requests.get(url, params=params, verify=False)
+      print("cabou request")
 
       if response.status_code == 200: #request teve sucesso
             response_data:list[dict] = response.json()
@@ -235,7 +223,7 @@ class IbgeAgregatesApi(AbstractApiInterface):
             
             call_result:RawDataCollection = self.__make_api_call(time_series_len,aggregate,cities,var,classification)
             print("chamada da API, extraiu um dado")
-            time.sleep(16) #sleep por 8 segundos para não sobrecarregar a api
+            time.sleep(20) #sleep por 8 segundos para não sobrecarregar a api
             api_data_points.append(call_result)
 
       return api_data_points
