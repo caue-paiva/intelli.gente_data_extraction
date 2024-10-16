@@ -15,9 +15,8 @@ def run_datasus(data_info: DatasusDataInfo)->pd.DataFrame:
       collect.df.to_csv(f"{collect.data_name}.csv")
 
 def run_city_gdp()->None:
-   scrapper = IbgePibCidadesScrapper()
    extractor = CategoryDataExtractor()
-   list_ = extractor.extract_processed_collection(scrapper)
+   list_ = extractor.extract_processed_collection()
 
    for collec in list_:
       collec.df.to_csv(f"{collec.data_name}.csv")
@@ -105,5 +104,5 @@ def parse_csv():
  
 if __name__ == "__main__":
    #run_Idbe()
-   run_datasus(DatasusDataInfo.GINI_COEF)
+   run_city_gdp()
    #run_MUNIC_base()
