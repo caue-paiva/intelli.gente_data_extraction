@@ -112,5 +112,5 @@ def parse_csv():
  
 if __name__ == "__main__":
    #run_Idbe()
-   run_api_agregados()
+   run_ANATEL()
    #run_MUNIC_base()
