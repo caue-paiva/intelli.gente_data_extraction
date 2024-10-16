@@ -1,6 +1,7 @@
 from webscrapping.extractorclasses import *
 from apiextractors import *
 import inspect,json,os
+from extractors_classes_handler import ExtractorClassesHandler
 
 ALL_IMPORTED_CLASSES = [object_name for object_name in dir() if inspect.isclass(globals()[object_name])] #lista todas as classes importadas no escopo global do Python
 
@@ -27,15 +28,20 @@ def run_requested_extractions(sources_to_extract:dict[str,list[str]]):
 
    for source in sources_to_extract:
       source_parsed:str = source.lower().replace(" ","")#variável para guardar o nome da classe em lowercase e sem espaço
-      if etl_classes_map.get(source_parsed) is not None:
+      extractor_class = etl_classes_map.get(source_parsed)
+      if  extractor_class is not None:
          indicators:list[str] = sources_to_extract[source]
          print(indicators)
+         print(extractor_class)
+         print(source)
       else:
          pass
+
 
 sources: dict 
 with open(os.path.join(os.getcwd(),"sources_to_extract.json"),"rb") as f:
    sources:dict =  json.load(f)
-   print(sources)
 
-run_requested_extractions(sources)
+handler = ExtractorClassesHandler()
+handler.run_requested_extractions(sources)
+#run_requested_extractions(sources)

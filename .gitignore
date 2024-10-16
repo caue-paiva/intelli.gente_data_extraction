@@ -10,3 +10,4 @@ venv
 tempfiles
 csvs
 InteligenteEtl/build/
+/.vscode
