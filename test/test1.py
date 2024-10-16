@@ -1,15 +1,15 @@
 from webscrapping.extractorclasses import *
 from webscrapping.scrapperclasses import * #um dos poucos casos que fazer isso é uma boa ideia!
 from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
-from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper
+from webscrapping.scrapperclasses import DatasusDataInfo,IbgePibCidadesScrapper
 from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor, IbgeMunicExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
 from datastructures import  YearDataPoint
 import pandas as pd
 
-def run_datasus()->pd.DataFrame:
+def run_datasus(data_info: DatasusDataInfo)->pd.DataFrame:
    extractor = DatasusDataExtractor()
-   processed_data = extractor.extract_processed_collection()
+   processed_data = extractor.extract_processed_collection(data_info)
    for collect in processed_data:
       print(collect.df.info())
       collect.df.to_csv(f"{collect.data_name}.csv")
@@ -105,5 +105,5 @@ def parse_csv():
  
 if __name__ == "__main__":
    #run_Idbe()
-   run_datasus()
+   run_datasus(DatasusDataInfo.GINI_COEF)
    #run_MUNIC_base()

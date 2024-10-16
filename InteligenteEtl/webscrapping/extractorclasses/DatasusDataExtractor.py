@@ -127,30 +127,24 @@ class DatasusDataExtractor(AbstractDataExtractor):
 
       return df
    
-   def extract_processed_collection(self)->list[ProcessedDataCollection]:
+   def extract_processed_collection(self,data_info:DatasusDataInfo)->list[ProcessedDataCollection]:
       """
-      """
-      collections = []
-      for data_point in DatasusDataInfo:
-         collection = self.__get_data_collection(data_point)
-         if collection is None: #não conseguiu extrair nenhum dado
-            continue
-         collections.append(collection)
+      Função da interface que recebe um objeto scrapper, chama a função dele que retorna o df extraido do site do datasus.
+      Esse DF retornado é processado, valores nulos são removidos, e o df é colocado no formato certo para ser inserido no BD.
 
-      return collections
-
- 
-   def __get_data_collection(self,data_info:DatasusDataInfo)->ProcessedDataCollection|None:
-      """
-      Dado um data_point do datasus, roda um scrapper instanciado para esse ponto e retorna um
-      objeto dos dados processados
+      Args:
+         data_info (DatasusDataInfo): Enum que representa o data_point a extrair
+      
+      Return:
+         (list[ProcessedDataCollection]): Lista contendo objetos dessa Classe com os dados já processados e prontos para serem mandados pro BD
+         
       """
       scrapper_object = DatasusLinkScrapper(data_info)
       data_list:list[YearDataPoint] = scrapper_object.extract_database()
       time_series_years:list[str] = [x.data_year for x in data_list]
 
       if len(data_list) < 1:
-         return None
+         raise IOError("Lista de dataframes deve ter tamanho de pelo menos 1")
       
       data_info: DatasusDataInfo = scrapper_object.data_info
       processed_df:pd.DataFrame = self.__join_df_parts(data_list,data_info)
@@ -165,18 +159,4 @@ class DatasusDataExtractor(AbstractDataExtractor):
          time_series_years= time_series_years,
          df = processed_df
       )
-      return collection
-
-if __name__ == "__main__":
-
-   url1 = "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/censo/cnv/alfbr"
-   url2 = "http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def"
-   abreviation1 = DatasusDataInfo.ILLITERACY_RATE
-   abreviation2 = DatasusDataInfo.GINI_COEF
-
-   extractor = DatasusDataExtractor()
-   scrapper = DatasusLinkScrapper(url1,abreviation1)
-
-   collection = extractor.extract_processed_collection(scrapper,"educacao","taxa de analfabetismo")
-
-
+      return [collection]
