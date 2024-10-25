@@ -38,7 +38,7 @@ class CitiesGDPDataInfo(Enum):
 
   # }
 
-class CategoryDataExtractor(AbstractDataExtractor):
+class IbgePibCidadesDataExtractor(AbstractDataExtractor):
 
    EXTRACTED_DATA_YEAR_COL = "Ano"
    EXTRACTED_DATA_CITY_CODE_COL = "Código do Município"

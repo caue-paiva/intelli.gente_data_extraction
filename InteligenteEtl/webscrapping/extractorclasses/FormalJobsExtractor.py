@@ -20,6 +20,7 @@ class FormalJobsExtractor(AbstractDataExtractor):
    EXTRACTED_TABLE_CITY_COL = "Cod. Loc." #nome da coluna dos códigos do municípios na tabela extraida
    EXTRACTED_DATA_NAME = "População ocupada com vínculo formal"
 
+
    def __init__(self, webscrapping_delay_multiplier:int = 1):
        self.__SCRAPER_CLASS = FormalJobsScrapper(webscrapping_delay_multiplier)
 

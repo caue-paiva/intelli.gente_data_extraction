@@ -1,9 +1,9 @@
 {
-
-   "CategoryDataExtractor" :[],
-   "DatasusDataExtractor": [
-      "Índice de GINI da renda domiciliar per capita",
-      "Taxa de analfabetismo "
-   ]
-
+   "IbgePibCidadesDataExtractor": [],
+   "IdebFinalYearsExtractor": [],
+   "RaisExtractor(Quebrado)": [],
+   "IdhExtractor": [],
+   "SchoolDistortionRatesExtractor": [],
+   "SnisExtractor": [],
+   "TechEquipmentExtractor": []
 }

@@ -1,6 +1,6 @@
 from webscrapping.extractorclasses import *
 from webscrapping.scrapperclasses import * #um dos poucos casos que fazer isso é uma boa ideia!
-from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
+from webscrapping.extractorclasses import DatasusDataExtractor, IbgePibCidadesDataExtractor, CityPaymentsExtractor
 from webscrapping.scrapperclasses import DatasusDataInfo,IbgePibCidadesScrapper
 from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor, IbgeMunicExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
@@ -15,7 +15,7 @@ def run_datasus(data_info: DatasusDataInfo)->pd.DataFrame:
       collect.df.to_csv(f"{collect.data_name}.csv")
 
 def run_city_gdp()->None:
-   extractor = CategoryDataExtractor()
+   extractor = IbgePibCidadesDataExtractor()
    list_ = extractor.extract_processed_collection()
 
    for collec in list_:

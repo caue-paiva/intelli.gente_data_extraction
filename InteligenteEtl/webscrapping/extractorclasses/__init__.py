@@ -1,6 +1,6 @@
 from .AbstractDataExtractor import AbstractDataExtractor
 from .DatasusDataExtractor import DatasusDataExtractor
-from .IbgePibCidadesDataExtractor import CategoryDataExtractor
+from .IbgePibCidadesDataExtractor import IbgePibCidadesDataExtractor
 from .FormalJobsExtractor import FormalJobsExtractor
 from .CityPaymentsExtractor import CityPaymentsExtractor
 from .IdhExtractor import IdhExtractor

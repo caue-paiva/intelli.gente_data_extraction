@@ -9,8 +9,13 @@ class SchoolDistortionRatesExtractor(AbstractDataExtractor):
    DTYPE = DataTypes.FLOAT
    DATA_NAME = "Taxas de distorção idade-série"
 
-   def extract_processed_collection(self, scrapper: SchoolDistortionRatesScrapper)-> list[ProcessedDataCollection]:
-      data_points:list[YearDataPoint] = scrapper.extract_database()
+   __scrapper_class: SchoolDistortionRatesScrapper
+
+   def __init__(self):
+      self.__scrapper_class = SchoolDistortionRatesScrapper()
+
+   def extract_processed_collection(self)-> list[ProcessedDataCollection]:
+      data_points:list[YearDataPoint] = self.__scrapper_class.extract_database()
       time_series_years:list[int] = YearDataPoint.get_years_from_list(data_points)
 
       joined_df:pd.DataFrame = self._concat_data_points(data_points)
