@@ -55,7 +55,7 @@ class AbstractApiInterface(ABC):
       pass
 
    @abstractmethod   
-   def extract_data_points(self)->list[ProcessedDataCollection]:
+   def extract_processed_collection(self)->list[ProcessedDataCollection]:
       pass
 
    def process_raw_data(self,data_collections: list[RawDataCollection])->list[ProcessedDataCollection]:

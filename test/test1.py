@@ -30,13 +30,13 @@ def run_MUNIC_base()->list[YearDataPoint]:
 
 def run_api_agregados():
    api = IbgeAgregatesApi()
-   data_points = api.extract_data_points()
+   data_points = api.extract_processed_collection()
    api.print_processed_data(data_points)
    api.save_processed_data_in_csv(data_points,1)
 
 def run_api_ipea():
    api_extractor = IpeaViolenceMapApi()
-   list_data_collect = api_extractor.extract_data_points()
+   list_data_collect = api_extractor.extract_processed_collection()
    api_extractor.save_processed_data_in_csv(list_data_collect,0)
 
 def run_CAPAG():
@@ -58,7 +58,7 @@ def run_IDH():
 
 def run_ANATEL():
    obj = AnatelApi()
-   list_ = obj.extract_data_points()
+   list_ = obj.extract_processed_collection()
    for collect in list_:
       print(collect.df.info())
       collect.df.to_csv(f"{collect.data_name}.csv")

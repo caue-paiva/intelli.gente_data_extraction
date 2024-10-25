@@ -1,9 +1,3 @@
 {
-   "IbgePibCidadesDataExtractor": [],
-   "IdebFinalYearsExtractor": [],
-   "RaisExtractor(Quebrado)": [],
-   "IdhExtractor": [],
-   "SchoolDistortionRatesExtractor": [],
-   "SnisExtractor": [],
-   "TechEquipmentExtractor": []
+   "anatelAPI": []
 }

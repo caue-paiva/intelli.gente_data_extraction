@@ -70,7 +70,7 @@ class IpeaViolenceMapApi(AbstractApiInterface):
       years = set(map(lambda x: x.year,data_points))
       return list(years).sort() #transforma o conjunto numa lista e ordena ele
 
-   def extract_data_points(self) -> list[ProcessedDataCollection]:
+   def extract_processed_collection(self) -> list[ProcessedDataCollection]:
       raw_data_list:list[ProcessedDataCollection] = []
 
       for category, data_points in self._data_map.items(): #loop pelas categorias do json de mapeamento dos dados

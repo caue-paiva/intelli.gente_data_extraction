@@ -1,4 +1,4 @@
-from etl_config import get_config
+from etl_config import get_config, ClassExtractionLog,DataPointExtractionLog
 from webscrapping.extractorclasses import *
 from apiextractors import *
 from webscrapping.extractorclasses import AbstractDataExtractor
@@ -8,6 +8,7 @@ from webscrapping.scrapperclasses.DatasusLinkScrapper import DatasusDataInfo
 from webscrapping.extractorclasses import DatasusDataExtractor
 from typing import Type
 import inspect
+from datetime import datetime,timedelta
 
 
 ALL_IMPORTED_CLASSES = [object_name for object_name in dir() if inspect.isclass(globals()[object_name])] #lista todas as classes importadas no escopo global do Python
@@ -94,7 +95,6 @@ class ExtractorClassesHandler:
                raise NotImplementedError(f"Implementação de extração de indicadores específicos não foi feita para a classe: {class_name}")
          
          else:
-            print("caso normal")
             if indicators_to_extract:
                raise RuntimeError(
                   """
@@ -106,7 +106,7 @@ class ExtractorClassesHandler:
             #caso padrão para classes que implementam apenas um indicador, apenas roda o método de extrair dados 
             return class_obj().extract_processed_collection()
 
-   def run_requested_extractions(self,sources_to_extract:dict[str,list[str]])->None:
+   def run_requested_extractions(self,sources_to_extract:dict[str,list[str]])->list[ClassExtractionLog]:
       """
       dado uma lista de fontes para extrair, com essa lista vindo de acordo com a tabela de controle de dados extraídos 
       (ver a coluna 'Extraído Pela Classe:' dessa tabela), realiza a extração dos dados requisitados.
@@ -116,26 +116,48 @@ class ExtractorClassesHandler:
          e o valor é uma lista de indicadores específicos daquela classe (para extrair todos a lista deve ser vazia)
       
       Return:
+         list[ClassExtractionLog]: lista de objetos de logging que representam como a extração ocorreu
       """
+
+      logs:list[ClassExtractionLog] = []
 
       for source in sources_to_extract:
          source_parsed:str = source.lower().replace(" ","")#variável para guardar o nome da classe em lowercase e sem espaço
          extractor_class = self.__etl_classes_map.get(source_parsed)
          
          if extractor_class is not None:
+            extraction_start_time = datetime.now()
             indicators:list[str] = sources_to_extract[source]
             list_ = self.__run_requested_extraction(
                source,
                extractor_class,
                indicators
             )
+            extraction_time: timedelta = datetime.now() - extraction_start_time
 
             if "munic" in source_parsed:
                continue
 
+            data_points_extracted:list[DataPointExtractionLog] = []
             for collec in list_:
                collec.df.to_csv(f"{collec.data_name}.csv",index=False)
+               data_points_extracted.append(
+                  DataPointExtractionLog(
+                     data_point=collec.data_name,
+                     time_series_years=collec.time_series_years,
+                     total_df_lines=collec.df.shape[0]
+                  )
+               )
+            logs.append(
+               ClassExtractionLog(
+                  class_name=source,
+                  data_points_logs=data_points_extracted,
+                  finish_date=datetime.now(),
+                  extraction_time=extraction_time,
+                  extra_info=""
+               )
+            )
+                            
          else:
             print(f"não foi possível extrair os dados com a classe {source}, pois o objeto python relacionado não foi encontrado")
-
-   
+      return logs

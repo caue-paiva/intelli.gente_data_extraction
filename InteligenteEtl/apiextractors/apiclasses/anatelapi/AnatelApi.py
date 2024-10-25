@@ -80,7 +80,7 @@ class AnatelApi(AbstractApiInterface):
          df=df
       )
 
-   def extract_data_points(self) -> list[ProcessedDataCollection]:
+   def extract_processed_collection(self) -> list[ProcessedDataCollection]:
       link:str = self.__get_zipfile_link()
       self._download_and_extract_zipfile(link)
       return_data_list:list[ProcessedDataCollection] = []

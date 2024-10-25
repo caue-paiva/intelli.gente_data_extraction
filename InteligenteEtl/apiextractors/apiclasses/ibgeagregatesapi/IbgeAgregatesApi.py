@@ -228,7 +228,7 @@ class IbgeAgregatesApi(AbstractApiInterface):
 
       return api_data_points
 
-   def extract_data_points(self, cities: list[int] = [], time_series_len: int = 0) -> list[ProcessedDataCollection]:
+   def extract_processed_collection(self, cities: list[int] = [], time_series_len: int = 0) -> list[ProcessedDataCollection]:
       """
       Extrai e processa dados da API do IBGE, toma os parâmetros para a chamada de api para cada dado do json que mapea os dados e parâmetros da
       API. Retorna os dados no modelo pronto para ingestão no BD
