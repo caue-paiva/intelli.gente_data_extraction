@@ -128,6 +128,10 @@ class FormalJobsScrapper(AbstractScrapper):
         self.__create_downloaded_files_dir() #cria diretório para os dados extraidos caso ele não exista
 
         options = webdriver.ChromeOptions()
+        options.add_argument("--headless")  # modo para não gerar um janela
+        options.add_argument("--disable-gpu")  # compatibilidade
+        options.add_argument("--no-sandbox") 
+        options.add_argument("--disable-dev-shm-usage")  # prevenir problemas de memória
         options.add_experimental_option("prefs", self.CHROME_DRIVER_PREFEREN)
         driver = webdriver.Chrome(options=options)
 

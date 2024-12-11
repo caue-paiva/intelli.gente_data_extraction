@@ -19,6 +19,8 @@ class ExtractorClassesHandler:
    __etl_classes_map: dict[str,object] #dict que mapea o nome de cada classe a seu objeto python
    __classes_with_several_indicators: list[str] #lista de classes que extraem vários indicadores
 
+   
+
    def __init__(self):
       all_classes:list[str]  = self.__get_all_extractor_classes()
       all_classes.extend(self.__get_all_api_classes())
@@ -84,11 +86,11 @@ class ExtractorClassesHandler:
          Return:
             list[ProcessedDataCollection]: Dados extraidos
          """
-
-         if class_name.lower().replace(" ","")  in self.__classes_with_several_indicators:
+         parsed_class_name:str = class_name.lower().replace(" ","")
+         if parsed_class_name  in self.__classes_with_several_indicators:
             #caso de classes que extraem vários indicadores
             
-            if class_name == "DatasusDataExtractor":
+            if parsed_class_name == "datasusdataextractor":
                print("datasus")
                return self.__extract_datasus_indicators(indicators_to_extract)
             else:
@@ -110,6 +112,7 @@ class ExtractorClassesHandler:
       """
       dado uma lista de fontes para extrair, com essa lista vindo de acordo com a tabela de controle de dados extraídos 
       (ver a coluna 'Extraído Pela Classe:' dessa tabela), realiza a extração dos dados requisitados.
+      Caso a lista de fontes tenha a entrada "todos" o código vai extrair todos os dados
 
       Args:
          sources_to_extract (dict[str,list[str]]): dicionário num formato json cuja chave é a classe a ser chamada para extração 
@@ -120,6 +123,15 @@ class ExtractorClassesHandler:
       """
 
       logs:list[ClassExtractionLog] = []
+      if not sources_to_extract: #o dict passado é nulo, vamos extrair todos os dados
+         error_message = ("Nenhum argumento de quais dados para extrair foi passado")
+         return [ #retorna um log de erro
+            ClassExtractionLog.error_log(error_message)
+         ]
+   
+      if "todos" in sources_to_extract.keys(): #flag para extrair todos os dados
+         sources_to_extract = {data_name:[] for data_name in self.__etl_classes_map.keys()} #cria um dict cujas chaves são os nomes dos dados
+         # e o valor é uma lista vazia (oq resulta em todos indicadores sendo extraidos)
 
       for source in sources_to_extract:
          source_parsed:str = source.lower().replace(" ","")#variável para guardar o nome da classe em lowercase e sem espaço
@@ -152,6 +164,7 @@ class ExtractorClassesHandler:
                ClassExtractionLog(
                   class_name=source,
                   data_points_logs=data_points_extracted,
+                  start_date = extraction_start_time,
                   finish_date=datetime.now(),
                   extraction_time=extraction_time,
                   extra_info=""
