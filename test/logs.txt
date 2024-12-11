@@ -1,0 +1,10 @@
+
+Class Name: IdebFinalYearsExtractor
+Finish Date: 2024-12-11 20:40:11
+Extraction Time: 0:00:43.489722
+Extra Info: 
+Data Points Logs:
+
+-> Data Point: Índice de desenvolvimento da educação básica (IDEB) - anos finais 
+     Time Series Years: 2005, 2007, 2009, 2011, 2013, 2015, 2017, 2019, 2021, 2023
+     Total DataFrame Lines: 30204
