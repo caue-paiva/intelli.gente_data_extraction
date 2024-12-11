@@ -72,7 +72,7 @@ class ExtractorClassesHandler:
    def __run_requested_extraction(
             self,
             class_name:str, 
-            class_obj: Type[AbstractApiInterface] | Type[AbstractDataExtractor], 
+            class_obj: Type[AbstractApiInterface] | Type[AbstractDataExtractor],  # type: ignore
             indicators_to_extract:list[str] = []
          ) -> list[ProcessedDataCollection]:
          """
