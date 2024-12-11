@@ -22,9 +22,9 @@ class HigherEducaPositionsScrapper(AbstractScrapper):
 
     def extract_database(self)->list[YearDataPoint]:
         links:list[str] = self.__get_file_links()[:3]
-        print(links)
+        #print(links)
         self.__download_zipfiles(links)
-        print("baixou todos zipfiles")
+        #print("baixou todos zipfiles")
         time.sleep(5)
         self.__extract_zipfiles()
         
@@ -76,6 +76,11 @@ class HigherEducaPositionsScrapper(AbstractScrapper):
             "download.directory_upgrade": True,  # Ensure directory upgrade
             "safebrowsing.enabled": True  # Enable safe browsing
         })
+        chrome_options.add_argument("--headless")  # Enable headless mode
+        chrome_options.add_argument("--disable-gpu")  # Disable GPU for compatibility
+        chrome_options.add_argument("--no-sandbox")  # Required for some environments
+        chrome_options.add_argument("--disable-dev-shm-usage")  # Prevent memory issues
+        chrome_options.add_argument("--window-size=1920,1080")  # Simulate maximized window size
 
         # Set up the Chrome driver
         driver = webdriver.Chrome(options=chrome_options)
@@ -97,7 +102,7 @@ class HigherEducaPositionsScrapper(AbstractScrapper):
                 new_zipfiles_count:int = reduce(lambda count,filename: count+1 if ".zip" in filename else count,files_in_dir,0) #conta numero de zipfiles no folder
             
             extracted_zipfile_count = new_zipfiles_count #atualiza variável de arquivos zip extraidos
-            print(extracted_zipfile_count)
+            #print(extracted_zipfile_count)
             time.sleep(5)  
         driver.quit()
 
@@ -169,7 +174,7 @@ class HigherEducaPositionsScrapper(AbstractScrapper):
     def __filter_df(self, df: pd.DataFrame) -> pd.DataFrame:
         df = df.copy()
         city_codes_before_filter = set(df["CO_MUNICIPIO"])
-        print(len(city_codes_before_filter))
+        #print(len(city_codes_before_filter))
         
         cols_and_filter_vals = {
             "TP_GRAU_ACADEMICO": [1, 2, 3, 4],
@@ -190,8 +195,8 @@ class HigherEducaPositionsScrapper(AbstractScrapper):
 
         df["CO_MUNICIPIO"] = df["CO_MUNICIPIO"].astype("int")
         city_codes_after_filter = set(df["CO_MUNICIPIO"])
-        print(df.info())
-        print(len(city_codes_after_filter))
+        #(df.info())
+        #print(len(city_codes_after_filter))
         
         #código abaixo lida com os municípios que estavam originalmente nos dados (~3300) mas que foram retirados após filtragem
         #esses municípios não devem ter valor NULL (por que os dados deles foram coletados) mas sim valores 0, por não terem cursos que

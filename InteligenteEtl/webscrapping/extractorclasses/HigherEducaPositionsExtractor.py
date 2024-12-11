@@ -41,10 +41,10 @@ class HigherEducaPositionsExtractor(AbstractDataExtractor):
       """
       O dataframe extraido tem várias entradas repetidas para uma única cidade, pois cada entrada se refere a um curso de graduação em uma certa universidade
       """
-      print(df[self.EXTRACTED_CITY_CODE_COL].nunique())
+      #print(df[self.EXTRACTED_CITY_CODE_COL].nunique())
       grouped_object = df.groupby([self.EXTRACTED_CITY_CODE_COL,self.YEAR_COLUMN])
       df = grouped_object.sum().reset_index()
-      print(df.info())
+      #print(df.info())
       return df
 
    def __filter_and_drop_cols(self,df:pd.DataFrame)->pd.DataFrame:
