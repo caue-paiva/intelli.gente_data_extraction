@@ -1,10 +1,10 @@
 
-Class Name: IdhExtractor
-Finish Date: 2025-01-07 20:05:14
-Extraction Time: 0:00:35.059654
+Class Name: SchoolDistortionRatesExtractor
+Finish Date: 2025-01-07 20:57:44
+Extraction Time: 0:05:16.343119
 Extra Info: 
 Data Points Logs:
 
--> Data Point: Índice de desenvolvimento humano do município (IDH-M)
-     Time Series Years: 1991, 2000, 2010
-     Total DataFrame Lines: 16584
+-> Data Point: Taxas de distorção idade-série
+     Time Series Years: 2022, 2018, 2023, 2016, 2020, 2021, 2019, 2017
+     Total DataFrame Lines: 44560
