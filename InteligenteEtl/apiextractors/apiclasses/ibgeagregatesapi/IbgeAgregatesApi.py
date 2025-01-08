@@ -3,6 +3,8 @@ from apiextractors.apidataclasses import DataLine, RawDataCollection
 from datastructures.DataCollection import ProcessedDataCollection
 from datastructures import DataTypes
 from datamaps import get_ibge_api_datamap
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import List
 import requests,json , os, urllib3, time
 
 #ao chamar a API do IBGE a lib de requests fica reclamando que a conexão é insegura, essa linha desabilita isso
@@ -180,9 +182,9 @@ class IbgeAgregatesApi(AbstractApiInterface):
       base_url:str = "https://servicodados.ibge.gov.br/api/v3/agregados/{agregado}/periodos/{periodos}/variaveis/{variaveis}"
 
       url:str = base_url.format(agregado=aggregate , periodos= (-time_series_len), variaveis=variable)
-      print("vai fazer request")
+      #print("vai fazer request")
       response = requests.get(url, params=params, verify=False)
-      print("cabou request")
+      #print("cabou request")
 
       if response.status_code == 200: #request teve sucesso
             response_data:list[dict] = response.json()
@@ -190,6 +192,24 @@ class IbgeAgregatesApi(AbstractApiInterface):
       else:
             raise RuntimeError(f"Falha na Request para a API, erro: {response.status_code}")
 
+   def __thread_worker_api_call(self, time_series_len, aggregate, cities, var, classification) -> RawDataCollection:
+    """
+    Pequena função "wrapper" para separar a chamada de API e o sleep.
+    Isso facilita a submissão ao ThreadPoolExecutor e mantém o sleep
+    dentro da função que será executada em paralelo.
+    """
+    call_result: RawDataCollection = self.__make_api_call(
+        time_series_len,
+        aggregate,
+        cities,
+        var,
+        classification
+    )
+    #print("chamada da API, extraiu um dado")
+    # Dorme 8 (ou 20) segundos para evitar sobrecarregar a API
+    time.sleep(20)
+
+    return call_result
 
 
    def extract_raw_data(self, cities: list[int] = [], time_series_len: int = 0) -> list[RawDataCollection]:
@@ -212,19 +232,46 @@ class IbgeAgregatesApi(AbstractApiInterface):
       if time_series_len == 0:
          time_series_len = self.MAX_TIME_SERIES_LEN
 
-      api_data_points: list[dict] = []  #lista com  dicionário, cada um representando um dado, contendo chaves para o nome do dado,sua categoria, anos de série históricas 
+      api_data_points: list[RawDataCollection] = []  #lista com  dicionário, cada um representando um dado, contendo chaves para o nome do dado,sua categoria, anos de série históricas 
       #e uma lista de pontos de dados extraidos de todas as chamadas da API
       
-      for category in self._data_map: #loop por todas as categorias de dados
-         for data_point, api_call_params in self._data_map[category].items(): #loop por cada dado individual
-            aggregate:int = api_call_params.get("agregado") #agregada o qual pertence o dado
-            var: str = str(api_call_params.get("variavel")) #variavel do dado, transforma em string
-            classification: str = api_call_params.get("classificacao","") #classificação da variável, caso exista
-            
-            call_result:RawDataCollection = self.__make_api_call(time_series_len,aggregate,cities,var,classification)
-            print("chamada da API, extraiu um dado")
-            time.sleep(20) #sleep por 8 segundos para não sobrecarregar a api
-            api_data_points.append(call_result)
+      # Cria um executor para gerenciar as threads nessa pool
+      
+      with ThreadPoolExecutor(max_workers=5) as executor:
+        # Guardaremos aqui todos os Future objects para coletar resultados depois
+        futures:list = [] #lista de tuplas dos objetos Futures e qual dado
+        data_names: list = []
+        #que esse objeto se refere
+
+      
+        for category in self._data_map:  # loop por todas as categorias de dados
+            i = 0 
+           
+            for data_point, api_call_params in self._data_map[category].items():
+                aggregate: int = api_call_params.get("agregado")
+                var: str = str(api_call_params.get("variavel"))
+                classification: str = api_call_params.get("classificacao", "")
+
+                # Submete a chamada para execução em uma nova thread
+                futures.append(
+                     executor.submit(
+                           self.__thread_worker_api_call,  # chama uma função  wrapper para .__make_api_call com sleep dentro dela
+                           time_series_len, #args da função
+                           aggregate,
+                           cities,
+                           var,
+                           classification
+                     ),
+                )
+                data_names.append(data_point)
+
+        # Conforme as threads terminam, obtemos seus resultados
+        for i,future in enumerate(as_completed(futures)):
+            try:
+               call_result = future.result()  # Pode levantar exceções se ocorrer erro dentro da thread
+               api_data_points.append(call_result)
+            except Exception as e:
+                print(f"Erro ao extrair dado {data_names[i]}: {e}")
 
       return api_data_points
 
