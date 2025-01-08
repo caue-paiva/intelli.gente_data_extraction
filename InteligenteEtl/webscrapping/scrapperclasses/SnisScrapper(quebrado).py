@@ -10,9 +10,6 @@ from datastructures import YearDataPoint
 from .AbstractScrapper import AbstractScrapper
 
 class SnisScrapper(AbstractScrapper):
-   """
-   TODO: completar a classe de scrapper a classe de extrator associada
-   """
 
    URL = "http://app4.mdr.gov.br/serieHistorica/municipio/index/"
    INDICATORS = [ #lista de indicadores a serem extraidos
