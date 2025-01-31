@@ -1,6 +1,8 @@
 /intelienv 
 /intellienv
 *.csv
+*.txt
+*.log
 !InteligenteEtl/citiesinfo/info_municipios_ibge.csv
 *.xlsx
 *.env
