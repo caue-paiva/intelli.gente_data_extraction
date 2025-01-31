@@ -16,6 +16,8 @@ def main(argv:list[str])->None:
    """
    if len(argv) >= 2: #primeiro argumento de linha de comando é o própio arquivo
       logs_path = Path(argv[1]).with_suffix(".log")
+   else:
+      logs_path = Path(f"extraction_logs.log")
 
 
    sources: dict 
@@ -24,12 +26,14 @@ def main(argv:list[str])->None:
 
    handler = ExtractorClassesHandler()
    logs = handler.run_requested_extractions(sources)
-   print(logs)
 
-   with open(logs_path,"w") as f:
-      for log in logs:
-         f.write(str(log))
-         f.write("\n")    
+   try:
+      with open(logs_path,"a") as f:
+         for log in logs:
+            f.write(str(log))
+            f.write("\n")    
+   except Exception as e:
+      print("Falha ao Salvar o arquivo de logs: ",e)
 
 if __name__ == "__main__":
    main(sys.argv)

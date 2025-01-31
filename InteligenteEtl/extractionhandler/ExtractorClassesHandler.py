@@ -8,6 +8,8 @@ from webscrapping.scrapperclasses.DatasusLinkScrapper import DatasusDataInfo
 from webscrapping.extractorclasses import DatasusDataExtractor
 from typing import Type
 import inspect
+import sys
+import io
 from datetime import datetime,timedelta
 
 
@@ -137,21 +139,25 @@ class ExtractorClassesHandler:
          source_parsed:str = source.lower().replace(" ","")#variável para guardar o nome da classe em lowercase e sem espaço
          extractor_class = self.__etl_classes_map.get(source_parsed)
          
-         if extractor_class is not None:
-            extraction_start_time = datetime.now()
+         if extractor_class is not None: #roda a extração dos dados com essa classe
+            extraction_start_time = datetime.now() #começo da extração
             indicators:list[str] = sources_to_extract[source]
-            list_ = self.__run_requested_extraction(
+
+            stdout_capture = io.StringIO() #captura o STDOUT das funções de scrapping e extração de dados em uma string
+            sys.stdout = stdout_capture
+
+            list_ = self.__run_requested_extraction( #extrai o dado
                source,
                extractor_class,
                indicators
             )
-            extraction_time: timedelta = datetime.now() - extraction_start_time
+            extraction_time: timedelta = datetime.now() - extraction_start_time #final da extração
 
             if "munic" in source_parsed:
                continue
 
             data_points_extracted:list[DataPointExtractionLog] = []
-            for collec in list_:
+            for collec in list_: #salva os dados em CSV
                collec.df.to_csv(f"{collec.data_name}.csv",index=False)
                data_points_extracted.append(
                   DataPointExtractionLog(
@@ -160,17 +166,20 @@ class ExtractorClassesHandler:
                      total_df_lines=collec.df.shape[0]
                   )
                )
-            logs.append(
+            logs.append( #guarda o log dessa extração
                ClassExtractionLog(
                   class_name=source,
                   data_points_logs=data_points_extracted,
                   start_date = extraction_start_time,
                   finish_date=datetime.now(),
                   extraction_time=extraction_time,
-                  extra_info=""
+                  extra_info=stdout_capture.getvalue() #coloca o valor do STDOUT da extração de dados dessa classe em extra info do log
                )
             )
                             
          else:
             print(f"não foi possível extrair os dados com a classe {source}, pois o objeto python relacionado não foi encontrado")
+      
+      sys.stdout = sys.__stdout__ #retorna o STDOUT para o padrão do sistema
+      
       return logs

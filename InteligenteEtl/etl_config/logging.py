@@ -41,7 +41,7 @@ class ClassExtractionLog:
            f"\nClass Name: {self.class_name}\n"
            f"Finish Date: {self.finish_date.strftime('%Y-%m-%d %H:%M:%S')}\n"
            f"Extraction Time: {self.extraction_time}\n"
-           f"Extra Info: {self.extra_info}\n"
+           f"Stdout: {self.extra_info}\n"
            f"Data Points Logs:\n{data_points_str}"
       )
 
