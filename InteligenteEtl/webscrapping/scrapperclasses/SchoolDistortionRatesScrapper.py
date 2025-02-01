@@ -12,16 +12,34 @@ from selenium.webdriver.chrome.options import Options
 from functools import reduce
 from datastructures import YearDataPoint
 from .AbstractScrapper import AbstractScrapper
+from etl_config import get_current_year
 
 class SchoolDistortionRatesScrapper(AbstractScrapper):
 
     URL = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/taxas-de-distorcao-idade-serie"
+    CHROME_PREFS = {
+            "download.default_directory": AbstractScrapper.DOWNLOADED_FILES_PATH ,  # Set the download directory
+            "download.prompt_for_download": False,  # Disable the prompt for download
+            "download.directory_upgrade": True,  # Ensure directory upgrade
+            "safebrowsing.enabled": True  # Enable safe browsing
+    }
 
-    def __init__(self):
+    def __init__(self,
+                years_to_extract:int = 10
+            ):
+        
         self.files_folder_path = self._create_downloaded_files_dir()
+        self.years_to_extract = years_to_extract
+        self.chrome_option =  webdriver.ChromeOptions()
+        self.chrome_option.add_argument("--headless")  # modo para não gerar um janela
+        self.chrome_option.add_argument("--disable-gpu")  # compatibilidade
+        self.chrome_option.add_argument("--no-sandbox") 
+        self.chrome_option.add_argument("--disable-dev-shm-usage")  # prevenir problemas de memória
+        self.chrome_option.add_experimental_option("prefs", self.CHROME_PREFS)
 
     def __extract_links(self)->list[str]:
-        driver = webdriver.Chrome()
+        
+        driver = webdriver.Chrome(self.chrome_option)
         driver.maximize_window()
         driver.get(self.URL)
 
@@ -32,7 +50,11 @@ class SchoolDistortionRatesScrapper(AbstractScrapper):
         self.__close_start_popup(driver)
 
         # Processar os anos desejados
-        anos = range(2023,2022,-1)
+        anos = range(
+            get_current_year(),
+            get_current_year()-self.years_to_extract,
+            -1)
+        print(anos)
         self.__click_on_all_years(driver, anos)
 
         # Obter o conteúdo da página renderizada após clicar em todos os anos
@@ -79,6 +101,7 @@ class SchoolDistortionRatesScrapper(AbstractScrapper):
 
     def __click_on_all_years(self, driver, anos):
         max_tries:int = 3
+        found_most_recent_year:bool = False
         for i, ano in enumerate(anos):
             cur_try:int = 0
             while cur_try < max_tries:
@@ -90,20 +113,22 @@ class SchoolDistortionRatesScrapper(AbstractScrapper):
                     driver.execute_script("arguments[0].scrollIntoView();", ano_element)
                     driver.execute_script("arguments[0].click();", ano_element)
                     time.sleep(2)
+                    found_most_recent_year = True
                     break
                 except Exception as e:
                     cur_try += 1
                     print(f"Erro ao processar o ano {ano}: {e}")
-                    if i > 0 and ano > anos[i - 1]:
+                    #só vamos para direita ou esquerda depois de achar o primeiro ano válido 
+                    if i > 0 and ano > anos[i - 1] and found_most_recent_year:
                         self.__click_side_arrows(driver, "esquerda")
-                    else:
+                    elif found_most_recent_year:
                         self.__click_side_arrows(driver, "direita")
 
     def extract_database(self)->list[YearDataPoint]:
         year_data_points = []
 
         # Extração dos links das páginas
-        links = self.__extract_links()[:1]
+        links = self.__extract_links()
         self.__download_and_extract_zipfiles(links)
      
         inner_folder = os.listdir(self.DOWNLOADED_FILES_PATH)
@@ -124,16 +149,8 @@ class SchoolDistortionRatesScrapper(AbstractScrapper):
     def __download_and_extract_zipfiles(self,urls:list[str])->None:
         #baixar arquivos zips
         downloaded_files_dir: str = self.DOWNLOADED_FILES_PATH 
-        chrome_options = Options()
-        chrome_options.add_experimental_option("prefs", {
-            "download.default_directory": downloaded_files_dir,  # Set the download directory
-            "download.prompt_for_download": False,  # Disable the prompt for download
-            "download.directory_upgrade": True,  # Ensure directory upgrade
-            "safebrowsing.enabled": True  # Enable safe browsing
-        })
-
         # Set up the Chrome driver
-        driver = webdriver.Chrome(options=chrome_options)
+        driver = webdriver.Chrome(options=self.chrome_option)
         if not os.path.isdir(downloaded_files_dir):
             os.mkdir(downloaded_files_dir)
 

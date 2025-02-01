@@ -1,115 +1,108 @@
 from webscrapping.extractorclasses import *
 from webscrapping.scrapperclasses import * #um dos poucos casos que fazer isso é uma boa ideia!
-from webscrapping.extractorclasses import DatasusDataExtractor, CategoryDataExtractor, CityPaymentsExtractor
-from webscrapping.scrapperclasses import DatasusLinkScrapper, DatasusDataInfo,IbgePibCidadesScrapper, IbgeMunicScrapper, CityPaymentsScrapper
-from webscrapping.scrapperclasses import FormalJobsScrapper, IdhScrapper, SnisScrapper, IbgeCitiesNetworkScrapper
+from webscrapping.extractorclasses import DatasusDataExtractor, IbgePibCidadesDataExtractor, CityPaymentsExtractor
+from webscrapping.scrapperclasses import DatasusDataInfo,IbgePibCidadesScrapper
 from webscrapping.extractorclasses import  FormalJobsExtractor, IdhExtractor, SnisExtractor, IbgeCitiesNetworkExtractor, IbgeMunicExtractor
 from apiextractors import IbgeAgregatesApi, IpeaViolenceMapApi, AnatelApi
-from datastructures import BaseFileType, YearDataPoint
+from datastructures import  YearDataPoint
 import pandas as pd
 
-def run_datasus(abreviation:DatasusDataInfo)->pd.DataFrame:
-   scrapper = DatasusLinkScrapper(abreviation)
-  
+def run_datasus(data_info: DatasusDataInfo)->pd.DataFrame:
    extractor = DatasusDataExtractor()
-   processed_data = extractor.extract_processed_collection(scrapper)
+   processed_data = extractor.extract_processed_collection(data_info)
+   for collect in processed_data:
+      print(collect.df.info())
+      collect.df.to_csv(f"{collect.data_name}.csv")
 
-   return processed_data[0].df
-
-def run_city_gdp(file_type:BaseFileType)->None:
-   scrapper = IbgePibCidadesScrapper(file_type)
-   extractor = CategoryDataExtractor()
-   list_ = extractor.extract_processed_collection(scrapper)
+def run_city_gdp()->None:
+   extractor = IbgePibCidadesDataExtractor()
+   list_ = extractor.extract_processed_collection()
 
    for collec in list_:
-      #print(collec)
       collec.df.to_csv(f"{collec.data_name}.csv")
 
-def run_MUNIC_base(file_type:BaseFileType)->list[YearDataPoint]:
-   scrapper = IbgeMunicScrapper(file_type,False)
+def run_MUNIC_base()->list[YearDataPoint]:
    extractor = IbgeMunicExtractor()
-   collections = extractor.extract_processed_collection(scrapper)
+   collections = extractor.extract_processed_collection()
    for collect in collections:
       print(collect.df.info())
+      collect.df.to_csv(f"{collect.data_name}.csv")
 
 def run_api_agregados():
-   api = IbgeAgregatesApi("agregados", "ibge")
-   data_points = api.extract_data_points()
+   api = IbgeAgregatesApi()
+   data_points = api.extract_processed_collection()
    api.print_processed_data(data_points)
    api.save_processed_data_in_csv(data_points,1)
 
 def run_api_ipea():
    api_extractor = IpeaViolenceMapApi()
-   list_data_collect = api_extractor.extract_data_points()
+   list_data_collect = api_extractor.extract_processed_collection()
    api_extractor.save_processed_data_in_csv(list_data_collect,0)
 
 def run_CAPAG():
-   scrapper = CityPaymentsScrapper()
    obj = CityPaymentsExtractor()
-   list_ = obj.extract_processed_collection(scrapper)
-   list_[0].df.to_csv(f"CAPAG_PROCESSADO{1}.csv")
+   list_ = obj.extract_processed_collection()
+   list_[0].df.to_csv(f"CAPAG_PROCESSADO{1}.csv",index=False)
 
 def run_formal_jobs():
-   scrapper = FormalJobsScrapper()
    obj = FormalJobsExtractor()
-
-   collection_list = obj.extract_processed_collection(scrapper)
+   collection_list = obj.extract_processed_collection()
    return collection_list[0].df
 
 def run_IDH():
-   scrapper = IdhScrapper()
    extractor = IdhExtractor()
-   collections = extractor.extract_processed_collection(scrapper)
+   collections = extractor.extract_processed_collection()
    for collect in collections:
       print(collect.df.info())
       collect.df.to_csv("idh-m.csv",index=False)
 
 def run_ANATEL():
    obj = AnatelApi()
-   list_ = obj.extract_data_points()
+   list_ = obj.extract_processed_collection()
    for collect in list_:
       print(collect.df.info())
       collect.df.to_csv(f"{collect.data_name}.csv")
 
 def ibge_cities_network():
-   obj = IbgeCitiesNetworkScrapper()
    extractor = IbgeCitiesNetworkExtractor()
-   list_ = extractor.extract_processed_collection(obj)
+   list_ = extractor.extract_processed_collection()
    for collection in list_:
       print(collection.df.info())
-      collection.df.to_csv(f"{collection.data_name}.csv")
+      collection.df.to_csv(f"{collection.data_name}.csv",index=False)
 
 def run_snis():
-   scrapper = SnisScrapper()
    extractor = SnisExtractor()
-   list_ = extractor.extract_processed_collection(scrapper)
+   list_ = extractor.extract_processed_collection()
 
    for ele in list_:
-      ele.df.to_csv(f"{ele.data_name}")
-
-def run_rais():
-   scrapper = RaisScrapper(RaisDataInfo.TECH_COMPANIES)
-   #scrapper.extract_database()
-   extractor = RaisExtractor()
-   extractor.extract_processed_collection(scrapper)
+      ele.df.to_csv(f"{ele.data_name}.csv")
 
 def run_tech_equipament():
-    scrapper = TechEquipamentScrapper()
     extractor = TechEquipamentExtractor()
-    collection = extractor.extract_processed_collection(scrapper,20)
+    collection = extractor.extract_processed_collection()
     for colec in collection:
       colec.df.to_csv(f"{colec.data_name}.csv")
 
 def run_Idbe():
-   scrapper = IdebFinalYearsScrapper()
    extractor = idebFinalYearsExtractor()
-   collection = extractor.extract_processed_collection(scrapper)
+   collection = extractor.extract_processed_collection()
+   print(len(collection))
 
    for colec in collection:
+      print(colec.data_name)
       colec.df.to_csv(f"{colec.data_name}.csv")
 
+def parse_csv():
+   import os
+   files:list[str] = os.listdir(os.getcwd())
 
+   for file in files:
+      print(file)
+      if ".csv" in file:
+         df = pd.read_csv(file,index_col=[0])
+         df.to_csv(os.path.join(os.getcwd(),file),index=False)
+ 
 if __name__ == "__main__":
-   run_Idbe()
-   
-   run_MUNIC_base(BaseFileType.EXCEL)
+   #run_Idbe()
+   run_city_gdp()
+   #run_MUNIC_base()

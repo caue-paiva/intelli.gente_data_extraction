@@ -15,8 +15,10 @@ class IdhExtractor(AbstractDataExtractor):
    DTYPE = DataTypes.FLOAT
    DATA_TOPIC = "IDH-M" #tópico
 
-   def extract_processed_collection(self, scrapper: IdhScrapper)-> list[ProcessedDataCollection]:
-      data_points:list[YearDataPoint] = scrapper.extract_database()
+   __SCRAPPER_CLASS = IdhScrapper() #classe scrapper para fazer webscraping
+
+   def extract_processed_collection(self)-> list[ProcessedDataCollection]:
+      data_points:list[YearDataPoint] = self.__SCRAPPER_CLASS.extract_database()
       time_series_years:list[int] = YearDataPoint.get_years_from_list(data_points)
 
       df = self._concat_data_points(data_points) #junta todos os dfs da lista de datapoint e add coluna do ano

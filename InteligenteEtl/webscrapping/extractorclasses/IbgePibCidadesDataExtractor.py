@@ -12,7 +12,7 @@ um código quase identico porém com 6 dígitos e não 7, isso deve ser levado e
 
 class CitiesGDPDataInfo(Enum):
    """
-   TODO: Colocar os 2 dados faltando dessa basa
+   TODO: Colocar os 2 dados faltando dessa base
 
    Enum para representar todas as possibilidades de dados que estão presentes do DF/tabela extraida do WebScrapping
    """
@@ -38,12 +38,16 @@ class CitiesGDPDataInfo(Enum):
 
   # }
 
-class CategoryDataExtractor(AbstractDataExtractor):
+class IbgePibCidadesDataExtractor(AbstractDataExtractor):
 
    EXTRACTED_DATA_YEAR_COL = "Ano"
    EXTRACTED_DATA_CITY_CODE_COL = "Código do Município"
+   __SCRAPER_CLASS: IbgePibCidadesScrapper
 
-   def extract_processed_collection(self,scrapper: IbgePibCidadesScrapper)->list[ProcessedDataCollection]:
+   def __init__(self):
+       self.__SCRAPER_CLASS = IbgePibCidadesScrapper()
+
+   def extract_processed_collection(self)->list[ProcessedDataCollection]:
       """ 
       TODO: Completar a função 
 
@@ -51,12 +55,12 @@ class CategoryDataExtractor(AbstractDataExtractor):
       extrai o dataframe bruto da base em um df menor apenas com as colunas de ano, código de cidade e os pontos de dados buscados
       
       Args:
-        scrapper (IbgePibCidadesScrapper) : um objeto dessa classe ou de uma classe filha que implemente a interface extract_base       
+
       Return:
         (list[ProcessedDataCollection]): lista de objetos ProcessedDataCollection, cada um sendo um dado diferente e pronto para entrar no BD
       """
 
-      list_datapoints:list[YearDataPoint] = scrapper.extract_database()
+      list_datapoints:list[YearDataPoint] = self.__SCRAPER_CLASS.extract_database()
       parsed_datapoints:list[YearDataPoint] = self.__drop_cols(list_datapoints)
       
       concatenated_df:pd.DataFrame = self._concat_data_points(parsed_datapoints,add_year_col=False)

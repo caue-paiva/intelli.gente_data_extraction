@@ -1,14 +1,12 @@
 from .AbstractDataExtractor import AbstractDataExtractor
 from .DatasusDataExtractor import DatasusDataExtractor
-from .IbgePibCidadesDataExtractor import CategoryDataExtractor
+from .IbgePibCidadesDataExtractor import IbgePibCidadesDataExtractor
 from .FormalJobsExtractor import FormalJobsExtractor
 from .CityPaymentsExtractor import CityPaymentsExtractor
 from .IdhExtractor import IdhExtractor
-from .SnisExtractor import SnisExtractor
 from .IbgeCitiesNetworkExtractor import IbgeCitiesNetworkExtractor
 from.HigherEducaPositionsExtractor import HigherEducaPositionsExtractor
 from .SchoolDistortionRatesExtractor import SchoolDistortionRatesExtractor
-from .RaisExtractor import RaisExtractor
 from .IdebFinalYearsExtractor import idebFinalYearsExtractor
 from .TechEquipamentExtractor import TechEquipamentExtractor
 from .IbgeMunicExtractor import IbgeMunicExtractor

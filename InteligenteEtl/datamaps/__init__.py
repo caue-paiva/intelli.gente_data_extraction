@@ -1,2 +1,3 @@
 from .MunicDataMaps import get_data_codes_per_year as munic_get_data_codes_per_year
 from .MunicDataMaps import get_data_informations as munic_get_data_information
+from .ApiDataMaps import get_ibge_api_datamap, get_anatel_api_datamap

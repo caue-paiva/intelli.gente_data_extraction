@@ -24,7 +24,14 @@ class IdhScrapper(AbstractScrapper):
          "download.directory_upgrade": True,
          "profile.default_content_setting_values.automatic_downloads": [1, {"behavior": 'allow'}] 
       }
-      CHROME_DRIVER_ARGUMENTS = ["--allow-running-insecure-content",f"--unsafely-treat-insecure-origin-as-secure={URL}"]
+      CHROME_DRIVER_ARGUMENTS = [
+         "--allow-running-insecure-content",
+         f"--unsafely-treat-insecure-origin-as-secure={URL}",
+         "--headless",
+         "--disable-gpu",
+         "--no-sandbox",
+         "--disable-dev-shm-usage"
+      ]
 
       options = webdriver.ChromeOptions()
       for arg in CHROME_DRIVER_ARGUMENTS:
@@ -39,7 +46,7 @@ class IdhScrapper(AbstractScrapper):
          """
          Le o arquivo excel extraido, transforma ele num dataframe e depois deleta ele
          """
-         print(year)
+         #asprint(year)
          file_path:str = os.path.join(self.DOWNLOADED_FILES_PATH,self.DOWNLOADED_FILE_NAME)
          df = pd.read_excel(file_path)
          os.remove(file_path)

@@ -14,6 +14,8 @@ class IbgeCitiesNetworkExtractor(AbstractDataExtractor):
    EXTRACTED_CITY_CODE_COL = "cod_ori"
    DATA_CATEGORY = "Arranjos Urbanos"
 
+   __SCRAPER_CLASS = IbgeCitiesNetworkScrapper()
+
    def __get_processed_collection(self,df:pd.DataFrame, data_name:str,time_series:list[int])->ProcessedDataCollection:
       data_col_name:str = self.DATA_POINTS[data_name]["column"]
       dtype:DataTypes =  self.DATA_POINTS[data_name]["dtype"]
@@ -44,8 +46,8 @@ class IbgeCitiesNetworkExtractor(AbstractDataExtractor):
       )
 
 
-   def extract_processed_collection(self, scrapper: IbgeCitiesNetworkScrapper) -> list[ProcessedDataCollection]:
-      data_points:list[YearDataPoint] = scrapper.extract_database()
+   def extract_processed_collection(self) -> list[ProcessedDataCollection]:
+      data_points:list[YearDataPoint] = self.__SCRAPER_CLASS.extract_database()
       time_series_years:list[int] = YearDataPoint.get_years_from_list(data_points)
       df:pd.DataFrame = self._concat_data_points(data_points)
 

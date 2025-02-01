@@ -19,12 +19,25 @@ class TechEquipamentScrapper(AbstractScrapper):
     REGEX_PATTERN = r'https://download.inep.gov.br/dados_abertos/microdados_censo_escolar_\d{4}\.zip'
     SCHOOL_TO_CITY_TABLE_FILE = "suplemento_cursos_tecnicos"
 
+
     __school_to_city_df:pd.DataFrame|None
+    chrome_option: Options
 
     def __init__(self):
         super().__init__()
         self.files_folder_path = self._create_downloaded_files_dir()
         self.__school_to_city_df = None
+        self.chrome_option =  webdriver.ChromeOptions()
+        self.chrome_option.add_argument("--headless")  # modo para não gerar um janela
+        self.chrome_option.add_argument("--disable-gpu")  # compatibilidade
+        self.chrome_option.add_argument("--no-sandbox") 
+        self.chrome_option.add_argument("--disable-dev-shm-usage")  # prevenir problemas de memória
+        self.chrome_option.add_experimental_option("prefs", {
+            "download.default_directory": os.path.abspath(self.files_folder_path),
+            "download.prompt_for_download": False,
+            "download.directory_upgrade": True,
+            "safebrowsing.enabled": True
+        })
 
     def __get_school_to_city_code_table(self,path:str)->pd.DataFrame:
         COLS_TO_READ = [
@@ -42,7 +55,7 @@ class TechEquipamentScrapper(AbstractScrapper):
         """
         extrai os links e retorna uma lista deles
         """
-        driver = webdriver.Chrome()
+        driver = webdriver.Chrome(options=self.chrome_option)
         driver.maximize_window()
         driver.get(self.URL)
         time.sleep(5)
@@ -66,15 +79,7 @@ class TechEquipamentScrapper(AbstractScrapper):
         """
         baixa os zipfiles localmente usando o selenium
         """
-        chrome_options = Options()
-        chrome_options.add_experimental_option("prefs", {
-            "download.default_directory": os.path.abspath(self.files_folder_path),
-            "download.prompt_for_download": False,
-            "download.directory_upgrade": True,
-            "safebrowsing.enabled": True
-        })
-
-        driver = webdriver.Chrome(options=chrome_options)
+        driver = webdriver.Chrome(options=self.chrome_option)
 
         for url in urls:
             driver.get(url)

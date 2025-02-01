@@ -132,10 +132,12 @@ class DatasusLinkScrapper(AbstractScrapper):
 
    website_url: str
    data_info:DatasusDataInfo
+   headless_mode:bool
 
-   def __init__(self,data_info:DatasusDataInfo):
+   def __init__(self,data_info:DatasusDataInfo,headless_mode:bool=True):
       self.website_url = data_info.value["url"] #pega o url associada ao dado que vai ser extraido
       self.data_info = data_info
+      self.headless_mode = headless_mode
    
    def extract_database(self)->list[YearDataPoint]:
       """
@@ -147,7 +149,13 @@ class DatasusLinkScrapper(AbstractScrapper):
       """
 
       if self.data_info == DatasusDataInfo.GINI_COEF: #caso específico do dado coeficiente de gini
-         driver = webdriver.Chrome()
+         options = webdriver.ChromeOptions()
+         if self.headless_mode:
+            options.add_argument("--headless")  # modo para não gerar um janela
+            options.add_argument("--disable-gpu")  # compatibilidade
+            options.add_argument("--no-sandbox") 
+            options.add_argument("--disable-dev-shm-usage")  # prevenir problemas de memória
+         driver = webdriver.Chrome(options=options)
          driver.get(self.website_url) 
          time.sleep(3) #espera a página carrega
          html:str = driver.page_source
@@ -243,7 +251,13 @@ class DatasusLinkScrapper(AbstractScrapper):
       Return:
          tuple[list[str],list[int]]: tupla com a lista de links para os arquivos csv e a lista de anos que cada csv se refere
       """
-      driver = webdriver.Chrome()
+      options = webdriver.ChromeOptions()
+      if self.headless_mode:
+            options.add_argument("--headless")  # modo para não gerar um janela
+            options.add_argument("--disable-gpu")  # compatibilidade
+            options.add_argument("--no-sandbox") 
+            options.add_argument("--disable-dev-shm-usage")  # prevenir problemas de memória
+      driver = webdriver.Chrome(options=options)
       driver.get(self.website_url) #driver do selenium vai pro site
       select_element = driver.find_element(By.ID, self.HTML_YEAR_BUTTON_ID) #acha o botão de selecionar os anos
       self.__select_data_options(driver) #caso seja necessário, seleciona as opções nas 3 tabelas do topo da página do datasus para mostrar os dados

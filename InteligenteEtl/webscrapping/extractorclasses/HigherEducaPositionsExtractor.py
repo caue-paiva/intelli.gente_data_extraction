@@ -11,12 +11,15 @@ class HigherEducaPositionsExtractor(AbstractDataExtractor):
    DATA_TOPIC = "Educação"
    DTYPE = DataTypes.INT
    EXTRACTED_CITY_CODE_COL = "CO_MUNICIPIO" #coluna original do
-
    EXTRACTED_DATA_VALUES_COL = "QT_VG_TOTAL" #coluna original do valor dos dados extraidos anteriormente
 
+   __scrapper_class: HigherEducaPositionsScrapper
 
-   def extract_processed_collection(self, scrapper: HigherEducaPositionsScrapper) -> list[ProcessedDataCollection]:
-      data_points:list[YearDataPoint] = scrapper.extract_database()
+   def __init__(self):
+      self.__scrapper_class = HigherEducaPositionsScrapper()
+
+   def extract_processed_collection(self) -> list[ProcessedDataCollection]:
+      data_points:list[YearDataPoint] = self.__scrapper_class.extract_database()
       years_in_data:list[int] = YearDataPoint.get_years_from_list(data_points)
 
       joined_df:pd.DataFrame = self._concat_data_points(data_points) #junta data points e add coluna de anos
@@ -38,10 +41,10 @@ class HigherEducaPositionsExtractor(AbstractDataExtractor):
       """
       O dataframe extraido tem várias entradas repetidas para uma única cidade, pois cada entrada se refere a um curso de graduação em uma certa universidade
       """
-      print(df[self.EXTRACTED_CITY_CODE_COL].nunique())
+      #print(df[self.EXTRACTED_CITY_CODE_COL].nunique())
       grouped_object = df.groupby([self.EXTRACTED_CITY_CODE_COL,self.YEAR_COLUMN])
       df = grouped_object.sum().reset_index()
-      print(df.info())
+      #print(df.info())
       return df
 
    def __filter_and_drop_cols(self,df:pd.DataFrame)->pd.DataFrame:

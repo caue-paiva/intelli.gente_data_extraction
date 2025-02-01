@@ -2,15 +2,14 @@ from datastructures import ProcessedDataCollection
 from .AbstractDataExtractor import AbstractDataExtractor
 from datastructures import YearDataPoint, DataTypes
 import pandas as pd
-from typing import Type
 from webscrapping.scrapperclasses.IbgeMunicScrapper import IbgeMunicScrapper
-import json
-import os
 import datamaps
 
 
 class IbgeMunicExtractor(AbstractDataExtractor):
    
+   __scrapper_class: IbgeMunicScrapper = IbgeMunicScrapper()
+
    def __map_binary_to_bool(self, df:pd.DataFrame)->None:
        df['valor'] = df['valor'].map({'Sim' : 1, 
                                       'Parcialmente adaptada' : 1, 
@@ -24,11 +23,11 @@ class IbgeMunicExtractor(AbstractDataExtractor):
                                       'Não sabe informar' : 0, 
                                       'Legislação não faz referencia ao tipo de bem tombado' : 0})
 
-   def extract_processed_collection(self,scrapper:Type[IbgeMunicScrapper])->list[ProcessedDataCollection]:
+   def extract_processed_collection(self)->list[ProcessedDataCollection]:
         data_infomations = datamaps.munic_get_data_information()
         data_codes_per_year = datamaps.munic_get_data_codes_per_year()
 
-        data_points:list[YearDataPoint] = scrapper.extract_database()
+        data_points:list[YearDataPoint] = self.__scrapper_class.extract_database()
         
         data_collections:list[ProcessedDataCollection] = []
         

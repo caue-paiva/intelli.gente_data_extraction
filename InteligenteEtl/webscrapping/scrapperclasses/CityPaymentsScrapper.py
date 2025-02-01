@@ -49,8 +49,14 @@ class CityPaymentsScrapper(AbstractScrapper):
       return href
 
    def __select_all_years(self):
-      driver = webdriver.Chrome()  # Update the path to your chromedriver
-      driver.maximize_window()
+      options = webdriver.ChromeOptions()
+      options.add_argument("--headless")  # Enable headless mode
+      options.add_argument("--disable-gpu")  # Disable GPU for compatibility
+      options.add_argument("--no-sandbox")  # Required for some environments
+      options.add_argument("--disable-dev-shm-usage")  # Prevent memory issues
+      options.add_argument("--window-size=1920,1080")  # Simulate maximized window size
+      driver = webdriver.Chrome(options=options)  # Update the path to your chromedriver
+
 
       # Load the webpage
       driver.get(self.URL)
