@@ -112,7 +112,7 @@ class ExtractorClassesHandler:
       """
       dado uma lista de fontes para extrair, com essa lista vindo de acordo com a tabela de controle de dados extraídos 
       (ver a coluna 'Extraído Pela Classe:' dessa tabela), realiza a extração dos dados requisitados.
-      Caso a lista de fontes tenha a entrada "todos" o código vai extrair todos os dados
+      Caso a lista de fontes seja vazia, ou tenha a entrada "todos" o código vai extrair todos os dados
 
       Args:
          sources_to_extract (dict[str,list[str]]): dicionário num formato json cuja chave é a classe a ser chamada para extração 
@@ -123,13 +123,9 @@ class ExtractorClassesHandler:
       """
 
       logs:list[ClassExtractionLog] = []
-      if not sources_to_extract: #o dict passado é nulo, vamos extrair todos os dados
-         error_message = ("Nenhum argumento de quais dados para extrair foi passado")
-         return [ #retorna um log de erro
-            ClassExtractionLog.error_log(error_message)
-         ]
+     
    
-      if "todos" in sources_to_extract.keys(): #flag para extrair todos os dados
+      if not sources_to_extract or "todos" in sources_to_extract.keys(): #flag para extrair todos os dados
          sources_to_extract = {data_name:[] for data_name in self.__etl_classes_map.keys()} #cria um dict cujas chaves são os nomes dos dados
          # e o valor é uma lista vazia (oq resulta em todos indicadores sendo extraidos)
 
@@ -157,7 +153,10 @@ class ExtractorClassesHandler:
             data_points_extracted:list[DataPointExtractionLog] = []
             for collec in list_: #salva os dados em CSV
                inserted_lines:int = insert_df_into_fact_table(collec.df,collec.data_name,collec.time_series_years) #insere o DF no BD, na tabela fato apropiada
-               #collec.df.to_csv(f"{collec.data_name}.csv",index=False)
+               
+               #name = (collec.data_name[:10] + collec.data_name[-5:-1]).replace(" ","")
+               #collec.df.to_csv(f"{name}.csv",index=False)
+               
                data_points_extracted.append(
                   DataPointExtractionLog(
                      data_point=collec.data_name,

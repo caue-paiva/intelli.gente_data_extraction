@@ -30,7 +30,7 @@ def insert_df_into_fact_table(df:pd.DataFrame,data_name:str,time_series_years:li
          tuple(map(lambda x: x.lower() if isinstance(x,str) else x, row))
       )
    
-   df.to_csv("antes_de_entrar.csv")
+   #df.to_csv("antes_de_entrar.csv")
    __insert_values_fact_table(fact_table_name,df_rows)
 
    all_years: list[int] = list(set(time_series_years + existing_time_series_years)) #pega todos os anos únicos dos dados
