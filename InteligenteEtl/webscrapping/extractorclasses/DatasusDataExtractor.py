@@ -143,8 +143,8 @@ class DatasusDataExtractor(AbstractDataExtractor):
       data_list:list[YearDataPoint] = scrapper_object.extract_database()
       time_series_years:list[str] = [x.data_year for x in data_list]
 
-      if len(data_list) < 1:
-         raise IOError("Lista de dataframes deve ter tamanho de pelo menos 1")
+      if len(data_list) < 1: #nenhum dado foi extraído
+         return []
       
       data_info: DatasusDataInfo = scrapper_object.data_info
       processed_df:pd.DataFrame = self.__join_df_parts(data_list,data_info)

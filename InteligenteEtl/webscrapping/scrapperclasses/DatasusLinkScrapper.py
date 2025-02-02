@@ -19,7 +19,7 @@ class DatasusDataInfo(Enum):
    """
    GINI_COEF = {
       "url":"http://tabnet.datasus.gov.br/cgi/ibge/censo/cnv/ginibr.def",
-      "data_abrev":"ginibr",
+      "data_abrev":"ginibr", #código para o dado que aparece no HTML de cada botão na janela de períodos disponíveis
       "data_name":"Índice de GINI da renda domiciliar per capita",
       "data_topic": "saúde",
       "content_to_select":[], #botões de conteúdo para clicar
@@ -105,6 +105,18 @@ class DatasusDataInfo(Enum):
       "monthly_data":False,
       "dtype":DataTypes.INT
    }
+   CHILD_DEATHS = {
+      "url": "http://tabnet.datasus.gov.br/cgi/deftohtm.exe?sim/cnv/inf10br.def",
+      "data_abrev":"infbr", 
+      "data_name":"total de óbitos infantis por residencia",
+      "data_topic": "saúde",
+      "content_to_select":[],
+      "columns_to_select":[],
+      "lines_to_select":[],
+      "monthly_data":False,
+      "dtype":DataTypes.INT
+   }
+
 
     
 
@@ -410,7 +422,7 @@ class DatasusLinkScrapper(AbstractScrapper):
      
       link_index:int = html.find(CSV_LINK_IDENTIFIER)
       if (link_index == -1):
-         print("Não foi possível achar o link do CSV")
+         #print("Não foi possível achar o link do CSV")
          return ""
          
       link_end:int = html.find('"',link_index)

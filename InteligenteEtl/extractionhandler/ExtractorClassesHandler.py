@@ -60,7 +60,6 @@ class ExtractorClassesHandler:
       """
       extract_all_indicators:bool = True if not indicators_to_extract else False #caso tenhamos que extrair todos os indicadores
       parsed_indicators_to_extract = list(map(self.__parse_str,indicators_to_extract))
-
       extractor = DatasusDataExtractor()
       data_collections:list[ProcessedDataCollection] = []
 
@@ -144,7 +143,7 @@ class ExtractorClassesHandler:
             indicators:list[str] = sources_to_extract[source]
 
             stdout_capture = io.StringIO() #captura o STDOUT das funções de scrapping e extração de dados em uma string
-            sys.stdout = stdout_capture
+            #sys.stdout = stdout_capture
 
             list_ = self.__run_requested_extraction( #extrai o dado
                source,
