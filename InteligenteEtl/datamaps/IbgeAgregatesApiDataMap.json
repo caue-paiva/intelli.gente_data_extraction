@@ -1,6 +1,9 @@
 
 
 {
+      "Urbanização Vias Públicas": {
+            "Domicílios particulares permanentes urbanos com Existência de iluminação pública no entorno": {"variavel": 96, "agregado": 2409, "classificacao": "1[0]|12233[104556]"}
+      },
       "caracterizacao socio-economica" : {
             "PIB TOTAL" :  {"variavel": 37 , "agregado": 5938 }, 
             "PIB AGROPECUARIA": {"variavel": 513 , "agregado": 5938 },
@@ -13,7 +16,9 @@
       "habitação": {
             "Domicílios particulares permanentes urbanos" : {"variavel":96, "agregado": 2409, "classificacao": "12235[all]|1[1]" },
             "Domicílios particulares permanentes urbanos com existência de calçamento/pavimentação da rua" : {"variavel":96, "agregado": 2409, "classificacao": "12235[104562,104563]|1[1]" }
-      }              
+      }           
+
+
 
 }
  
