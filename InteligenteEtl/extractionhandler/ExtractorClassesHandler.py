@@ -1,11 +1,10 @@
 from etl_config import get_config, ClassExtractionLog,DataPointExtractionLog
 from webscrapping.extractorclasses import *
 from apiextractors import *
-from webscrapping.extractorclasses import AbstractDataExtractor
 from apiextractors.apiclasses import AbstractApiInterface
 from datastructures import ProcessedDataCollection
 from webscrapping.scrapperclasses.DatasusLinkScrapper import DatasusDataInfo
-from webscrapping.extractorclasses import DatasusDataExtractor
+from dbInterface.data_insertion import insert_df_into_fact_table
 from typing import Type
 import inspect
 import sys
@@ -157,12 +156,13 @@ class ExtractorClassesHandler:
 
             data_points_extracted:list[DataPointExtractionLog] = []
             for collec in list_: #salva os dados em CSV
-               collec.df.to_csv(f"{collec.data_name}.csv",index=False)
+               inserted_lines:int = insert_df_into_fact_table(collec.df,collec.data_name,collec.time_series_years) #insere o DF no BD, na tabela fato apropiada
+               #collec.df.to_csv(f"{collec.data_name}.csv",index=False)
                data_points_extracted.append(
                   DataPointExtractionLog(
                      data_point=collec.data_name,
                      time_series_years=collec.time_series_years,
-                     total_df_lines=collec.df.shape[0]
+                     total_df_lines=inserted_lines #vamos guardar no Log quantas linhas foram realmente inseridas no BD
                   )
                )
             logs.append( #guarda o log dessa extração

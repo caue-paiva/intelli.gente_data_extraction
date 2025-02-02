@@ -8,7 +8,6 @@ h11==0.14.0
 idna==3.7
 -e InteligenteEtl
 multimethod==1.10
-python-dotenv==1.0.1
 mypy-extensions==1.0.0
 numpy==1.26.4
 openpyxl==3.1.2
@@ -16,6 +15,7 @@ outcome==1.3.0.post0
 packaging==24.1
 pandas==2.2.2
 pandera==0.20.3
+psycopg2-binary==2.9.9
 pydantic==2.8.2
 pydantic_core==2.20.1
 PySocks==1.7.1
