@@ -87,7 +87,7 @@ class AnatelApi(AbstractApiInterface):
 
       for ckan_api_id in self._data_map:
          for data_point in self._data_map[ckan_api_id]:
-            print(data_point)
+            #print(data_point)
             data_collection = self.__get_processed_collection(self._data_map[ckan_api_id][data_point],data_point)
             return_data_list.append(data_collection)
 
