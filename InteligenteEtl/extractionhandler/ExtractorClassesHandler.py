@@ -138,7 +138,7 @@ class ExtractorClassesHandler:
             indicators:list[str] = sources_to_extract[source]
 
             stdout_capture = io.StringIO() #captura o STDOUT das funções de scrapping e extração de dados em uma string
-            #sys.stdout = stdout_capture
+            sys.stdout = stdout_capture
 
             list_ = self.__run_requested_extraction( #extrai o dado
                source,
