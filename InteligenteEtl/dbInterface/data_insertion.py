@@ -14,7 +14,8 @@ def insert_df_into_fact_table(df:pd.DataFrame,data_name:str,time_series_years:li
 
    data_point_fk: int = fact_table_info["dado_id"]
    existing_time_series_years:list[int] = fact_table_info["anos_serie_historica"]
-   fact_table_name:str = parse_topic_table_name(fact_table_info["topico"])  #nome da tabela de fato é o tópico com parsing para ser um nome válido no SQL
+   fact_table_name = fact_table_info["topico"][:20] #nome da coluna pode ter no max 20 chars
+   fact_table_name:str = parse_topic_table_name(fact_table_name)  #nome da tabela de fato é o tópico com parsing para ser um nome válido no SQL
 
 
    years_to_insert:list[int] = [year for year in time_series_years if year not in existing_time_series_years]
@@ -27,7 +28,7 @@ def insert_df_into_fact_table(df:pd.DataFrame,data_name:str,time_series_years:li
    df_rows:list[tuple] = []
    for row in df.itertuples(index=False,name=None):
       df_rows.append(
-         tuple(map(lambda x: x.lower() if isinstance(x,str) else x, row))
+         tuple(map(lambda x: x.lower()[:20] if isinstance(x,str) else x, row)) #slice até 20 chars pq esse é o tamanho do VARCHAR da coluna de nome do dado da tbela
       )
    
    #df.to_csv("antes_de_entrar.csv")
