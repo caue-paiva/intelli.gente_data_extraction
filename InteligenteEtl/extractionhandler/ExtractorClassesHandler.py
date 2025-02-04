@@ -20,9 +20,10 @@ class ExtractorClassesHandler:
    __etl_classes_map: dict[str,object] #dict que mapea o nome de cada classe a seu objeto python
    __classes_with_several_indicators: list[str] #lista de classes que extraem vários indicadores
 
-   
+   __max_retries:int
 
-   def __init__(self):
+   def __init__(self,max_retries:int = 1):
+      self.__max_retries = max_retries
       all_classes:list[str]  = self.__get_all_extractor_classes()
       all_classes.extend(self.__get_all_api_classes())
 
@@ -134,50 +135,68 @@ class ExtractorClassesHandler:
          extractor_class = self.__etl_classes_map.get(source_parsed)
          
          if extractor_class is not None: #roda a extração dos dados com essa classe
-            extraction_start_time = datetime.now() #começo da extração
-            indicators:list[str] = sources_to_extract[source]
-
+            cur_try = 0
+            prev_error_msgs = ""
+            extracted = False
             stdout_capture = io.StringIO() #captura o STDOUT das funções de scrapping e extração de dados em uma string
             sys.stdout = stdout_capture
 
-            list_ = self.__run_requested_extraction( #extrai o dado
-               source,
-               extractor_class,
-               indicators
-            )
-            extraction_time: timedelta = datetime.now() - extraction_start_time #final da extração
+            while cur_try < self.__max_retries: #tenta rodar a extração
+               try:
+                  
 
-            if "munic" in source_parsed:
-               continue
+                  extraction_start_time = datetime.now() #começo da extração
+                  indicators:list[str] = sources_to_extract[source]
 
-            data_points_extracted:list[DataPointExtractionLog] = []
-            for collec in list_: #salva os dados em CSV
-               inserted_lines:int = insert_df_into_fact_table(collec.df,collec.data_name,collec.time_series_years) #insere o DF no BD, na tabela fato apropiada
-               
-               #name = (collec.data_name[:10] + collec.data_name[-5:-1]).replace(" ","")
-               #collec.df.to_csv(f"{name}.csv",index=False)
-               
-               data_points_extracted.append(
-                  DataPointExtractionLog(
-                     data_point=collec.data_name,
-                     time_series_years=collec.time_series_years,
-                     total_df_lines=inserted_lines #vamos guardar no Log quantas linhas foram realmente inseridas no BD
+                  list_ = self.__run_requested_extraction( #extrai o dado
+                     source,
+                     extractor_class,
+                     indicators
                   )
-               )
-            logs.append( #guarda o log dessa extração
-               ClassExtractionLog(
-                  class_name=source,
-                  data_points_logs=data_points_extracted,
-                  start_date = extraction_start_time,
-                  finish_date=datetime.now(),
-                  extraction_time=extraction_time,
-                  extra_info=stdout_capture.getvalue() #coloca o valor do STDOUT da extração de dados dessa classe em extra info do log
-               )
-            )
-                            
+                  extraction_time: timedelta = datetime.now() - extraction_start_time #final da extração
+
+                  data_points_extracted:list[DataPointExtractionLog] = []
+                  for collec in list_: #salva os dados em CSV
+                     inserted_lines:int = insert_df_into_fact_table(collec.df,collec.data_name,collec.time_series_years) #insere o DF no BD, na tabela fato apropiada
+                     
+                     #name = (collec.data_name[:10] + collec.data_name[-5:-1]).replace(" ","")
+                     #collec.df.to_csv(f"{name}.csv",index=False)
+                     
+                     data_points_extracted.append(
+                        DataPointExtractionLog(
+                           data_point=collec.data_name,
+                           time_series_years=collec.time_series_years,
+                           total_df_lines=inserted_lines #vamos guardar no Log quantas linhas foram realmente inseridas no BD
+                        )
+                     )
+                  
+                  #coloca o valor das msgs de erro das tentativas anteriores e o STDOUT da extração de dados dessa classe em extra info do log
+                  extraction_debug_info = prev_error_msgs + "\n" + stdout_capture.getvalue()
+                  
+                  logs.append( #guarda o log dessa extração
+                     ClassExtractionLog(
+                           class_name=source,
+                           data_points_logs=data_points_extracted,
+                           start_date = extraction_start_time,
+                           finish_date=datetime.now(),
+                           extraction_time=extraction_time,
+                           extra_info=extraction_debug_info 
+                     )
+                  )
+                  extracted = True
+                  break #sai do loop de várias tentativas
+               except Exception as e:
+                  cur_try += 1 #incrementa tentativa
+                  prev_error_msgs += (str(e) + "\n") #append da msg de erro                 
+         
+            if not extracted:
+               print(f"Não foi possívei extrair os dados da classe {source} depois de {self.__max_retries} tentativas, mensagens de erro: {prev_error_msgs}")
+         
          else:
             print(f"não foi possível extrair os dados com a classe {source}, pois o objeto python relacionado não foi encontrado")
       
+
+
       sys.stdout = sys.__stdout__ #retorna o STDOUT para o padrão do sistema
       
       return logs
