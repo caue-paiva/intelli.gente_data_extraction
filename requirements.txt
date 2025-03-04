@@ -6,7 +6,6 @@ charset-normalizer==3.3.2
 et-xmlfile==1.1.0
 h11==0.14.0
 idna==3.7
--e InteligenteEtl
 multimethod==1.10
 python-dotenv==1.0.1
 mypy-extensions==1.0.0
