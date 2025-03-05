@@ -286,6 +286,7 @@ class SnisScrapper(AbstractScrapper):
       driver.get(self.URL)
       driver.maximize_window()
       csv_link:str =  self.__extraction_run(driver) #primeira rodada do algoritmo, pega a lista de todos os anos
+      print(csv_link)
       df = pd.read_csv(csv_link,
                 encoding="latin",
                 sep=";",

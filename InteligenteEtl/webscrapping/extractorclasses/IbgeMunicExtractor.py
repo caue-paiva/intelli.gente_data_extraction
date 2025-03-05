@@ -32,7 +32,6 @@ class IbgeMunicExtractor(AbstractDataExtractor):
         data_collections:list[ProcessedDataCollection] = []
         
         for data_point in data_points:
-            print(data_point.df.columns)
             year = data_point.data_year
             number_of_cities = len(data_point.df.index)
             year_column = number_of_cities*[year]
@@ -50,9 +49,7 @@ class IbgeMunicExtractor(AbstractDataExtractor):
                                    "valor" : value_column})
                 if data_infomations[data_name]['tipo'] == 'bool':
                     self.__map_binary_to_bool(df)
-
-                print(df)
-                
+               
                 data_collections.append(ProcessedDataCollection(
                     category=data_infomations[data_name]['categoria'],
                     dtype=DataTypes.from_string(data_infomations[data_name]['tipo']),
@@ -60,5 +57,4 @@ class IbgeMunicExtractor(AbstractDataExtractor):
                     time_series_years=[year],
                     df = df
                 ))
-
         return data_collections

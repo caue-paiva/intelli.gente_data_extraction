@@ -94,7 +94,7 @@ class IbgeMunicScrapper(IbgePibCidadesScrapper):
 
       data_list: list[YearDataPoint] = []
       for year,url in self.URL_FOR_EACH_YEAR.items():
-         print(year)
+         print(year,url)
 
          format = url.split(".")[-1]
          if(format=='zip'):
@@ -132,7 +132,7 @@ class IbgeMunicScrapper(IbgePibCidadesScrapper):
 
          df.columns = df.columns.str.upper()
 
-         print(df)
+         #print(df)
 
          data_list.append(
             YearDataPoint(df,year)
@@ -140,7 +140,7 @@ class IbgeMunicScrapper(IbgePibCidadesScrapper):
 
          # df.to_csv(f'csvs/{year}.csv')
 
-      
+      print("fim scrapper")
       return data_list
       
 
