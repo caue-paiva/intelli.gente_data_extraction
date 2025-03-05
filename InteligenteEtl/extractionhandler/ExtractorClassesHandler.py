@@ -125,13 +125,8 @@ class ExtractorClassesHandler:
       """
 
       logs:list[ClassExtractionLog] = []
-      if not sources_to_extract: #o dict passado é nulo, vamos extrair todos os dados
-         error_message = ("Nenhum argumento de quais dados para extrair foi passado")
-         return [ #retorna um log de erro
-            ClassExtractionLog.error_log(error_message)
-         ]
    
-      if "todos" in sources_to_extract.keys(): #flag para extrair todos os dados
+      if not sources_to_extract or "todos" in sources_to_extract.keys(): #flag para extrair todos os dados ou o dict é nulo
          sources_to_extract = {data_name:[] for data_name in self.__etl_classes_map.keys()} #cria um dict cujas chaves são os nomes dos dados
          # e o valor é uma lista vazia (oq resulta em todos indicadores sendo extraidos)
 
