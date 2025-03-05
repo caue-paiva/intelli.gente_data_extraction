@@ -124,8 +124,6 @@ class ExtractorClassesHandler:
       """
 
       logs:list[ClassExtractionLog] = []
-     
-   
       if not sources_to_extract or "todos" in sources_to_extract.keys(): #flag para extrair todos os dados
          sources_to_extract = {data_name:[] for data_name in self.__etl_classes_map.keys()} #cria um dict cujas chaves são os nomes dos dados
          # e o valor é uma lista vazia (oq resulta em todos indicadores sendo extraidos)
